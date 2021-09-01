@@ -8,5 +8,6 @@ namespace MarkMyDoctor.Models
 {
     public class DoctorDbContext : DbContext
     {
+
     }
 }
