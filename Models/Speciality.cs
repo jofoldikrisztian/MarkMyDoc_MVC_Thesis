@@ -1,0 +1,20 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Collections.Generic;
+
+namespace MarkMyDoctor.Models
+{
+    public class Speciality : IEntityTypeConfiguration<Speciality>
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+
+        public  ICollection<Doctor> Doctors { get; set; }
+
+        public void Configure(EntityTypeBuilder<Speciality> builder)
+        {
+            builder.Property(s => s.Name).HasMaxLength(20);
+            builder.HasIndex(s => s.Name).IsUnique();
+        }
+    }
+}
