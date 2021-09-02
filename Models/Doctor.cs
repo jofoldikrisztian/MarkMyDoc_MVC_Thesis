@@ -18,8 +18,8 @@ namespace MarkMyDoctor.Models
         public byte[]? PorfilePicture { get; set; }
 
         public ICollection<Review> Reviews { get; set; }
-        public ICollection<Facility> Facilities { get; set; }
-        public ICollection<Speciality> Specialities { get; set; }
+        public ICollection<DoctorFacility> DoctorFacilities { get; set; }
+        public ICollection<DoctorSpeciality> DoctorSpecialities { get; set; }
 
         public void Configure(EntityTypeBuilder<Doctor> builder)
         {

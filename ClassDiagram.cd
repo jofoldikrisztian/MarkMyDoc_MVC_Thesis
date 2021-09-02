@@ -12,20 +12,20 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="MarkMyDoctor.Models.Doctor" BaseTypeListCollapsed="true">
-    <Position X="11.75" Y="0.5" Width="2.75" />
+    <Position X="12.5" Y="0.75" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AUACAEAAACAAAAAAAABAQAQAAAAAQgAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AEACAEQAACAAAAAAAABBQAQAAAAAAgAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Doctor.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
       <Property Name="Reviews" />
-      <Property Name="Facilities" />
-      <Property Name="Specialities" />
+      <Property Name="DoctorFacilities" />
+      <Property Name="DoctorSpecialities" />
     </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="MarkMyDoctor.Models.ErrorViewModel" Collapsed="true">
-    <Position X="14.75" Y="0.5" Width="1.5" />
+    <Position X="16.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAIAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\ErrorViewModel.cs</FileName>
@@ -34,19 +34,19 @@
   <Class Name="MarkMyDoctor.Models.Facility" BaseTypeListCollapsed="true">
     <Position X="4.75" Y="0.5" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAACAAABAAAAAAAIAABAAAQAAAAAAAACAgAAAAAAAAA=</HashCode>
+      <HashCode>AAACAAQBAAAAAAAIAABAAAQAAAAAAAACAAAAAAAAAAA=</HashCode>
       <FileName>Models\Facility.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="City" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
-      <Property Name="Doctors" />
+      <Property Name="DoctorFacilities" />
     </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="MarkMyDoctor.Models.Review" BaseTypeListCollapsed="true">
-    <Position X="8" Y="3.25" Width="2.25" />
+    <Position X="8" Y="4.25" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAADBAAAEACAgNAMAABAAAgAAAACAAQAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Review.cs</FileName>
@@ -58,18 +58,18 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="MarkMyDoctor.Models.Speciality" BaseTypeListCollapsed="true">
-    <Position X="11.75" Y="4.5" Width="2.25" />
+    <Position X="12.25" Y="5" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAAAAABAAAQAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <HashCode>AAACAAAAAAAAAAAAAABBAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Speciality.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
-      <Property Name="Doctors" />
+      <Property Name="DoctorSpecialities" />
     </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="MarkMyDoctor.Models.User" BaseTypeListCollapsed="true">
-    <Position X="3.25" Y="3.5" Width="2.25" />
+    <Position X="3.25" Y="4.75" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAACAEAAAAAAAAAAAABAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\User.cs</FileName>
@@ -77,6 +77,30 @@
     <ShowAsCollectionAssociation>
       <Property Name="Reviews" />
     </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MarkMyDoctor.Models.DoctorSpeciality">
+    <Position X="17.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABACAAAAAAAAAAAAAABAAAAAAAACAAQAAAAAAAACAAA=</HashCode>
+      <FileName>Models\DoctorSpeciality.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Doctor" />
+      <Property Name="Speciality" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MarkMyDoctor.Models.DoctorFacility">
+    <Position X="8.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAKAAAAAAAAAAIAAABAAAAAAAACAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\DoctorFacility.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Doctor" />
+      <Property Name="Facility" />
+    </ShowAsAssociation>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Font Name="Segoe UI" Size="9" />

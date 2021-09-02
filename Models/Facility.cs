@@ -15,7 +15,7 @@ namespace MarkMyDoctor.Models
 
         public int CityId { get; set; }
         public City City { get; set; }
-        public ICollection<Doctor> Doctors { get; set; }
+        public ICollection<DoctorFacility> DoctorFacilities { get; set; }
 
         public void Configure(EntityTypeBuilder<Facility> builder)
         {
