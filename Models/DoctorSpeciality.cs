@@ -23,6 +23,9 @@ namespace MarkMyDoctor.Models
 
             builder.HasOne(ds => ds.Speciality).WithMany(d => d.DoctorSpecialities)
               .HasForeignKey(ds => ds.SpecialityId).HasPrincipalKey(s => s.Id);
+
+            //Egy specialitás nem tartozhat többször egy orvoshoz, és egy specialitásnak nem lehet többször ugyan az az orvosa.
+            builder.HasIndex(ds => new { ds.SpecialityId, ds.DoctorId }).IsUnique();
         }
     }
 }

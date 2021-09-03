@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
   <Class Name="MarkMyDoctor.Models.City" BaseTypeListCollapsed="true">
-    <Position X="1" Y="0.5" Width="2.5" />
+    <Position X="4.25" Y="6.5" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAAABAAAQAAAAAQAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\City.cs</FileName>
@@ -12,9 +12,9 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="MarkMyDoctor.Models.Doctor" BaseTypeListCollapsed="true">
-    <Position X="12.5" Y="0.75" Width="2.75" />
+    <Position X="11" Y="1" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AEACAEQAACAAAAAAAABBQAQAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AEACAEQAACAAABAAAABBQAQAAAAAAgAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Doctor.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -24,15 +24,8 @@
     </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="MarkMyDoctor.Models.ErrorViewModel" Collapsed="true">
-    <Position X="16.5" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAIAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Models\ErrorViewModel.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="MarkMyDoctor.Models.Facility" BaseTypeListCollapsed="true">
-    <Position X="4.75" Y="0.5" Width="2.25" />
+    <Position X="5.5" Y="3" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAACAAQBAAAAAAAIAABAAAQAAAAAAAACAAAAAAAAAAA=</HashCode>
       <FileName>Models\Facility.cs</FileName>
@@ -46,7 +39,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="MarkMyDoctor.Models.Review" BaseTypeListCollapsed="true">
-    <Position X="8" Y="4.25" Width="2.25" />
+    <Position X="11" Y="5" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAADBAAAEACAgNAMAABAAAgAAAACAAQAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Review.cs</FileName>
@@ -58,7 +51,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="MarkMyDoctor.Models.Speciality" BaseTypeListCollapsed="true">
-    <Position X="12.25" Y="5" Width="2.25" />
+    <Position X="14" Y="5.25" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAAABBAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Speciality.cs</FileName>
@@ -69,7 +62,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="MarkMyDoctor.Models.User" BaseTypeListCollapsed="true">
-    <Position X="3.25" Y="4.75" Width="2.25" />
+    <Position X="7.5" Y="6" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAACAEAAAAAAAAAAAABAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\User.cs</FileName>
@@ -80,7 +73,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="MarkMyDoctor.Models.DoctorSpeciality">
-    <Position X="17.5" Y="4.75" Width="1.5" />
+    <Position X="15.25" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ABACAAAAAAAAAAAAAABAAAAAAAACAAQAAAAAAAACAAA=</HashCode>
       <FileName>Models\DoctorSpeciality.cs</FileName>
@@ -92,7 +85,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="MarkMyDoctor.Models.DoctorFacility">
-    <Position X="8.5" Y="0.5" Width="1.5" />
+    <Position X="8.75" Y="1.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAKAAAAAAAAAAIAAABAAAAAAAACAAQAAAAAAAAAAAA=</HashCode>
       <FileName>Models\DoctorFacility.cs</FileName>

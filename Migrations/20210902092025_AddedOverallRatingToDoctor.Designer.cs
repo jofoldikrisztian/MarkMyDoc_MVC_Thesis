@@ -4,14 +4,16 @@ using MarkMyDoctor.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MarkMyDoctor.Migrations
 {
     [DbContext(typeof(DoctorDbContext))]
-    partial class DoctorDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210902092025_AddedOverallRatingToDoctor")]
+    partial class AddedOverallRatingToDoctor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,7 +38,7 @@ namespace MarkMyDoctor.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Cities");
+                    b.ToTable("City");
                 });
 
             modelBuilder.Entity("MarkMyDoctor.Models.Doctor", b =>
@@ -50,6 +52,7 @@ namespace MarkMyDoctor.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -72,7 +75,7 @@ namespace MarkMyDoctor.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Doctors");
+                    b.ToTable("Doctor");
                 });
 
             modelBuilder.Entity("MarkMyDoctor.Models.DoctorFacility", b =>
@@ -90,12 +93,11 @@ namespace MarkMyDoctor.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DoctorId");
+
                     b.HasIndex("FacilityId");
 
-                    b.HasIndex("DoctorId", "FacilityId")
-                        .IsUnique();
-
-                    b.ToTable("DoctorFacilities");
+                    b.ToTable("DoctorFacility");
                 });
 
             modelBuilder.Entity("MarkMyDoctor.Models.DoctorSpeciality", b =>
@@ -115,8 +117,7 @@ namespace MarkMyDoctor.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.HasIndex("SpecialityId", "DoctorId")
-                        .IsUnique();
+                    b.HasIndex("SpecialityId");
 
                     b.ToTable("DoctorSpeciality");
                 });
@@ -147,7 +148,7 @@ namespace MarkMyDoctor.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Facilities");
+                    b.ToTable("Facility");
                 });
 
             modelBuilder.Entity("MarkMyDoctor.Models.Review", b =>
@@ -201,7 +202,7 @@ namespace MarkMyDoctor.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Review");
                 });
 
             modelBuilder.Entity("MarkMyDoctor.Models.Speciality", b =>
@@ -221,7 +222,7 @@ namespace MarkMyDoctor.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Specialities");
+                    b.ToTable("Speciality");
                 });
 
             modelBuilder.Entity("MarkMyDoctor.Models.User", b =>
@@ -241,7 +242,7 @@ namespace MarkMyDoctor.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("MarkMyDoctor.Models.DoctorFacility", b =>

@@ -22,6 +22,9 @@ namespace MarkMyDoctor.Models
 
             builder.HasOne(df => df.Facility).WithMany(f => f.DoctorFacilities)
                 .HasForeignKey(df => df.FacilityId).HasPrincipalKey(f => f.Id);
+
+            //Egy intézmény nem tartozhat többször egy orvoshoz, és egy intézménynek nem lehet többször ugyan az az orvosa.
+            builder.HasIndex(df => new { df.DoctorId, df.FacilityId }).IsUnique();
         }
     }
 }

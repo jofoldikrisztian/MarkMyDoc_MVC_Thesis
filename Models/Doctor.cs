@@ -13,9 +13,10 @@ namespace MarkMyDoctor.Models
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public bool CanPayWithCard { get; set; }
-        public string Email { get; set; }
+        public string? Email { get; set; }
         public string? WebAddress { get; set; }
         public byte[]? PorfilePicture { get; set; }
+        public byte? OverallRating { get; set; }
 
         public ICollection<Review> Reviews { get; set; }
         public ICollection<DoctorFacility> DoctorFacilities { get; set; }
