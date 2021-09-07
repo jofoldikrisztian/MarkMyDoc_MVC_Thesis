@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 
 namespace MarkMyDoctor.Data
 {
-    interface IDoctorService
+    public interface IDoctorService
     {
 
+        List<string> GetSearchResults(string toSearch);
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using MarkMyDoctor.Models;
+﻿using MarkMyDoctor.Data;
+using MarkMyDoctor.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,9 +14,12 @@ namespace MarkMyDoctor.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private IDoctorService DoctorService { get; }
+
+        public HomeController(ILogger<HomeController> logger, IDoctorService doctorService)
         {
             _logger = logger;
+            DoctorService = doctorService;
         }
 
         public IActionResult Index()
@@ -32,6 +36,12 @@ namespace MarkMyDoctor.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpPost]
+        public JsonResult Search(string toSearch)
+        {
+            return Json(DoctorService.GetSearchResults(toSearch));
         }
     }
 }
