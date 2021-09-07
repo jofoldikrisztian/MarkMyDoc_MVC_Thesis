@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MarkMyDoctor.Models
+namespace MarkMyDoctor.Models.Entities
 {
     public class Doctor : IEntityTypeConfiguration<Doctor>
     {
@@ -24,7 +24,7 @@ namespace MarkMyDoctor.Models
 
         public void Configure(EntityTypeBuilder<Doctor> builder)
         {
-            builder.Property(d => d.Name).HasMaxLength(30);
+            builder.Property(d => d.Name).HasMaxLength(50);
         }
     }
 }

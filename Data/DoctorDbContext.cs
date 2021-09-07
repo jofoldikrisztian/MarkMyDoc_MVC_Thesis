@@ -1,4 +1,5 @@
 ﻿using MarkMyDoctor.Models;
+using MarkMyDoctor.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

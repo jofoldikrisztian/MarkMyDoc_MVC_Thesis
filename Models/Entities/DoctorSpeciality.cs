@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MarkMyDoctor.Models
+namespace MarkMyDoctor.Models.Entities
 {
     public class DoctorSpeciality : IEntityTypeConfiguration<DoctorSpeciality>
     {

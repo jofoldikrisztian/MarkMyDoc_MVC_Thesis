@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MarkMyDoctor.Models
+namespace MarkMyDoctor.Models.Entities
 {
     public class Facility : IEntityTypeConfiguration<Facility>
     {
@@ -22,7 +22,7 @@ namespace MarkMyDoctor.Models
             builder.HasOne(f => f.City).WithMany(c => c.Facilities)
                 .HasForeignKey(v => v.CityId).HasPrincipalKey(c => c.Id);
 
-            builder.Property(f => f.Name).HasMaxLength(50);
+            builder.Property(f => f.Name).HasMaxLength(150);
             builder.HasIndex(f => f.Name).IsUnique();
         }
     }

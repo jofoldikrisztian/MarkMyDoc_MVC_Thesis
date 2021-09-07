@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Collections.Generic;
 
-namespace MarkMyDoctor.Models
+namespace MarkMyDoctor.Models.Entities
 {
     public class City : IEntityTypeConfiguration<City>
     {

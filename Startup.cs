@@ -1,4 +1,5 @@
 using MarkMyDoctor.Data;
+using MarkMyDoctor.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -60,6 +61,8 @@ namespace MarkMyDoctor
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            Seed.Data(app);
         }
     }
 }

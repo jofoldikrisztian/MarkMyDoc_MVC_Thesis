@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Collections.Generic;
 
-namespace MarkMyDoctor.Models
+namespace MarkMyDoctor.Models.Entities
 {
     public class Speciality : IEntityTypeConfiguration<Speciality>
     {
@@ -13,7 +13,7 @@ namespace MarkMyDoctor.Models
 
         public void Configure(EntityTypeBuilder<Speciality> builder)
         {
-            builder.Property(s => s.Name).HasMaxLength(20);
+            builder.Property(s => s.Name).HasMaxLength(40);
             builder.HasIndex(s => s.Name).IsUnique();
         }
     }
