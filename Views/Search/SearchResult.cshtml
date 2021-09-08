@@ -1,0 +1,54 @@
+﻿@model PaginatedList<MarkMyDoctor.Models.Entities.Doctor>
+
+@{ ViewData["Title"] = "Találatok"; }
+
+<div class="search-result">
+
+    <div class="navigationButtons navTop">
+        <partial Name="_NavigationPartial" model="@Model" />
+    </div>
+
+    @foreach (var doc in Model)
+    {
+
+<div class="doctor-card-container">
+    <div class="doctor-card">
+        <div class="image">
+            <img src="~/images/surgeon-doctor-svgrepo-com.svg" alt="">
+        </div>
+        <div class="infos">
+            <h3>@doc.Name</h3>
+            <div class="reviews">
+                @for (byte i = 0; i < @doc.OverallRating; i++)
+                {
+<i class="fas fa-star"></i>}
+                @for (byte i = @doc.OverallRating ?? 0; i < 5; i++)
+                {
+                    <i class="far fa-star"></i>}
+            </div>
+            <div class="more-infos">
+                <h5>Értékelések</h5>
+                <h5>Szakterületek</h5>
+                <h5>Elérhetőség</h5>
+            </div>
+            <div class="info-content">
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur dolores voluptatum unde cum
+                    dolorum, vero blanditiis molestiae minima reprehenderit eius. Sapiente suscipit minima tempore
+                    assumenda quibusdam alias eveniet dolorem rerum?
+                </p>
+            </div>
+            <div class="buttons">
+                <a class="fas fa-info-circle" asp-action="Details" asp-controller="Doctor"
+                   asp-route-id="@doc.Id"> Adatlap</a>
+                <a class="fas fa-marker" asp-action="Create" asp-controller="Review"
+                   asp-route-id="@doc.Id"> Értékelés</a>
+            </div>
+        </div>
+    </div>
+</div>}
+
+    <div class="navigationButtons navBottom">
+        <partial Name="_NavigationPartial" model="@Model" />
+    </div>
+</div>

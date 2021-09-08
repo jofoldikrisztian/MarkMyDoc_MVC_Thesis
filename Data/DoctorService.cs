@@ -1,4 +1,5 @@
-﻿using MarkMyDoctor.Models.Entities;
+﻿using MarkMyDoctor.Infrastructure;
+using MarkMyDoctor.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,32 @@ namespace MarkMyDoctor.Data
         private IQueryable<City> Cities => DbContext.Cities;
         private IQueryable<Facility> Facilities => DbContext.Facilities;
 
+        public async Task<PaginatedList<Doctor>> GetAllDoctorAsync(int pageNumber)
+        {
+            var query = Doctors.OrderBy(q => q.Name);
+
+            var model = await PaginatedList<Doctor>.CreateAsync(query, pageNumber, 5);
+
+            return model;
+        }
+
+        public async Task<PaginatedList<Doctor>> GetDoctorsByCityAsync(string toSearch, int pageNumber)
+        {
+            var query = Doctors.Where(d => d.DoctorFacilities.Any(f => f.Facility.Name.Equals(toSearch))).OrderBy(q => q.Name);
+
+            var model = await PaginatedList<Doctor>.CreateAsync(query, pageNumber, 5);
+
+            return model;
+        }
+
+        public async Task<PaginatedList<Doctor>> GetDoctorsByNameAsync(string toSearch, int pageNumber)
+        {
+            var query = Doctors.Where(d => d.Name.Contains(toSearch)).OrderBy(q => q.Name);
+
+            var model = await PaginatedList<Doctor>.CreateAsync(query, pageNumber, 5);
+
+            return model;
+        }
 
         public List<string> GetSearchResults(string toSearch)
         {
@@ -33,5 +60,14 @@ namespace MarkMyDoctor.Data
             return result;
         }
 
+        public bool IsValidCity(string toSearch)
+        {
+            return Cities.Any(c => c.Name.Equals(toSearch));
+        }
+
+        public bool IsValidDoctor(string toSearch)
+        {
+            return Doctors.Any(d => d.Name.Equals(toSearch));
+        }
     }
 }

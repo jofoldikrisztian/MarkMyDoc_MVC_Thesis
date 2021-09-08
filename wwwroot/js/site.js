@@ -49,3 +49,11 @@ $(function () {
         appendTo: '#search-box',
     });
 });
+
+//#region Oldal töltő 
+
+$('#btnSubmit, #btnDoctors, .buttons, #navButton').click(function () {
+    $('.spinner').css('display', 'block');
+});
+
+//#endregion
