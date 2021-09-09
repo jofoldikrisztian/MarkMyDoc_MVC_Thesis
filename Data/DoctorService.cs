@@ -1,5 +1,6 @@
 ﻿using MarkMyDoctor.Infrastructure;
 using MarkMyDoctor.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -87,6 +88,36 @@ namespace MarkMyDoctor.Data
         public bool IsValidSpeciality(string toSearch)
         {
             return Specialities.Any(s => s.Name.Equals(toSearch));
+        }
+
+        public bool DoctorExists(int id)
+        {
+            return Doctors.Any(e => e.Id == id);
+        }
+
+        public async Task<Doctor> GetDoctorByIdAsync(int? id)
+        {
+            return await Doctors.Include(d => d.DoctorSpecialities).ThenInclude(s => s.Speciality).Include(d => d.DoctorFacilities).ThenInclude(f => f.Facility).FirstOrDefaultAsync(d => d.Id.Equals(id));
+        }
+
+        public Task SaveChangesAsync()
+        {
+           return DbContext.SaveChangesAsync();
+        }
+
+        public void AddDoctor(Doctor doctor)
+        {
+            DbContext.Add(doctor);
+        }
+
+        public void UpdateDoctor(Doctor doctor)
+        {
+            DbContext.Update(doctor);
+        }
+
+        public void Remove(Doctor doctor)
+        {
+            DbContext.Remove(doctor);
         }
     }
 }

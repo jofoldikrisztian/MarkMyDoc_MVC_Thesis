@@ -12,18 +12,14 @@ namespace MarkMyDoctor.Controllers
 {
     public class DoctorsController : Controller
     {
-        private readonly DoctorDbContext _context;
+        private readonly IDoctorService DoctorService;
 
-        public DoctorsController(DoctorDbContext context)
+        public DoctorsController(IDoctorService doctorService)
         {
-            _context = context;
+            DoctorService = doctorService;
         }
 
-        // GET: Doctors
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Doctors.ToListAsync());
-        }
+
 
         // GET: Doctors/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -33,8 +29,7 @@ namespace MarkMyDoctor.Controllers
                 return NotFound();
             }
 
-            var doctor = await _context.Doctors
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var doctor = await DoctorService.GetDoctorByIdAsync(id);
             if (doctor == null)
             {
                 return NotFound();
@@ -58,8 +53,8 @@ namespace MarkMyDoctor.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(doctor);
-                await _context.SaveChangesAsync();
+                DoctorService.AddDoctor(doctor);
+                await DoctorService.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(doctor);
@@ -73,7 +68,7 @@ namespace MarkMyDoctor.Controllers
                 return NotFound();
             }
 
-            var doctor = await _context.Doctors.FindAsync(id);
+            var doctor = await DoctorService.GetDoctorByIdAsync(id);
             if (doctor == null)
             {
                 return NotFound();
@@ -97,12 +92,12 @@ namespace MarkMyDoctor.Controllers
             {
                 try
                 {
-                    _context.Update(doctor);
-                    await _context.SaveChangesAsync();
+                    DoctorService.UpdateDoctor(doctor);
+                    await DoctorService.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DoctorExists(doctor.Id))
+                    if (!DoctorService.DoctorExists(doctor.Id))
                     {
                         return NotFound();
                     }
@@ -124,8 +119,7 @@ namespace MarkMyDoctor.Controllers
                 return NotFound();
             }
 
-            var doctor = await _context.Doctors
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var doctor = await DoctorService.GetDoctorByIdAsync(id);
             if (doctor == null)
             {
                 return NotFound();
@@ -139,15 +133,12 @@ namespace MarkMyDoctor.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var doctor = await _context.Doctors.FindAsync(id);
-            _context.Doctors.Remove(doctor);
-            await _context.SaveChangesAsync();
+            var doctor = await DoctorService.GetDoctorByIdAsync(id);
+            DoctorService.Remove(doctor);
+            await DoctorService.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool DoctorExists(int id)
-        {
-            return _context.Doctors.Any(e => e.Id == id);
-        }
+        
     }
 }

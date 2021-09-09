@@ -18,5 +18,11 @@ namespace MarkMyDoctor.Data
         Task<PaginatedList<Doctor>> GetAllDoctorAsync(int pageNumber);
         bool IsValidSpeciality(string toSearch);
         Task<PaginatedList<Doctor>> GetDoctorsBySpeciality(string toSearch, int pageNumber);
+        Task<Doctor> GetDoctorByIdAsync(int? id);
+        bool DoctorExists(int id);
+        Task SaveChangesAsync();
+        void AddDoctor(Doctor doctor);
+        void UpdateDoctor(Doctor doctor);
+        void Remove(Doctor doctor);
     }
 }

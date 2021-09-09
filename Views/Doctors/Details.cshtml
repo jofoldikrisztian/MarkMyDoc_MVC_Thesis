@@ -1,59 +1,66 @@
 ﻿@model MarkMyDoctor.Models.Entities.Doctor
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Model.Name;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
 
-<div>
-    <h4>Doctor</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CanPayWithCard)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CanPayWithCard)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.WebAddress)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.WebAddress)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PorfilePicture)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PorfilePicture)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.OverallRating)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.OverallRating)
-        </dd>
-    </dl>
+<div class="details-card-container">
+    <div class="upper-container">
+        <div class="image-container">
+            <img src="~/images/surgeon-doctor-svgrepo-com.svg" alt="">
+        </div>
+    </div>
+    <div class="lower-container">
+        <h1>@Model.Name</h1>
+        <div class="reviews">
+            @for (var i = 0; i < @Model.OverallRating; i++)
+            {
+                <i class="fas fa-star"></i>}
+            @for (var i = @Model.OverallRating; i < 5; i++)
+            {
+                <i class="far fa-star"></i>}
+            @*<span> (@Model?.Reviews?.Count())</span>*@
+        </div>
+
+        <div class="doctor-details">
+
+            <div class="specialities">
+                <h4 id="address">Szakterületek:</h4>
+                @foreach (var spec in Model.DoctorSpecialities)
+                {
+                    <ul>
+                        <li>@spec.Speciality.Name</li>
+                    </ul>}
+            </div>
+            <div class="doc-address">
+                <h4 id="address" data-city=@ViewBag.City>Cím:</h4>
+                @*<span>@Model.DoctorFacilities,</span>
+                <span>@Model.Address</span>*@
+            </div>
+        </div>
+        <a class="doctor-details__a" asp-action="Edit" asp-controller="Doctor" asp-route-id="@Model.Id">Adatlap szerkesztése</a>
+        <a class="doctor-details__a" asp-action="Delete" asp-controller="Doctor" asp-route-id="@Model.Id">Orvos törlése</a>
+        <a class="doctor-details__a" asp-action="Create" asp-controller="Review" asp-route-id="@Model.Id">Orvos értékelése</a>
+        <div class="doctor-details-reviews">
+            <h4>Értékelések:</h4>
+            <hr>
+            <div class="doctor-review">
+
+                @*@if (Model.Reviews.Any())
+                {
+                    <partial Name="_ReviewListPartial" model="@Model" /> }
+                else
+                {
+
+                    <div class="empty-box">
+                        <span>Még nem érkezett értékelés!</span>
+                    </div>}*@
+            </div>
+        </div>
+        @*<div id="map-div"></div>*@
+    </div>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
