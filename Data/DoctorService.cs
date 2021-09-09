@@ -52,11 +52,22 @@ namespace MarkMyDoctor.Data
             return model;
         }
 
+        public async Task<PaginatedList<Doctor>> GetDoctorsBySpeciality(string toSearch, int pageNumber)
+        {
+            var query = Doctors.Where(d => d.DoctorSpecialities.Any(s => s.Speciality.Name.Equals(toSearch)));
+
+            var model = await PaginatedList<Doctor>.CreateAsync(query, pageNumber, 5);
+
+            return model;
+        }
+
         public List<string> GetSearchResults(string toSearch)
         {
             var result = Cities.Where(c => c.Name.Contains(toSearch)).Select(c => c.Name).ToList();
 
             result.AddRange(Doctors.Where(d => d.Name.Contains(toSearch)).Select(d => d.Name).ToList());
+
+            result.AddRange(Specialities.Where(s => s.Name.Contains(toSearch)).Select(s => s.Name).ToList());
 
             result.Sort();
 
@@ -71,6 +82,11 @@ namespace MarkMyDoctor.Data
         public bool IsValidDoctor(string toSearch)
         {
             return Doctors.Any(d => d.Name.Equals(toSearch));
+        }
+
+        public bool IsValidSpeciality(string toSearch)
+        {
+            return Specialities.Any(s => s.Name.Equals(toSearch));
         }
     }
 }

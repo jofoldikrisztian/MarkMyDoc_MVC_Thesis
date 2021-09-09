@@ -42,6 +42,12 @@ namespace MarkMyDoctor.Controllers
             {
                 return View(await DoctorService.GetDoctorsByNameAsync(toSearch, pageNumber));
             }
+
+            if (DoctorService.IsValidSpeciality(toSearch))
+            {
+                return View(await DoctorService.GetDoctorsBySpeciality(toSearch, pageNumber));
+            }
+
             return View(await DoctorService.GetAllDoctorAsync(pageNumber));
         }
     }
