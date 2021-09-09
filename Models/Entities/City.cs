@@ -9,7 +9,7 @@ namespace MarkMyDoctor.Models.Entities
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public ICollection<Facility> Facilities { get; set; }
+        public ICollection<Facility>? Facilities { get; set; }
 
         public void Configure(EntityTypeBuilder<City> builder)
         {

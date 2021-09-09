@@ -1,99 +1,67 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
-  <Class Name="MarkMyDoctor.Models.City" BaseTypeListCollapsed="true">
-    <Position X="4.25" Y="6.5" Width="2.5" />
+  <Class Name="MarkMyDoctor.Models.Entities.City">
+    <Position X="7.25" Y="0.5" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAAABAAAQAAAAAQAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Models\City.cs</FileName>
+      <FileName>Models\Entities\City.cs</FileName>
     </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="Facilities" />
-    </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="MarkMyDoctor.Models.Doctor" BaseTypeListCollapsed="true">
-    <Position X="11" Y="1" Width="2.75" />
+  <Class Name="MarkMyDoctor.Models.Entities.Doctor">
+    <Position X="10" Y="3" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AEACAEQAACAAABAAAABBQAQAAAAAAgAAAAAAAAAAAAA=</HashCode>
-      <FileName>Models\Doctor.cs</FileName>
+      <FileName>Models\Entities\Doctor.cs</FileName>
     </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="Reviews" />
-      <Property Name="DoctorFacilities" />
-      <Property Name="DoctorSpecialities" />
-    </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="MarkMyDoctor.Models.Facility" BaseTypeListCollapsed="true">
-    <Position X="5.5" Y="3" Width="2.25" />
-    <TypeIdentifier>
-      <HashCode>AAACAAQBAAAAAAAIAABAAAQAAAAAAAACAAAAAAAAAAA=</HashCode>
-      <FileName>Models\Facility.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="City" />
-    </ShowAsAssociation>
-    <ShowAsCollectionAssociation>
-      <Property Name="DoctorFacilities" />
-    </ShowAsCollectionAssociation>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
-  <Class Name="MarkMyDoctor.Models.Review" BaseTypeListCollapsed="true">
-    <Position X="11" Y="5" Width="2.25" />
-    <TypeIdentifier>
-      <HashCode>AAADBAAAEACAgNAMAABAAAgAAAACAAQAAAAAAAAAAAA=</HashCode>
-      <FileName>Models\Review.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Doctor" />
-      <Property Name="User" />
-    </ShowAsAssociation>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
-  <Class Name="MarkMyDoctor.Models.Speciality" BaseTypeListCollapsed="true">
-    <Position X="14" Y="5.25" Width="2.25" />
-    <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAAAAABBAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Models\Speciality.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="DoctorSpecialities" />
-    </ShowAsCollectionAssociation>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
-  <Class Name="MarkMyDoctor.Models.User" BaseTypeListCollapsed="true">
-    <Position X="7.5" Y="6" Width="2.25" />
-    <TypeIdentifier>
-      <HashCode>AAACAEAAAAAAAAAAAABAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Models\User.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="Reviews" />
-    </ShowAsCollectionAssociation>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
-  <Class Name="MarkMyDoctor.Models.DoctorSpeciality">
-    <Position X="15.25" Y="2.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>ABACAAAAAAAAAAAAAABAAAAAAAACAAQAAAAAAAACAAA=</HashCode>
-      <FileName>Models\DoctorSpeciality.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Doctor" />
-      <Property Name="Speciality" />
-    </ShowAsAssociation>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="MarkMyDoctor.Models.DoctorFacility">
-    <Position X="8.75" Y="1.25" Width="1.5" />
+  <Class Name="MarkMyDoctor.Models.Entities.DoctorFacility">
+    <Position X="10" Y="6.75" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAKAAAAAAAAAAIAAABAAAAAAAACAAQAAAAAAAAAAAA=</HashCode>
-      <FileName>Models\DoctorFacility.cs</FileName>
+      <FileName>Models\Entities\DoctorFacility.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Doctor" />
-      <Property Name="Facility" />
-    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MarkMyDoctor.Models.Entities.DoctorSpeciality">
+    <Position X="10" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>ABACAAAAAAAAAAAAAABAAAAAAAACAAQAAAAAAAACAAA=</HashCode>
+      <FileName>Models\Entities\DoctorSpeciality.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MarkMyDoctor.Models.Entities.Facility">
+    <Position X="7.25" Y="5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAQBAAAAAAAIAABAAAQAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Entities\Facility.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MarkMyDoctor.Models.Entities.Review">
+    <Position X="4.5" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAADBAAAEACAgNAMAABAAAgAAAACAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Entities\Review.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MarkMyDoctor.Models.Entities.Speciality">
+    <Position X="7.25" Y="2.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAABBAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Entities\Speciality.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MarkMyDoctor.Models.Entities.User">
+    <Position X="4.5" Y="5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAEAAAAAAAAAAAABAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Entities\User.cs</FileName>
+    </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Font Name="Segoe UI" Size="9" />

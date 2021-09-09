@@ -21,6 +21,8 @@ namespace MarkMyDoctor.Data
         private IQueryable<Speciality> Specialities => DbContext.Specialities;
         private IQueryable<City> Cities => DbContext.Cities;
         private IQueryable<Facility> Facilities => DbContext.Facilities;
+        private IQueryable<DoctorFacility> DoctorFacilities => DbContext.DoctorFacilities;
+
 
         public async Task<PaginatedList<Doctor>> GetAllDoctorAsync(int pageNumber)
         {
@@ -33,7 +35,8 @@ namespace MarkMyDoctor.Data
 
         public async Task<PaginatedList<Doctor>> GetDoctorsByCityAsync(string toSearch, int pageNumber)
         {
-            var query = Doctors.Where(d => d.DoctorFacilities.Any(f => f.Facility.Name.Equals(toSearch))).OrderBy(q => q.Name);
+           
+            var query = Doctors.Where(d => d.DoctorFacilities.Any(f => f.Facility.City.Name.Equals(toSearch))).OrderBy(q => q.Name);
 
             var model = await PaginatedList<Doctor>.CreateAsync(query, pageNumber, 5);
 
