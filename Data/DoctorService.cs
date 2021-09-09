@@ -54,7 +54,7 @@ namespace MarkMyDoctor.Data
 
         public async Task<PaginatedList<Doctor>> GetDoctorsBySpeciality(string toSearch, int pageNumber)
         {
-            var query = Doctors.Where(d => d.DoctorSpecialities.Any(s => s.Speciality.Name.Equals(toSearch)));
+            var query = Doctors.Where(d => d.DoctorSpecialities.Any(s => s.Speciality.Name.Equals(toSearch))).OrderBy(d => d.Name);
 
             var model = await PaginatedList<Doctor>.CreateAsync(query, pageNumber, 5);
 

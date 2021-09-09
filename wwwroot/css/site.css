@@ -339,8 +339,9 @@ body {
 /* #region NavigationButtons */
 
 .navigationButtons {
+    padding-top: 20px;
     font: inherit;
-    width: 20%;
+    width: 40%;
     display: flex;
     justify-content: space-between;
     text-align: center;
@@ -354,13 +355,13 @@ body {
 }
 
 .navigationButtons a {
-    font-size: 2rem;
+    font-size: 1.5rem;
     text-decoration: none;
     color: black;
     border: 2px solid #5fdffc;
     border-radius: 25px;
     background-color: white;
-    width: 40%;
+    width: 25%;
     padding: 0.5rem;
 }
 
@@ -373,7 +374,7 @@ body {
 .navigationButtons span {
     font-size: 1.2rem;
     font-weight: bold;
-    width: 30px;
+    width: 50%;
 }
 
 .disabled {
