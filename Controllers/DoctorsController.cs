@@ -127,25 +127,24 @@ namespace MarkMyDoctor.Controllers
                     doctor.PorfilePicture = doctorViewModel.Doctor.PorfilePicture;
                     doctor.WebAddress = doctorViewModel.Doctor.WebAddress;
 
+                    //A megszüntetett kijelölésű specialitások eltávolítása az orvos specialitásai közül
                     doctor.DoctorSpecialities.Where(m => !selectedSpecialities.Contains(m.Speciality)).ToList().ForEach(spec => doctor.DoctorSpecialities.Remove(spec));
 
-                    var existingSpecialities = doctor.DoctorSpecialities.Select(m => m.Id);
+                    //A "megmaradt" specialitások tárolása egy ideiglenes objektumba
+                    var existingSpecialities = doctor.DoctorSpecialities.Select(m => m.Speciality.Id);
 
+                    //Az új specialitások hozzáadása az orvoshoz
 
-
-
-
-                    //doctor.DoctorSpecialities.Where(m => !doctorViewModel.SelectedSpecialityIds.Contains(m.Id))
-
-
-
-
-                    //editDoc.DoctorSpecialities = 
-
-                    //editDoc.DoctorSpecialities.Union(selectedSpecialities);
-
-
-                    //DoctorService.UpdateDoctor(editDoc);
+                    foreach (var speciality in selectedSpecialities)
+                    {
+                        if (!existingSpecialities.Any(ex => ex.Equals(speciality.Id)))
+                        {
+                            doctor.DoctorSpecialities.Add(new DoctorSpeciality() { 
+                                SpecialityId = speciality.Id,
+                                DoctorId = id
+                            });
+                        }
+                    }
 
                     await DoctorService.SaveChangesAsync();
                 }

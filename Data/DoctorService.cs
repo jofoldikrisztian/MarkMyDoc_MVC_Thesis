@@ -147,5 +147,9 @@ namespace MarkMyDoctor.Data
         {
             return await DoctorSpecialities.Where(s => s.DoctorId == id).ToListAsync();
         }
+
+
+        
+
     }
 }
