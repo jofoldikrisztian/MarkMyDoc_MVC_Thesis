@@ -5,6 +5,10 @@
     {
       "library": "jqueryui@1.12.1",
       "destination": "wwwroot/lib/jqueryui/"
+    },
+    {
+      "library": "select2@4.0.13",
+      "destination": "wwwroot/select2/"
     }
   ]
 }

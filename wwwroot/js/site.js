@@ -57,3 +57,12 @@ $('#btnSubmit, #btnDoctors, .buttons, #navButton').click(function () {
 });
 
 //#endregion
+
+$(document).ready(function () {
+    $('.select2-mmd').select2(
+        {
+            placeholder: "Válassz szakterületeket!",
+            allowClear: true
+        }
+    );
+});

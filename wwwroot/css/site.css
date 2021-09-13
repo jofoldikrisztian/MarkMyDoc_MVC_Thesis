@@ -542,14 +542,7 @@ body {
     align-items: center;
 }
 
-    .lower-container h1 {
-        font-size: 4rem;
-    }
 
-    .lower-container h6 {
-        color: var(--body-font-coloror);
-        font-size: 1.6rem;
-    }
 
     .lower-container .reviews {
         padding-top: 5px;
@@ -596,7 +589,7 @@ hr {
     .doctor-details ul,
     .doc-address span,
     .doctor-details-reviews span {
-        font-size: 2.5rem;
+        font-size: 1.5rem;
     }
 
 .empty-box {
@@ -618,7 +611,7 @@ hr {
 }
 
 .doctor-details__a {
-    font-size: 2rem;
+    font-size: 1.5rem;
     color: var(--blue-color);
     text-decoration: none;
 }
@@ -628,3 +621,4 @@ hr {
     }
 
 /* #endregion DetailsCard */
+

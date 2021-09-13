@@ -13,7 +13,7 @@
         </div>
     </div>
     <div class="lower-container">
-        <h1>@Model.Name</h1>
+        <h3>@Model.Name</h3>
         <div class="reviews">
             @for (var i = 0; i < @Model.OverallRating; i++)
             {
@@ -40,8 +40,8 @@
                 <span>@Model.Address</span>*@
             </div>
         </div>
-        <a class="doctor-details__a" asp-action="Edit" asp-controller="Doctor" asp-route-id="@Model.Id">Adatlap szerkesztése</a>
-        <a class="doctor-details__a" asp-action="Delete" asp-controller="Doctor" asp-route-id="@Model.Id">Orvos törlése</a>
+        <a class="doctor-details__a" asp-action="Edit" asp-controller="Doctors" asp-route-id="@Model.Id">Adatlap szerkesztése</a>
+        <a class="doctor-details__a" asp-action="Delete" asp-controller="Doctors" asp-route-id="@Model.Id">Orvos törlése</a>
         <a class="doctor-details__a" asp-action="Create" asp-controller="Review" asp-route-id="@Model.Id">Orvos értékelése</a>
         <div class="doctor-details-reviews">
             <h4>Értékelések:</h4>

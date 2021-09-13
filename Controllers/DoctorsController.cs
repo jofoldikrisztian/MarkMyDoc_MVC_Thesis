@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MarkMyDoctor.Data;
 using MarkMyDoctor.Models.Entities;
+using MarkMyDoctor.Models.ViewModels;
 
 namespace MarkMyDoctor.Controllers
 {
@@ -69,11 +70,26 @@ namespace MarkMyDoctor.Controllers
             }
 
             var doctor = await DoctorService.GetDoctorByIdAsync(id);
+
             if (doctor == null)
             {
                 return NotFound();
             }
-            return View(doctor);
+
+            var doctorViewModel = new DoctorViewModel()
+            {
+                Specialities = await DoctorService.GetSpecialitiesToSelectListAsync(),
+                Doctor = doctor,
+                SelectedSpecialityIds = doctor.DoctorSpecialities.Select(d => d.Speciality.Id.ToString()).ToList()
+            };
+
+
+            if (doctorViewModel == null)
+            {
+                return NotFound();
+            }
+
+            return View(doctorViewModel);
         }
 
         // POST: Doctors/Edit/5
@@ -81,18 +97,56 @@ namespace MarkMyDoctor.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,PhoneNumber,CanPayWithCard,Email,WebAddress,PorfilePicture,OverallRating")] Doctor doctor)
+        public async Task<IActionResult> Edit(int id, DoctorViewModel doctorViewModel)
         {
-            if (id != doctor.Id)
+            var doctor = await DoctorService.GetDoctorByIdAsync(id);
+
+            if (doctor == null)
             {
                 return NotFound();
             }
+
+            var selectedSpecialities = new List<Speciality>();
+
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    DoctorService.UpdateDoctor(doctor);
+
+                    await foreach (var spec in DoctorService.GetSelectedSpecialitiesAsync(doctorViewModel.SelectedSpecialityIds))
+                    {
+                        selectedSpecialities.Add(spec);
+                    }
+
+
+                    doctor.Name = doctorViewModel.Doctor.Name;
+                    doctor.CanPayWithCard = doctorViewModel.Doctor.CanPayWithCard;
+                    doctor.Email = doctorViewModel.Doctor.Email;
+                    doctor.PhoneNumber = doctorViewModel.Doctor.PhoneNumber;
+                    doctor.PorfilePicture = doctorViewModel.Doctor.PorfilePicture;
+                    doctor.WebAddress = doctorViewModel.Doctor.WebAddress;
+
+                    doctor.DoctorSpecialities.Where(m => !selectedSpecialities.Contains(m.Speciality)).ToList().ForEach(spec => doctor.DoctorSpecialities.Remove(spec));
+
+                    var existingSpecialities = doctor.DoctorSpecialities.Select(m => m.Id);
+
+
+
+
+
+                    //doctor.DoctorSpecialities.Where(m => !doctorViewModel.SelectedSpecialityIds.Contains(m.Id))
+
+
+
+
+                    //editDoc.DoctorSpecialities = 
+
+                    //editDoc.DoctorSpecialities.Union(selectedSpecialities);
+
+
+                    //DoctorService.UpdateDoctor(editDoc);
+
                     await DoctorService.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -108,7 +162,8 @@ namespace MarkMyDoctor.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(doctor);
+
+            return View(doctorViewModel);
         }
 
         // GET: Doctors/Delete/5
@@ -139,6 +194,6 @@ namespace MarkMyDoctor.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MarkMyDoctor.Infrastructure;
 using MarkMyDoctor.Models.Entities;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,7 @@ namespace MarkMyDoctor.Data
         private IQueryable<City> Cities => DbContext.Cities;
         private IQueryable<Facility> Facilities => DbContext.Facilities;
         private IQueryable<DoctorFacility> DoctorFacilities => DbContext.DoctorFacilities;
+        private IQueryable<DoctorSpeciality> DoctorSpecialities => DbContext.DoctorSpecialities;
 
 
         public async Task<PaginatedList<Doctor>> GetAllDoctorAsync(int pageNumber)
@@ -118,6 +120,32 @@ namespace MarkMyDoctor.Data
         public void Remove(Doctor doctor)
         {
             DbContext.Remove(doctor);
+        }
+
+        public async Task<ICollection<SelectListItem>> GetSpecialitiesToSelectListAsync()
+        {
+            return (from spec in await GetSpecialitiesAsync() select new SelectListItem { Value = spec.Id.ToString(), Text = spec.Name }).ToList();
+        }
+        public async Task<ICollection<Speciality>> GetSpecialitiesAsync()
+        {
+            return await Specialities.OrderBy(s => s.Name).ToListAsync();
+        }
+
+        public async IAsyncEnumerable<Speciality> GetSelectedSpecialitiesAsync(List<string> selectedSpecialityIds)
+        {
+            if (selectedSpecialityIds == null) yield break;
+            foreach (var specId in selectedSpecialityIds)
+            {
+                if (int.TryParse(specId, out var tempSpecId))
+                {
+                    yield return await Specialities.SingleAsync(s => s.Id.Equals(tempSpecId));
+                }
+            }
+        }
+
+        public async Task<ICollection<DoctorSpeciality>> GetDoctorSpecialities(int id)
+        {
+            return await DoctorSpecialities.Where(s => s.DoctorId == id).ToListAsync();
         }
     }
 }

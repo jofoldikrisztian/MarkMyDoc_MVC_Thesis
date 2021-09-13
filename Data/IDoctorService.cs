@@ -1,5 +1,6 @@
 ﻿using MarkMyDoctor.Infrastructure;
 using MarkMyDoctor.Models.Entities;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,5 +25,9 @@ namespace MarkMyDoctor.Data
         void AddDoctor(Doctor doctor);
         void UpdateDoctor(Doctor doctor);
         void Remove(Doctor doctor);
+        Task<ICollection<SelectListItem>> GetSpecialitiesToSelectListAsync();
+        Task<ICollection<Speciality>> GetSpecialitiesAsync();
+        IAsyncEnumerable<Speciality> GetSelectedSpecialitiesAsync(List<string> selectedSpecialityIds);
+        Task<ICollection<DoctorSpeciality>> GetDoctorSpecialities(int id);
     }
 }
