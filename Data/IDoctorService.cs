@@ -29,5 +29,6 @@ namespace MarkMyDoctor.Data
         Task<ICollection<Speciality>> GetSpecialitiesAsync();
         IAsyncEnumerable<Speciality> GetSelectedSpecialitiesAsync(List<string> selectedSpecialityIds);
         Task<ICollection<DoctorSpeciality>> GetDoctorSpecialities(int id);
+        Task CalculateDoctorOverall(int id);      
     }
 }

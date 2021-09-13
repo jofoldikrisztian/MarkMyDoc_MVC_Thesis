@@ -148,8 +148,34 @@ namespace MarkMyDoctor.Data
             return await DoctorSpecialities.Where(s => s.DoctorId == id).ToListAsync();
         }
 
+        public async Task CalculateDoctorOverall(int id)
+        {
+            var doc = await GetDoctorByIdAsync(id);
 
-        
 
+            if (doc != null)
+            {
+                var professionalism = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.ProfessionalismRating);
+                var humanity = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.HumanityRating);
+                var flexibility = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.FelxibilityRating);
+                var empathy = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.EmpathyRating);
+
+
+                doc.OverallRating = Convert.ToByte(Math.Round((professionalism + humanity + flexibility + empathy) / 4.0));
+
+                DbContext.Update(doc);
+
+                await DbContext.SaveChangesAsync();
+            }
+        }
+
+        public void CreateReview(Review review)
+        {
+            throw new NotImplementedException();
+        }
+
+       
+
+       
     }
 }

@@ -26,5 +26,7 @@ namespace MarkMyDoctor.Models.Entities
         {
             builder.Property(d => d.Name).HasMaxLength(50);
         }
+
+     
     }
 }

@@ -1,0 +1,79 @@
+﻿@model MarkMyDoctor.Models.Entities.Review
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Review</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReviewBody" class="control-label"></label>
+                <input asp-for="ReviewBody" class="form-control" />
+                <span asp-validation-for="ReviewBody" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Recommend" /> @Html.DisplayNameFor(model => model.Recommend)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReviewedOn" class="control-label"></label>
+                <input asp-for="ReviewedOn" class="form-control" />
+                <span asp-validation-for="ReviewedOn" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsReported" /> @Html.DisplayNameFor(model => model.IsReported)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProfessionalismRating" class="control-label"></label>
+                <input asp-for="ProfessionalismRating" class="form-control" />
+                <span asp-validation-for="ProfessionalismRating" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HumanityRating" class="control-label"></label>
+                <input asp-for="HumanityRating" class="form-control" />
+                <span asp-validation-for="HumanityRating" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CommunicationRating" class="control-label"></label>
+                <input asp-for="CommunicationRating" class="form-control" />
+                <span asp-validation-for="CommunicationRating" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmpathyRating" class="control-label"></label>
+                <input asp-for="EmpathyRating" class="form-control" />
+                <span asp-validation-for="EmpathyRating" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FelxibilityRating" class="control-label"></label>
+                <input asp-for="FelxibilityRating" class="form-control" />
+                <span asp-validation-for="FelxibilityRating" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

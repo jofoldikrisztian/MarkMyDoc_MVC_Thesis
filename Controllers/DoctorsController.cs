@@ -21,7 +21,6 @@ namespace MarkMyDoctor.Controllers
         }
 
 
-
         // GET: Doctors/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -31,6 +30,7 @@ namespace MarkMyDoctor.Controllers
             }
 
             var doctor = await DoctorService.GetDoctorByIdAsync(id);
+
             if (doctor == null)
             {
                 return NotFound();
