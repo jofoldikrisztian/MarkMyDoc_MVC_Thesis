@@ -1,4 +1,4 @@
-﻿@model MarkMyDoctor.Models.Entities.Review
+﻿@model DoctorReviewViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -11,60 +11,99 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" new { onsubmit="return VerifyRating()" } method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Doctor.Id" />
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+                <label asp-for="Review.Title" class="control-label">Értékelés címe:</label>
+                <input asp-for="Review.Title" class="form-control" />
+                <span asp-validation-for="Review.Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ReviewBody" class="control-label"></label>
-                <input asp-for="ReviewBody" class="form-control" />
-                <span asp-validation-for="ReviewBody" class="text-danger"></span>
+                <label asp-for="Review.ReviewBody" class="control-label">Értékelés szövege:</label>
+                <input asp-for="Review.ReviewBody" class="form-control" />
+                <span asp-validation-for="Review.ReviewBody" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Recommend" /> @Html.DisplayNameFor(model => model.Recommend)
+                    Ajánlod?
+                    <input class="form-check-input" asp-for="Review.Recommend" />
+                    <span>Igen:</span> @Html.RadioButtonFor(m => m.Review.Recommend, true)
+                    <span>Nem:</span> @Html.RadioButtonFor(m => m.Review.Recommend, false)
                 </label>
             </div>
             <div class="form-group">
-                <label asp-for="ReviewedOn" class="control-label"></label>
-                <input asp-for="ReviewedOn" class="form-control" />
-                <span asp-validation-for="ReviewedOn" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsReported" /> @Html.DisplayNameFor(model => model.IsReported)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProfessionalismRating" class="control-label"></label>
-                <input asp-for="ProfessionalismRating" class="form-control" />
-                <span asp-validation-for="ProfessionalismRating" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HumanityRating" class="control-label"></label>
-                <input asp-for="HumanityRating" class="form-control" />
-                <span asp-validation-for="HumanityRating" class="text-danger"></span>
+                <label asp-for="Review.ProfessionalismRating" class="control-label"></label>
+                <div onmouseout="CreateSelected('Professionalism')">
+                    <i id="Professionalism1" onmouseout="CreateOut(1, 'Professionalism')" onmouseover="CreateOver(1, 'Professionalism')" onclick="CreateClick(1, 'Professionalism')" class="far fa-star"></i>
+                    <i id="Professionalism2" onmouseout="CreateOut(2, 'Professionalism')" onmouseover="CreateOver(2, 'Professionalism')" onclick="CreateClick(2, 'Professionalism')" class="far fa-star"></i>
+                    <i id="Professionalism3" onmouseout="CreateOut(3, 'Professionalism')" onmouseover="CreateOver(3, 'Professionalism')" onclick="CreateClick(3, 'Professionalism')" class="far fa-star"></i>
+                    <i id="Professionalism4" onmouseout="CreateOut(4, 'Professionalism')" onmouseover="CreateOver(4, 'Professionalism')" onclick="CreateClick(4, 'Professionalism')" class="far fa-star"></i>
+                    <i id="Professionalism5" onmouseout="CreateOut(5, 'Professionalism')" onmouseover="CreateOver(5, 'Professionalism')" onclick="CreateClick(5, 'Professionalism')" class="far fa-star"></i>
+                </div>
+                <div>
+                    @Html.HiddenFor(m => m.Review.ProfessionalismRating, new { id = "ProfessionalismRating", value = "0" })
+                </div>
+                <span asp-validation-for="Review.ProfessionalismRating" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CommunicationRating" class="control-label"></label>
-                <input asp-for="CommunicationRating" class="form-control" />
-                <span asp-validation-for="CommunicationRating" class="text-danger"></span>
+                <label asp-for="Review.HumanityRating" class="control-label"></label>
+                <div onmouseout="CreateSelected('Humanity')">
+                    <i id="Humanity1" onmouseout="CreateOut(1, 'Humanity')" onmouseover="CreateOver(1, 'Humanity')" onclick="CreateClick(1, 'Humanity')" class="far fa-star"></i>
+                    <i id="Humanity2" onmouseout="CreateOut(2, 'Humanity')" onmouseover="CreateOver(2, 'Humanity')" onclick="CreateClick(2, 'Humanity')" class="far fa-star"></i>
+                    <i id="Humanity3" onmouseout="CreateOut(3, 'Humanity')" onmouseover="CreateOver(3, 'Humanity')" onclick="CreateClick(3, 'Humanity')" class="far fa-star"></i>
+                    <i id="Humanity4" onmouseout="CreateOut(4, 'Humanity')" onmouseover="CreateOver(4, 'Humanity')" onclick="CreateClick(4, 'Humanity')" class="far fa-star"></i>
+                    <i id="Humanity5" onmouseout="CreateOut(5, 'Humanity')" onmouseover="CreateOver(5, 'Humanity')" onclick="CreateClick(5, 'Humanity')" class="far fa-star"></i>
+                </div>
+                <div>
+                    @Html.HiddenFor(m => m.Review.HumanityRating, new { id = "HumanityRating", value = "0" })
+                </div>
+                <span asp-validation-for="Review.HumanityRating" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EmpathyRating" class="control-label"></label>
-                <input asp-for="EmpathyRating" class="form-control" />
-                <span asp-validation-for="EmpathyRating" class="text-danger"></span>
+                <label asp-for="Review.CommunicationRating" class="control-label"></label>
+                <div onmouseout="CreateSelected('Communication')">
+                    <i id="Communication1" onmouseout="CreateOut(1, 'Communication')" onmouseover="CreateOver(1, 'Communication')" onclick="CreateClick(1, 'Communication')" class="far fa-star"></i>
+                    <i id="Communication2" onmouseout="CreateOut(2, 'Communication')" onmouseover="CreateOver(2, 'Communication')" onclick="CreateClick(2, 'Communication')" class="far fa-star"></i>
+                    <i id="Communication3" onmouseout="CreateOut(3, 'Communication')" onmouseover="CreateOver(3, 'Communication')" onclick="CreateClick(3, 'Communication')" class="far fa-star"></i>
+                    <i id="Communication4" onmouseout="CreateOut(4, 'Communication')" onmouseover="CreateOver(4, 'Communication')" onclick="CreateClick(4, 'Communication')" class="far fa-star"></i>
+                    <i id="Communication5" onmouseout="CreateOut(5, 'Communication')" onmouseover="CreateOver(5, 'Communication')" onclick="CreateClick(5, 'Communication')" class="far fa-star"></i>
+                </div>
+                <div>
+                    @Html.HiddenFor(m => m.Review.CommunicationRating, new { id = "CommunicationRating", value = "0" })
+                </div>
+                <span asp-validation-for="Review.CommunicationRating" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FelxibilityRating" class="control-label"></label>
-                <input asp-for="FelxibilityRating" class="form-control" />
-                <span asp-validation-for="FelxibilityRating" class="text-danger"></span>
+                <label asp-for="Review.EmpathyRating" class="control-label"></label>
+                <div onmouseout="CreateSelected('Empathy')">
+                    <i id="Empathy1" onmouseout="CreateOut(1, 'Empathy')" onmouseover="CreateOver(1, 'Empathy')" onclick="CreateClick(1, 'Empathy')" class="far fa-star"></i>
+                    <i id="Empathy2" onmouseout="CreateOut(2, 'Empathy')" onmouseover="CreateOver(2, 'Empathy')" onclick="CreateClick(2, 'Empathy')" class="far fa-star"></i>
+                    <i id="Empathy3" onmouseout="CreateOut(3, 'Empathy')" onmouseover="CreateOver(3, 'Empathy')" onclick="CreateClick(3, 'Empathy')" class="far fa-star"></i>
+                    <i id="Empathy4" onmouseout="CreateOut(4, 'Empathy')" onmouseover="CreateOver(4, 'Empathy')" onclick="CreateClick(4, 'Empathy')" class="far fa-star"></i>
+                    <i id="Empathy5" onmouseout="CreateOut(5, 'Empathy')" onmouseover="CreateOver(5, 'Empathy')" onclick="CreateClick(5, 'Empathy')" class="far fa-star"></i>
+                </div>
+                <div>
+                    @Html.HiddenFor(m => m.Review.EmpathyRating, new { id = "EmpathyRating", value = "0" })
+                </div>
+                <span asp-validation-for="Review.EmpathyRating"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <label asp-for="Review.FelxibilityRating" class="control-label"></label>
+                <div onmouseout="CreateSelected('Flexibility')">
+                    <i id="Flexibility1" onmouseout="CreateOut(1, 'Flexibility')" onmouseover="CreateOver(1, 'Flexibility')" onclick="CreateClick(1, 'Flexibility')" class="far fa-star"></i>
+                    <i id="Flexibility2" onmouseout="CreateOut(2, 'Flexibility')" onmouseover="CreateOver(2, 'Flexibility')" onclick="CreateClick(2, 'Flexibility')" class="far fa-star"></i>
+                    <i id="Flexibility3" onmouseout="CreateOut(3, 'Flexibility')" onmouseover="CreateOver(3, 'Flexibility')" onclick="CreateClick(3, 'Flexibility')" class="far fa-star"></i>
+                    <i id="Flexibility4" onmouseout="CreateOut(4, 'Flexibility')" onmouseover="CreateOver(4, 'Flexibility')" onclick="CreateClick(4, 'Flexibility')" class="far fa-star"></i>
+                    <i id="Flexibility5" onmouseout="CreateOut(5, 'Flexibility')" onmouseover="CreateOver(5, 'Flexibility')" onclick="CreateClick(5, 'Flexibility')" class="far fa-star"></i>
+                </div>
+                <div>
+                    @Html.HiddenFor(m => m.Review.FelxibilityRating, new { id = "FlexibilityRating", value = "0" })
+                </div>
+                <span asp-validation-for="Review.FelxibilityRating" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Mentés" class="btn btn-primary" />
             </div>
         </form>
     </div>

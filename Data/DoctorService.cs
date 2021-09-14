@@ -25,6 +25,7 @@ namespace MarkMyDoctor.Data
         private IQueryable<Facility> Facilities => DbContext.Facilities;
         private IQueryable<DoctorFacility> DoctorFacilities => DbContext.DoctorFacilities;
         private IQueryable<DoctorSpeciality> DoctorSpecialities => DbContext.DoctorSpecialities;
+        private IQueryable<User> Users => DbContext.Users;
 
 
         public async Task<PaginatedList<Doctor>> GetAllDoctorAsync(int pageNumber)
@@ -148,7 +149,7 @@ namespace MarkMyDoctor.Data
             return await DoctorSpecialities.Where(s => s.DoctorId == id).ToListAsync();
         }
 
-        public async Task CalculateDoctorOverall(int id)
+        public async Task CalculateDoctorOverall(int id, int actualReviewScore)
         {
             var doc = await GetDoctorByIdAsync(id);
 
@@ -157,25 +158,25 @@ namespace MarkMyDoctor.Data
             {
                 var professionalism = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.ProfessionalismRating);
                 var humanity = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.HumanityRating);
-                var flexibility = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.FelxibilityRating);
+                var communication = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.CommunicationRating);
                 var empathy = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.EmpathyRating);
+                var flexibility = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.FelxibilityRating);
 
 
-                doc.OverallRating = Convert.ToByte(Math.Round((professionalism + humanity + flexibility + empathy) / 4.0));
+                doc.OverallRating = Convert.ToByte(Math.Round((professionalism + humanity + flexibility + empathy + communication + actualReviewScore) / 5.0));
 
                 DbContext.Update(doc);
-
-                await DbContext.SaveChangesAsync();
             }
         }
 
-        public void CreateReview(Review review)
+        public async void CreateReview(Review review)
         {
-            throw new NotImplementedException();
+            await DbContext.AddAsync(review);
         }
 
-       
-
-       
+        public async Task<User> GetUserById(int id)
+        {
+            return await Users.FirstOrDefaultAsync(u => u.Id == id);
+        }
     }
 }

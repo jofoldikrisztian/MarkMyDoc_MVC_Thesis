@@ -66,3 +66,46 @@ $(document).ready(function () {
         }
     );
 });
+
+
+function CreateOut(rating, ratingAspect) {
+    for (var i = 1; i <= rating; i++) {
+        $("#" + ratingAspect + i).attr('class', 'far fa-star');
+    }
+}
+
+function CreateOver(rating, ratingAspect) {
+    for (var i = 1; i <= rating; i++) {
+        $("#" + ratingAspect + i).attr('class', 'fas fa-star');
+    }
+}
+
+function CreateClick(rating, ratingAspect) {
+    $("#" + ratingAspect + "Rating").val(rating);
+    for (var i = 1; i <= rating; i++) {
+        $("#" + ratingAspect + i).attr('class', 'fas fa-star');
+    }
+
+    for (var i = rating + 1; i <= 5; i++) {
+        $("#" + ratingAspect + i).attr('class', 'far fa-star');
+    }
+}
+
+function CreateSelected(ratingAspect) {
+    var rating = $("#" + ratingAspect + "Rating").val();
+    for (var i = 1; i <= rating; i++) {
+        $("#" + ratingAspect + i).attr('class', 'fas fa-star');
+    }
+}
+
+function VerifyRating(ratingAspect) {
+    var ProfessionalismRating = $("#ProfessionalismRating").val();
+    var CommunicationRating = $("#CommunicationRating").val();
+    var EmpathyRating = $("#EmpathyRating").val();
+    var HumanityRating = $("#HumanityRating").val();
+    var FelxibilityRating = $("#FlexibilityRating").val();
+    if (ProfessionalismRating == "0" || CommunicationRating == "0" || EmpathyRating == "0" || HumanityRating == "0" || FelxibilityRating == "0") {
+        alert("Kérlek tölts ki minden értékelést!");
+        return false;
+    }
+}

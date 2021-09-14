@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,7 +11,9 @@ namespace MarkMyDoctor.Models.Entities
     public class Review : IEntityTypeConfiguration<Review>
     {
         public int Id { get; set; }
+        [Required(ErrorMessage = "A mező kitöltése kötelező")]
         public string Title { get; set; }
+        [Required(ErrorMessage = "A mező kitöltése kötelező")]
         public string ReviewBody { get; set; }
         public bool Recommend { get; set; }
         public DateTime ReviewedOn { get; set; }
