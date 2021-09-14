@@ -22,7 +22,7 @@ namespace MarkMyDoctor.Models.Entities
         public byte HumanityRating { get; set; }
         public byte CommunicationRating { get; set; }
         public byte EmpathyRating { get; set; }
-        public byte FelxibilityRating { get; set; }
+        public byte FlexibilityRating { get; set; }
 
         public int DoctorId { get; set; }
         public Doctor Doctor { get; set; }

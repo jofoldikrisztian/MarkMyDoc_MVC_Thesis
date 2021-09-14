@@ -21,7 +21,7 @@
             @for (var i = @Model.OverallRating; i < 5; i++)
             {
                 <i class="far fa-star"></i>}
-            @*<span> (@Model?.Reviews?.Count())</span>*@
+            <span> (@Model?.Reviews?.Count())</span>
         </div>
 
         <div class="doctor-details">
@@ -48,7 +48,7 @@
             <hr>
             <div class="doctor-review">
 
-                @*@if (Model.Reviews.Any())
+                @if (Model.Reviews.Any())
                 {
                     <partial Name="_ReviewListPartial" model="@Model" /> }
                 else
@@ -56,7 +56,7 @@
 
                     <div class="empty-box">
                         <span>Még nem érkezett értékelés!</span>
-                    </div>}*@
+                    </div>}
             </div>
         </div>
         @*<div id="map-div"></div>*@

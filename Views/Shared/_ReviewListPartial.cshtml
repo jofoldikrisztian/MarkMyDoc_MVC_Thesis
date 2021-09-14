@@ -1,0 +1,81 @@
+﻿@foreach (var rev in Model.Reviews)
+{
+    <div class="reviewCard">
+
+        <div class="reviewRatings">
+            <div>
+                <span>Professzionalitás:</span>
+                <div>
+                    @for (var i = 0; i < @rev.ProfessionalismRating; i++)
+                    {
+                        <i class="fas fa-star"></i>
+                    }
+                    @for (int i = @rev.ProfessionalismRating; i < 5; i++)
+                    {
+                        <i class="far fa-star"></i>
+                    }
+                </div>
+            </div>
+            <div>
+                <span>Emberség:</span>
+                <div>
+                    @for (int i = 0; i < @rev.HumanityRating; i++)
+                    {
+                        <i class="fas fa-star"></i>
+                    }
+                    @for (int i = @rev.HumanityRating; i < 5; i++)
+                    {
+                        <i class="far fa-star"></i>
+                    }
+                </div>
+            </div>
+            <div>
+                <span>Kommunikáció:</span>
+                <div>
+                    @for (var i = 0; i < @rev.CommunicationRating; i++)
+                    {
+                        <i class="fas fa-star"></i>
+                    }
+                    @for (int i = @rev.CommunicationRating; i < 5; i++)
+                    {
+                        <i class="far fa-star"></i>
+                    }
+                </div>
+            </div>
+            <div>
+                <span>Empátia:</span>
+                <div>
+                    @for (var i = 0; i < @rev.EmpathyRating; i++)
+                    {
+                        <i class="fas fa-star"></i>
+                    }
+                    @for (int i = @rev.EmpathyRating; i < 5; i++)
+                    {
+                        <i class="far fa-star"></i>
+                    }
+                </div>
+            </div>
+            <div>
+                <span>Rugalmasság:</span>
+                <div>
+                    @for (var i = 0; i < @rev.FlexibilityRating; i++)
+                    {
+                        <i class="fas fa-star"></i>
+                    }
+                    @for (int i = @rev.FlexibilityRating; i < 5; i++)
+                    {
+                        <i class="far fa-star"></i>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="reviewInformation">
+            <div class="review-title">
+                <h3>@rev.Title</h3>
+                <span>@rev.ReviewedOn.ToString("dd-MMM-yyyy")</span>
+            </div>
+            <span>@rev.ReviewBody</span>
+        </div>
+
+    </div>
+}

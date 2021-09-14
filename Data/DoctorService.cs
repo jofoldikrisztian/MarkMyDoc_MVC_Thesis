@@ -100,7 +100,12 @@ namespace MarkMyDoctor.Data
 
         public async Task<Doctor> GetDoctorByIdAsync(int? id)
         {
-            return await Doctors.Include(d => d.DoctorSpecialities).ThenInclude(s => s.Speciality).Include(d => d.DoctorFacilities).ThenInclude(f => f.Facility).FirstOrDefaultAsync(d => d.Id.Equals(id));
+            return await Doctors.Include(d => d.DoctorSpecialities)
+                                .ThenInclude(s => s.Speciality)
+                                .Include(d => d.DoctorFacilities)
+                                .ThenInclude(f => f.Facility)
+                                .Include(d => d.Reviews)
+                                .FirstOrDefaultAsync(d => d.Id.Equals(id));
         }
 
         public Task SaveChangesAsync()
@@ -160,7 +165,7 @@ namespace MarkMyDoctor.Data
                 var humanity = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.HumanityRating);
                 var communication = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.CommunicationRating);
                 var empathy = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.EmpathyRating);
-                var flexibility = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.FelxibilityRating);
+                var flexibility = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.FlexibilityRating);
 
 
                 doc.OverallRating = Convert.ToByte(Math.Round((professionalism + humanity + flexibility + empathy + communication + actualReviewScore) / 5.0));

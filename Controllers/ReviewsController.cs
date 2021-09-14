@@ -63,7 +63,7 @@ namespace MarkMyDoctor.Controllers
 
             var reviewScore = review.CommunicationRating +
                               review.EmpathyRating +
-                              review.FelxibilityRating +
+                              review.FlexibilityRating +
                               review.HumanityRating +
                               review.ProfessionalismRating;
 

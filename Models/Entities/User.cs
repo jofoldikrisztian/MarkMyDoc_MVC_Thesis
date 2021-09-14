@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -7,11 +8,9 @@ using System.Threading.Tasks;
 
 namespace MarkMyDoctor.Models.Entities
 {
-    public class User : IEntityTypeConfiguration<User>
+    public class User : IdentityUser<int> ,IEntityTypeConfiguration<User>
     {
-        public int Id { get; set; }
         public string Name { get; set; }
-
         public ICollection<Review>? Reviews { get; set; }
 
 

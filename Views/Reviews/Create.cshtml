@@ -9,8 +9,8 @@
 
 <h4>Review</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="row container-block">
+    <div class="col-md-4 container-form">
         <form asp-action="Create" new { onsubmit="return VerifyRating()" } method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Doctor.Id" />
@@ -89,7 +89,7 @@
                 <span asp-validation-for="Review.EmpathyRating"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Review.FelxibilityRating" class="control-label"></label>
+                <label asp-for="Review.FlexibilityRating" class="control-label"></label>
                 <div onmouseout="CreateSelected('Flexibility')">
                     <i id="Flexibility1" onmouseout="CreateOut(1, 'Flexibility')" onmouseover="CreateOver(1, 'Flexibility')" onclick="CreateClick(1, 'Flexibility')" class="far fa-star"></i>
                     <i id="Flexibility2" onmouseout="CreateOut(2, 'Flexibility')" onmouseover="CreateOver(2, 'Flexibility')" onclick="CreateClick(2, 'Flexibility')" class="far fa-star"></i>
@@ -98,9 +98,9 @@
                     <i id="Flexibility5" onmouseout="CreateOut(5, 'Flexibility')" onmouseover="CreateOver(5, 'Flexibility')" onclick="CreateClick(5, 'Flexibility')" class="far fa-star"></i>
                 </div>
                 <div>
-                    @Html.HiddenFor(m => m.Review.FelxibilityRating, new { id = "FlexibilityRating", value = "0" })
+                    @Html.HiddenFor(m => m.Review.FlexibilityRating, new { id = "FlexibilityRating", value = "0" })
                 </div>
-                <span asp-validation-for="Review.FelxibilityRating" class="text-danger"></span>
+                <span asp-validation-for="Review.FlexibilityRating" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Mentés" class="btn btn-primary" />

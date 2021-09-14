@@ -1,5 +1,7 @@
 ﻿using MarkMyDoctor.Models;
 using MarkMyDoctor.Models.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MarkMyDoctor.Data
 {
-    public class DoctorDbContext : DbContext
+    public class DoctorDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
         public DoctorDbContext(DbContextOptions<DoctorDbContext> options) : base(options) { }
 
@@ -21,11 +23,13 @@ namespace MarkMyDoctor.Data
         public DbSet<Facility> Facilities { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Speciality> Specialities { get; set; }
-        public DbSet<User> Users { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            base.OnModelCreating(modelBuilder);
             //Megkeresi az összes olyan objektumot, mely megvalósítja IEntityTypeConfiguration interfészt, és meghívja a Configure metódusát.
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 

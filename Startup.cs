@@ -28,7 +28,7 @@ namespace MarkMyDoctor
         {
             services.AddDbContext<DoctorDbContext>(options => 
             
-            options.UseSqlServer(Configuration.GetConnectionString("MarkMyDoctorDB")));
+            options.UseSqlServer(Configuration.GetConnectionString("MarkMyDoctorDB"), o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
             services.AddScoped<IDoctorService, DoctorService>();
 
