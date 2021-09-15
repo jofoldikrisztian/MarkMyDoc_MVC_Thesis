@@ -161,14 +161,22 @@ namespace MarkMyDoctor.Data
 
             if (doc != null)
             {
-                var professionalism = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.ProfessionalismRating);
-                var humanity = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.HumanityRating);
-                var communication = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.CommunicationRating);
-                var empathy = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.EmpathyRating);
-                var flexibility = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.FlexibilityRating);
+                if (Reviews.Where(r => r.DoctorId == id).Any())
+                {
+                    var professionalism = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.ProfessionalismRating);
+                    var humanity = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.HumanityRating);
+                    var communication = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.CommunicationRating);
+                    var empathy = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.EmpathyRating);
+                    var flexibility = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.FlexibilityRating);
 
+                    doc.OverallRating = Convert.ToByte(Math.Round((professionalism + humanity + flexibility + empathy + communication + actualReviewScore) / 5.0));
+                }
+                else
+                {
+                    doc.OverallRating = Convert.ToByte(Math.Round((actualReviewScore) / 5.0));
+                }
 
-                doc.OverallRating = Convert.ToByte(Math.Round((professionalism + humanity + flexibility + empathy + communication + actualReviewScore) / 5.0));
+               
 
                 DbContext.Update(doc);
             }

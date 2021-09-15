@@ -55,11 +55,6 @@ namespace MarkMyDoctor.Models
                     dbContext.DoctorFacilities.AddRange(AddFacilitiesToDoctors(dbContext));
                 }
 
-                if (!dbContext.Users.Any())
-                {
-                    dbContext.Users.Add(new User() { Name = "Gyuri" });
-                }
-
                 await dbContext.SaveChangesAsync();
             }
         }

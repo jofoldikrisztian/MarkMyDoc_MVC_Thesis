@@ -8,16 +8,20 @@ using Microsoft.EntityFrameworkCore;
 using MarkMyDoctor.Data;
 using MarkMyDoctor.Models.Entities;
 using MarkMyDoctor.Models.ViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace MarkMyDoctor.Controllers
 {
     public class ReviewsController : Controller
     {
+        private readonly UserManager<User> userManager;
+
         private IDoctorService DoctorService { get; }
 
-        public ReviewsController(IDoctorService doctorService)
+        public ReviewsController(IDoctorService doctorService, UserManager<User> userManager)
         {
             DoctorService = doctorService;
+            this.userManager = userManager;
         }
 
 
@@ -57,7 +61,8 @@ namespace MarkMyDoctor.Controllers
 
             review.ReviewedOn = DateTime.Today;
 
-            review.User = await DoctorService.GetUserById(1);
+
+            review.User = await userManager.GetUserAsync(User);
 
             DoctorService.CreateReview(review);
 

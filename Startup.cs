@@ -1,8 +1,13 @@
 using MarkMyDoctor.Data;
 using MarkMyDoctor.Models;
+using MarkMyDoctor.Models.Entities;
+using MarkMyDoctor.Services;
+using MarkMyDoctor.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,13 +31,36 @@ namespace MarkMyDoctor
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DoctorDbContext>(options => 
-            
-            options.UseSqlServer(Configuration.GetConnectionString("MarkMyDoctorDB"), o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
+            services.AddDbContext<DoctorDbContext>(options =>
+                                        options.UseSqlServer(Configuration.GetConnectionString("MarkMyDoctorDB"), 
+                                        o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
+            services.AddIdentity<User, IdentityRole<int>>()
+                .AddEntityFrameworkStores<DoctorDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options =>
+                    options.SignIn.RequireConfirmedEmail = false);
+
+
+            services.ConfigureApplicationCookie(optoins =>
+            {
+                optoins.Cookie.HttpOnly = true;
+                optoins.Cookie.IsEssential = true;
+                optoins.LoginPath = "/Identity/Account/Login";
+                optoins.AccessDeniedPath = "/Identity/Account/AccesDenied";
+
+            });
+
+            services.AddTransient<IEmailSender, EmailSender>();
+
+            services.Configure<MailSettings>( Configuration.GetSection("MailSettings"));
+            
             services.AddScoped<IDoctorService, DoctorService>();
 
             services.AddControllersWithViews();
+
+            services.AddRazorPages();
 
 
         }
@@ -55,6 +83,8 @@ namespace MarkMyDoctor
 
             app.UseRouting();
 
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -62,6 +92,7 @@ namespace MarkMyDoctor
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
 
             Seed.Data(app);
