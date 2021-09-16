@@ -1,6 +1,7 @@
 using MarkMyDoctor.Data;
 using MarkMyDoctor.Models;
 using MarkMyDoctor.Models.Entities;
+using MarkMyDoctor.SeedData;
 using MarkMyDoctor.Services;
 using MarkMyDoctor.Settings;
 using Microsoft.AspNetCore.Builder;
@@ -32,8 +33,8 @@ namespace MarkMyDoctor
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DoctorDbContext>(options =>
-                                        options.UseSqlServer(Configuration.GetConnectionString("MarkMyDoctorDB"), 
-                                        o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
+                                        options.UseSqlServer(Configuration.GetConnectionString("MarkMyDoctorDB") 
+                                        /*o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)*/));
 
             services.AddIdentity<User, IdentityRole<int>>()
                 .AddEntityFrameworkStores<DoctorDbContext>()
@@ -57,6 +58,12 @@ namespace MarkMyDoctor
             services.Configure<MailSettings>( Configuration.GetSection("MailSettings"));
             
             services.AddScoped<IDoctorService, DoctorService>();
+
+
+
+            services.AddScoped<IRoleSeedService, RoleSeedService>();
+
+            services.AddScoped<IUserSeedService, UserSeedService>();
 
             services.AddControllersWithViews();
 
@@ -96,6 +103,7 @@ namespace MarkMyDoctor
             });
 
             Seed.Data(app);
+            Seed.UserAndRoles(app);
         }
     }
 }

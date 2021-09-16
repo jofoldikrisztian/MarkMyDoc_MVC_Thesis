@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace MarkMyDoctor.Models
+namespace MarkMyDoctor.SeedData
 {
     public static class Seed
     {
@@ -59,11 +59,23 @@ namespace MarkMyDoctor.Models
             }
         }
 
+        public async static void UserAndRoles(IApplicationBuilder app)
+        {
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                var roleSeeder = scope.ServiceProvider.GetRequiredService<IRoleSeedService>();
+                await roleSeeder.SeedRoleAsync();
+
+                var userSeeder = scope.ServiceProvider.GetRequiredService<IUserSeedService>();
+                await userSeeder.SeedUserAsync();
+            }
+        }
+
         private static IEnumerable<DoctorFacility> AddFacilitiesToDoctors(DoctorDbContext dbContext)
         {
             var docFacList = new List<DoctorFacility>();
 
-            foreach (var fac in File.ReadAllLines(@"./PopulateData/housedoctors.txt"))
+            foreach (var fac in File.ReadAllLines(@"./SeedData/PopulateData/housedoctors.txt"))
             {
                 var line = fac.Split("\t");
 
@@ -104,7 +116,7 @@ namespace MarkMyDoctor.Models
 
             var facilities = new List<Facility>();
 
-            foreach (var fac in File.ReadAllLines(@"./PopulateData/housedoctors.txt"))
+            foreach (var fac in File.ReadAllLines(@"./SeedData/PopulateData/housedoctors.txt"))
             {
                 var line = fac.Split("\t");
 
@@ -127,14 +139,14 @@ namespace MarkMyDoctor.Models
 
         private static IEnumerable<Speciality> ReadSpecialities(object context)
         {
-            return File.ReadAllLines(@"./PopulateData/specialities.txt").Select(speciality => new Speciality() { Name = speciality.ToLower() }).ToList();
+            return File.ReadAllLines(@"./SeedData/PopulateData/specialities.txt").Select(speciality => new Speciality() { Name = speciality.ToLower() }).ToList();
         }
 
         private static IEnumerable<Doctor> ReadDoctors()
         {
             var doctors = new List<Doctor>();
 
-            foreach (var doctor in File.ReadAllLines(@"./PopulateData/housedoctors.txt"))
+            foreach (var doctor in File.ReadAllLines(@"./SeedData/PopulateData/housedoctors.txt"))
             {
                 var doctorLine = doctor.Split("\t");
 
@@ -160,7 +172,7 @@ namespace MarkMyDoctor.Models
 
         private static IEnumerable<City> ReadCities()
         {
-            return File.ReadAllLines(@"./PopulateData/cities.txt").Select(line => new City() { Name = line }).ToList();
+            return File.ReadAllLines(@"./SeedData/PopulateData/cities.txt").Select(line => new City() { Name = line }).ToList();
         }
 
         private static void CheckMigrations(DoctorDbContext context)

@@ -30,7 +30,7 @@ namespace MarkMyDoctor.Data
         IAsyncEnumerable<Speciality> GetSelectedSpecialitiesAsync(List<string> selectedSpecialityIds);
         Task<ICollection<DoctorSpeciality>> GetDoctorSpecialities(int id);
         Task CalculateDoctorOverall(int id, int actualReviewScore);
-        void CreateReview(Review review);
+        Task CreateReview(Review review);
         Task<User> GetUserById(int id);
     }
 }

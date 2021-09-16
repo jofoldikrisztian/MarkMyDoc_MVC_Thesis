@@ -108,9 +108,9 @@ namespace MarkMyDoctor.Data
                                 .FirstOrDefaultAsync(d => d.Id.Equals(id));
         }
 
-        public Task SaveChangesAsync()
+        public async Task SaveChangesAsync()
         {
-           return DbContext.SaveChangesAsync();
+           await DbContext.SaveChangesAsync();
         }
 
         public void AddDoctor(Doctor doctor)
@@ -182,7 +182,7 @@ namespace MarkMyDoctor.Data
             }
         }
 
-        public async void CreateReview(Review review)
+        public async Task CreateReview(Review review)
         {
             await DbContext.AddAsync(review);
         }

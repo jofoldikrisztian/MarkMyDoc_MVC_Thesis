@@ -131,7 +131,7 @@ namespace MarkMyDoctor.Controllers
                     doctor.DoctorSpecialities.Where(m => !selectedSpecialities.Contains(m.Speciality)).ToList().ForEach(spec => doctor.DoctorSpecialities.Remove(spec));
 
                     //A "megmaradt" specialitások tárolása egy ideiglenes objektumba
-                    var existingSpecialities = doctor.DoctorSpecialities.Select(m => m.Speciality.Id);
+                    var existingSpecialities = doctor.DoctorSpecialities.Select(m => m.Speciality.Id).ToList();
 
                     //Az új specialitások hozzáadása az orvoshoz
 
@@ -159,7 +159,7 @@ namespace MarkMyDoctor.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Doctors", new { id = id });
             }
 
             return View(doctorViewModel);
