@@ -33,8 +33,8 @@ namespace MarkMyDoctor
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DoctorDbContext>(options =>
-                                        options.UseSqlServer(Configuration.GetConnectionString("MarkMyDoctorDB")
-                                        /*o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)*/));
+                                        options.UseSqlServer(Configuration.GetConnectionString("MarkMyDoctorDB"),
+                                        o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
             services.AddIdentity<User, IdentityRole<int>>()
                 .AddEntityFrameworkStores<DoctorDbContext>()

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using MarkMyDoctor.Data;
 using MarkMyDoctor.Models.Entities;
 using MarkMyDoctor.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MarkMyDoctor.Controllers
 {
@@ -166,6 +167,7 @@ namespace MarkMyDoctor.Controllers
         }
 
         // GET: Doctors/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

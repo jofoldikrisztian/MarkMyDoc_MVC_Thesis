@@ -1,5 +1,8 @@
 ﻿@model MarkMyDoctor.Models.Entities.Doctor
 
+
+@inject SignInManager<User> SignInManager
+
 @{
     ViewData["Title"] = Model.Name;
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -41,7 +44,10 @@
             </div>
         </div>
         <a class="doctor-details__a" asp-action="Edit" asp-controller="Doctors" asp-route-id="@Model.Id">Adatlap szerkesztése</a>
-        <a class="doctor-details__a" asp-action="Delete" asp-controller="Doctors" asp-route-id="@Model.Id">Orvos törlése</a>
+        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+        {
+            <a class="doctor-details__a" asp-action="Delete" asp-controller="Doctors" asp-route-id="@Model.Id">Orvos törlése</a>
+        }
         <a class="doctor-details__a" asp-action="Create" asp-controller="Reviews" asp-route-id="@Model.Id">Orvos értékelése</a>
         <div class="doctor-details-reviews">
             <h4>Értékelések:</h4>
