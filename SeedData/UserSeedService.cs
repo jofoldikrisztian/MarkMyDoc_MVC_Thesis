@@ -1,19 +1,22 @@
-﻿using MarkMyDoctor.Models.Entities;
+﻿using MarkMyDoctor.Data;
+using MarkMyDoctor.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MarkMyDoctor.SeedData
+namespace MarkMyDoctor.SeedData 
 {
     public class UserSeedService : IUserSeedService
     {
         private readonly UserManager<User> userManager;
+        private readonly IDoctorService doctorService;
 
-        public UserSeedService(UserManager<User> userManager)
+        public UserSeedService(UserManager<User> userManager, IDoctorService doctorService)
         {
             this.userManager = userManager;
+            this.doctorService = doctorService;
         }
         public async Task SeedUserAsync()
         {
@@ -23,22 +26,25 @@ namespace MarkMyDoctor.SeedData
                 {
                     UserName = "Administrator",
                     Email = "admin@markmydoc.com",
-                    SecurityStamp = Guid.NewGuid().ToString()
+                    SecurityStamp = Guid.NewGuid().ToString("D"),
+                    NormalizedEmail = "ADMIN@MARKMYDOC.COM",
+                    NormalizedUserName = "ADMINISTRATOR",
+                    PhoneNumber = "+36303332233",
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
                 };
 
-                var createResult = await userManager.CreateAsync(user, "P@$$W0rd");
+                var password = new PasswordHasher<User>();
+                var hashed = password.HashPassword(user, "secret");
+                user.PasswordHash = hashed;
 
-                if (userManager.Options.SignIn.RequireConfirmedAccount)
-                {
-                    var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                var result = await userManager.CreateAsync(user);
 
-                    var result = await userManager.ConfirmEmailAsync(user, code);
-                }
 
                 var addToRoleResult = await userManager.AddToRoleAsync(user, "Administrator");
 
 
-                if (!createResult.Succeeded || !addToRoleResult.Succeeded)
+                if (!result.Succeeded || !addToRoleResult.Succeeded)
                 {
                     throw new ApplicationException("Nem sikerült létrehozni az Administrator felhasználót");
                 }

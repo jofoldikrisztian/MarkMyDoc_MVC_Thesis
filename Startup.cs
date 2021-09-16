@@ -33,7 +33,7 @@ namespace MarkMyDoctor
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DoctorDbContext>(options =>
-                                        options.UseSqlServer(Configuration.GetConnectionString("MarkMyDoctorDB") 
+                                        options.UseSqlServer(Configuration.GetConnectionString("MarkMyDoctorDB")
                                         /*o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)*/));
 
             services.AddIdentity<User, IdentityRole<int>>()
@@ -41,7 +41,10 @@ namespace MarkMyDoctor
                 .AddDefaultTokenProviders();
 
             services.Configure<IdentityOptions>(options =>
-                    options.SignIn.RequireConfirmedEmail = false);
+            {
+                options.SignIn.RequireConfirmedEmail = true;
+                options.SignIn.RequireConfirmedAccount = true;
+            });
 
 
             services.ConfigureApplicationCookie(optoins =>
@@ -55,8 +58,8 @@ namespace MarkMyDoctor
 
             services.AddTransient<IEmailSender, EmailSender>();
 
-            services.Configure<MailSettings>( Configuration.GetSection("MailSettings"));
-            
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+
             services.AddScoped<IDoctorService, DoctorService>();
 
 
