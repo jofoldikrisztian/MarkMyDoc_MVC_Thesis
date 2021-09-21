@@ -92,10 +92,42 @@ body {
     max-width: 100%;
 }
 
+
+
+/* #region forms */
+
+
+.bg-black {
+    background-color: rgba(000,000,000,0.5);
+    border: 4px double rgba(255,255,255,0.3);
+}
+
+label {
+    font-weight: 600;
+}
+
+.form-control {
+    border-radius: 0;
+    padding: 26px;
+    background-color: rgba(255,255,255,0.8);
+    border: none;
+}
+
+.btn {
+    border-radius: 0;
+}
+
+.select2-selection__choice {
+    background-color: #757575 !important;
+}
+
+
+/* #endregion forms*/
 .content {
     background-image: url(../images/bg.jpg);
     background-size: cover;
     background-position: center;
+    min-height: 85vh;
 }
 
 @media (min-width: 1200px) {
@@ -410,12 +442,13 @@ body {
         width: 30%;
     }
 
-        .doctor-card .image img {
+        .doctor-card .image  img {
             width: 70%;
             position: relative;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+
         }
 
     .doctor-card .infos {
@@ -529,9 +562,11 @@ body {
     box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.3);
 }
 
-    .image-container img {
+.image-container img {
         border-radius: 50%;
-    }
+        width: 170px;
+        height: 170px;
+}
 
 .lower-container {
     height: auto;
@@ -597,11 +632,12 @@ hr {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 15px;
 }
 
-    .empty-box span {
-        padding: 0;
-    }
+.empty-box span {
+    padding: 0;
+}
 
 #map-div {
     margin-top: 30px;

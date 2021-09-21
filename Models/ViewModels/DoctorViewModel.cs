@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MarkMyDoctor.Data;
 using MarkMyDoctor.Models.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MarkMyDoctor.Models.ViewModels
@@ -15,6 +16,8 @@ namespace MarkMyDoctor.Models.ViewModels
         public Doctor Doctor { get; init; }
         [Display(Name ="Specialitások:")]
         public List<string> SelectedSpecialityIds { get; init; }
+
+        public IFormFile? Image { get; set; }
 
     }
 }

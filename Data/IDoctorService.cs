@@ -32,5 +32,6 @@ namespace MarkMyDoctor.Data
         Task CalculateDoctorOverall(int id, int actualReviewScore);
         Task CreateReview(Review review);
         Task<User> GetUserById(int id);
+ 
     }
 }

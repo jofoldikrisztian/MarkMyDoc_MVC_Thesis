@@ -1,61 +1,75 @@
-﻿@model MarkMyDoctor.Models.Entities.Doctor
+﻿@model MarkMyDoctor.Models.ViewModels.DoctorViewModel
 
 @{
-    ViewData["Title"] = "Új orvos hozzáadása";
+    ViewData["Title"] = "Orvos hozzáadása";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-<h4>Új orvos hozzáadása</h4>
-<hr />
-<div class="row container-block">
-    <div class="col-md-4 container-form">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="CanPayWithCard" /> @Html.DisplayNameFor(model => model.CanPayWithCard)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="WebAddress" class="control-label"></label>
-                <input asp-for="WebAddress" class="form-control" />
-                <span asp-validation-for="WebAddress" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PorfilePicture" class="control-label"></label>
-                <input asp-for="PorfilePicture" class="form-control" />
-                <span asp-validation-for="PorfilePicture" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="OverallRating" class="control-label"></label>
-                <input asp-for="OverallRating" class="form-control" />
-                <span asp-validation-for="OverallRating" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
 <div>
-    <a asp-action="Index">Back to List</a>
+    <div class="row">
+        <div class="col-12 text-white p-5 mt-5 bg-black">
+            <h2>Orvos hozzáadása</h2>
+            <hr />
+            <form asp-action="Create" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="Doctor.Name" class="control-label"></label>
+                        <input asp-for="Doctor.Name" class="form-control" />
+                        <span asp-validation-for="Doctor.Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="SelectedSpecialityIds"></label>
+                        <select multiple="multiple" class="select2-mmd" asp-for="SelectedSpecialityIds" asp-items="Model.Specialities"></select>
+                        <span asp-validation-for="SelectedSpecialityIds" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="Doctor.PhoneNumber" class="control-label"></label>
+                        <input asp-for="Doctor.PhoneNumber" class="form-control" />
+                        <span asp-validation-for="Doctor.PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group form-check col-md-6">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="Doctor.CanPayWithCard" /> @Html.DisplayNameFor(model => model.Doctor.CanPayWithCard)
+                        </label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="Doctor.Email" class="control-label"></label>
+                        <input asp-for="Doctor.Email" class="form-control" />
+                        <span asp-validation-for="Doctor.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="Doctor.WebAddress" class="control-label"></label>
+                        <input asp-for="Doctor.WebAddress" class="form-control" />
+                        <span asp-validation-for="Doctor.WebAddress" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="Image" class="control-label"></label>
+                        <input asp-for="Image" name="Image" type="file" accept="image/*" class="form-control" />
+                        <span asp-validation-for="Image" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="Doctor.OverallRating" class="control-label"></label>
+                        <input asp-for="Doctor.OverallRating" class="form-control" />
+                        <span asp-validation-for="Doctor.OverallRating" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group text-center">
+                    <input type="submit" value="Mentés" class="btn btn-primary" />
+                </div>
+
+                <div>
+                    <a class="btn btn-primary" href="@ViewBag.returnUrl">Vissza</a>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 @section Scripts {

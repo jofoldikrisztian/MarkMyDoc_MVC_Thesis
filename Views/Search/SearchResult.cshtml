@@ -14,8 +14,15 @@
 <div class="doctor-card-container">
     <div class="doctor-card">
         <div class="image">
-            <img src="~/images/surgeon-doctor-svgrepo-com.svg" alt="">
-        </div>
+          
+                @if (doc.PorfilePicture != null)
+                {
+            <img alt="" src="data:image/jpg;base64,@Convert.ToBase64String(doc.PorfilePicture)" /> }
+                            else
+                            {
+            <img src="~/images/surgeon-doctor-svgrepo-com.svg" alt="">}
+            </div>
+
         <div class="infos">
             <h3>@doc.Name</h3>
             <div class="reviews">

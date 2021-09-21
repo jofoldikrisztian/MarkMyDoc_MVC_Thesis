@@ -9,16 +9,21 @@ using MarkMyDoctor.Data;
 using MarkMyDoctor.Models.Entities;
 using MarkMyDoctor.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MarkMyDoctor.Controllers
 {
     public class DoctorsController : Controller
     {
         private readonly IDoctorService DoctorService;
+        private readonly IWebHostEnvironment hostingEnvironment;
 
-        public DoctorsController(IDoctorService doctorService)
+        public DoctorsController(IDoctorService doctorService, IWebHostEnvironment hostingEnvironment)
         {
             DoctorService = doctorService;
+            this.hostingEnvironment = hostingEnvironment;
         }
 
 
@@ -32,6 +37,8 @@ namespace MarkMyDoctor.Controllers
 
             var doctor = await DoctorService.GetDoctorByIdAsync(id);
 
+
+
             if (doctor == null)
             {
                 return NotFound();
@@ -41,9 +48,15 @@ namespace MarkMyDoctor.Controllers
         }
 
         // GET: Doctors/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var doctorViewModel = new DoctorViewModel()
+            {
+                Specialities = await DoctorService.GetSpecialitiesToSelectListAsync(),
+            };
+
+
+            return View(doctorViewModel);
         }
 
         // POST: Doctors/Create
@@ -51,15 +64,53 @@ namespace MarkMyDoctor.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,PhoneNumber,CanPayWithCard,Email,WebAddress,PorfilePicture,OverallRating")] Doctor doctor)
+        public async Task<IActionResult> Create(DoctorViewModel doctorViewModel)
         {
             if (ModelState.IsValid)
             {
-                DoctorService.AddDoctor(doctor);
-                await DoctorService.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    var selectedSpecialities = new List<Speciality>();
+                    var doctor = new Doctor();
+
+                    await foreach (var spec in DoctorService.GetSelectedSpecialitiesAsync(doctorViewModel.SelectedSpecialityIds))
+                    {
+                        selectedSpecialities.Add(spec);
+                    }
+
+                    if (doctorViewModel.Image != null)
+                    {
+                        if (doctorViewModel.Image.Length > 0)
+                        {   
+
+                            byte[]? p1 = null;
+                            using (var target = new MemoryStream())
+                            {
+                                await doctorViewModel.Image.CopyToAsync(target);
+                                p1 = target.ToArray();
+                            }
+
+                            doctor.PorfilePicture = p1;
+                        }
+                    }
+
+                    doctor = doctorViewModel.Doctor;
+
+                    //CreateDoctorMethod
+
+                    await DoctorService.SaveChangesAsync();
+
+                   
+                    
+
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
             }
-            return View(doctor);
+            return View(doctorViewModel);
         }
 
         // GET: Doctors/Edit/5
@@ -83,6 +134,8 @@ namespace MarkMyDoctor.Controllers
                 Doctor = doctor,
                 SelectedSpecialityIds = doctor.DoctorSpecialities.Select(d => d.Speciality.Id.ToString()).ToList()
             };
+
+            ViewBag.returnUrl = Request.Headers["Referer"].ToString();
 
 
             if (doctorViewModel == null)
@@ -120,12 +173,35 @@ namespace MarkMyDoctor.Controllers
                         selectedSpecialities.Add(spec);
                     }
 
+                    if (doctorViewModel.Image != null)
+                    {
+                        if (doctorViewModel.Image.Length > 0)
+                        {
+
+
+                            //var image = Image.Load(doctorViewModel.Image.OpenReadStream());
+                            //image.Mutate(x => x.Resize(256, 256));
+                            //image.Save("...");
+                            //return Ok();
+
+                            byte[] p1 = null;
+                            using (var target = new MemoryStream())
+                            {
+                                await doctorViewModel.Image.CopyToAsync(target);
+
+                            
+                                p1 = target.ToArray();
+                            }
+
+                            doctor.PorfilePicture = p1;
+                        }
+                    }
 
                     doctor.Name = doctorViewModel.Doctor.Name;
                     doctor.CanPayWithCard = doctorViewModel.Doctor.CanPayWithCard;
                     doctor.Email = doctorViewModel.Doctor.Email;
                     doctor.PhoneNumber = doctorViewModel.Doctor.PhoneNumber;
-                    doctor.PorfilePicture = doctorViewModel.Doctor.PorfilePicture;
+                    //doctor.PorfilePicture = doctorViewModel.Doctor.PorfilePicture;
                     doctor.WebAddress = doctorViewModel.Doctor.WebAddress;
 
                     //A megszüntetett kijelölésű specialitások eltávolítása az orvos specialitásai közül

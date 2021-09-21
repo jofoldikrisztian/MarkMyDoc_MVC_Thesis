@@ -5,84 +5,86 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<div class="review-form">
+    <h1>@Model.Title</h1>
 
-<h4>Review</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ReviewBody" class="control-label"></label>
-                <input asp-for="ReviewBody" class="form-control" />
-                <span asp-validation-for="ReviewBody" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Recommend" /> @Html.DisplayNameFor(model => model.Recommend)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="ReviewedOn" class="control-label"></label>
-                <input asp-for="ReviewedOn" class="form-control" />
-                <span asp-validation-for="ReviewedOn" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsReported" /> @Html.DisplayNameFor(model => model.IsReported)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProfessionalismRating" class="control-label"></label>
-                <input asp-for="ProfessionalismRating" class="form-control" />
-                <span asp-validation-for="ProfessionalismRating" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HumanityRating" class="control-label"></label>
-                <input asp-for="HumanityRating" class="form-control" />
-                <span asp-validation-for="HumanityRating" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CommunicationRating" class="control-label"></label>
-                <input asp-for="CommunicationRating" class="form-control" />
-                <span asp-validation-for="CommunicationRating" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EmpathyRating" class="control-label"></label>
-                <input asp-for="EmpathyRating" class="form-control" />
-                <span asp-validation-for="EmpathyRating" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FlexibilityRating" class="control-label"></label>
-                <input asp-for="FlexibilityRating" class="form-control" />
-                <span asp-validation-for="FlexibilityRating" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DoctorId" class="control-label"></label>
-                <select asp-for="DoctorId" class="form-control" asp-items="ViewBag.DoctorId"></select>
-                <span asp-validation-for="DoctorId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <h4>Review</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ReviewBody" class="control-label"></label>
+                    <input asp-for="ReviewBody" class="form-control" />
+                    <span asp-validation-for="ReviewBody" class="text-danger"></span>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Recommend" /> @Html.DisplayNameFor(model => model.Recommend)
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ReviewedOn" class="control-label"></label>
+                    <input asp-for="ReviewedOn" class="form-control" />
+                    <span asp-validation-for="ReviewedOn" class="text-danger"></span>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="IsReported" /> @Html.DisplayNameFor(model => model.IsReported)
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProfessionalismRating" class="control-label"></label>
+                    <input asp-for="ProfessionalismRating" class="form-control" />
+                    <span asp-validation-for="ProfessionalismRating" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="HumanityRating" class="control-label"></label>
+                    <input asp-for="HumanityRating" class="form-control" />
+                    <span asp-validation-for="HumanityRating" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CommunicationRating" class="control-label"></label>
+                    <input asp-for="CommunicationRating" class="form-control" />
+                    <span asp-validation-for="CommunicationRating" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EmpathyRating" class="control-label"></label>
+                    <input asp-for="EmpathyRating" class="form-control" />
+                    <span asp-validation-for="EmpathyRating" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FlexibilityRating" class="control-label"></label>
+                    <input asp-for="FlexibilityRating" class="form-control" />
+                    <span asp-validation-for="FlexibilityRating" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DoctorId" class="control-label"></label>
+                    <select asp-for="DoctorId" class="form-control" asp-items="ViewBag.DoctorId"></select>
+                    <span asp-validation-for="DoctorId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UserId" class="control-label"></label>
+                    <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
+                    <span asp-validation-for="UserId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
 </div>
 
 @section Scripts {

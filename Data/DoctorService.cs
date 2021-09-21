@@ -191,5 +191,7 @@ namespace MarkMyDoctor.Data
         {
             return await Users.FirstOrDefaultAsync(u => u.Id == id);
         }
+
+  
     }
 }
