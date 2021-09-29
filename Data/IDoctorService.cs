@@ -26,12 +26,14 @@ namespace MarkMyDoctor.Data
         void UpdateDoctor(Doctor doctor);
         void Remove(Doctor doctor);
         Task<ICollection<SelectListItem>> GetSpecialitiesToSelectListAsync();
+        Task<PaginatedList<Doctor>> GetDoctorSearchResult(string toSearch, int pageNumber);
         Task<ICollection<Speciality>> GetSpecialitiesAsync();
         IAsyncEnumerable<Speciality> GetSelectedSpecialitiesAsync(List<string> selectedSpecialityIds);
         Task<ICollection<DoctorSpeciality>> GetDoctorSpecialities(int id);
         Task CalculateDoctorOverall(int id, int actualReviewScore);
         Task CreateReview(Review review);
         Task<User> GetUserById(int id);
- 
+        Task CreateDoctor(Doctor doctor);
+        Task AddDoctorSpecialities(List<DoctorSpeciality> docSpecList);
     }
 }

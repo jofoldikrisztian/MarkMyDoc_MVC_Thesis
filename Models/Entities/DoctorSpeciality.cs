@@ -9,11 +9,13 @@ namespace MarkMyDoctor.Models.Entities
 {
     public class DoctorSpeciality : IEntityTypeConfiguration<DoctorSpeciality>
     {
+
+
         public int Id { get; set; }
         public int SpecialityId { get; set; }
-        public Speciality Speciality { get; set; }
+        public Speciality? Speciality { get; set; }
         public int DoctorId { get; set; }
-        public Doctor Doctor { get; set; }
+        public Doctor? Doctor { get; init; }
 
 
         public void Configure(EntityTypeBuilder<DoctorSpeciality> builder)

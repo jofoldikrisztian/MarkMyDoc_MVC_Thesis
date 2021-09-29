@@ -105,6 +105,7 @@ namespace MarkMyDoctor.Data
                                 .Include(d => d.DoctorFacilities)
                                 .ThenInclude(f => f.Facility)
                                 .Include(d => d.Reviews)
+                                .ThenInclude(d => d.User)
                                 .FirstOrDefaultAsync(d => d.Id.Equals(id));
         }
 
@@ -167,7 +168,7 @@ namespace MarkMyDoctor.Data
                     var humanity = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.HumanityRating);
                     var communication = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.CommunicationRating);
                     var empathy = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.EmpathyRating);
-                    var flexibility = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.FlexibilityRating);
+                    var flexibility = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.TrustAtmosphereRating);
 
                     doc.OverallRating = Convert.ToByte(Math.Round((professionalism + humanity + flexibility + empathy + communication + actualReviewScore) / 5.0));
                 }
@@ -192,6 +193,28 @@ namespace MarkMyDoctor.Data
             return await Users.FirstOrDefaultAsync(u => u.Id == id);
         }
 
-  
+        public async Task CreateDoctor(Doctor doctor)
+        {
+            await DbContext.AddAsync(doctor);
+        }
+
+        public async Task<PaginatedList<Doctor>> GetDoctorSearchResult(string toSearch, int pageNumber)
+        {
+            var query = Doctors.Where(
+                d => 
+                d.DoctorSpecialities.Any(s => s.Speciality.Name.Contains(toSearch)) ||
+                d.Name.Contains(toSearch) ||
+                d.DoctorFacilities.Any(f => f.Facility.City.Name.Contains(toSearch)) 
+                ).OrderBy(d => d.Name);
+
+            var model = await PaginatedList<Doctor>.CreateAsync(query, pageNumber, 5);
+
+            return model;
+        }
+
+        public async Task AddDoctorSpecialities(List<DoctorSpeciality> docSpecList)
+        {
+            await DbContext.DoctorSpecialities.AddRangeAsync(docSpecList);
+        }
     }
 }

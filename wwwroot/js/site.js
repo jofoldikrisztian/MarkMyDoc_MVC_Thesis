@@ -103,9 +103,43 @@ function VerifyRating(ratingAspect) {
     var CommunicationRating = $("#CommunicationRating").val();
     var EmpathyRating = $("#EmpathyRating").val();
     var HumanityRating = $("#HumanityRating").val();
-    var FelxibilityRating = $("#FlexibilityRating").val();
-    if (ProfessionalismRating == "0" || CommunicationRating == "0" || EmpathyRating == "0" || HumanityRating == "0" || FelxibilityRating == "0") {
+    var TrustAtmosphereRating = $("#TrustAtmosphereRating").val();
+    if (ProfessionalismRating == "0" || CommunicationRating == "0" || EmpathyRating == "0" || HumanityRating == "0" || TrustAtmosphereRating == "0") {
         alert("Kérlek tölts ki minden értékelést!");
         return false;
     }
 }
+
+
+/* TextArea autosize*/
+
+
+!function (t, e, i, n) {
+    function s(e, i)
+    {
+        this.element = e, this.$element = t(e), this.init()
+    }
+    var h = "textareaAutoSize", o = "plugin_" + h, r = function (t)
+    {
+        return t.replace(/\s/g, "").length > 0
+    };
+    s.prototype = {
+        init: function () {
+            var i = parseInt(this.$element.css("paddingBottom")) + parseInt(this.$element.css("paddingTop")) + parseInt(this.$element.css("borderTopWidth")) + parseInt(this.$element.css("borderBottomWidth")) || 0;
+            r(this.element.value) && this.$element.height(this.element.scrollHeight - i),
+                this.$element.on("input keyup", function (n) {
+                    var s = t(e), h = s.scrollTop();
+                    t(this).height(0).height(this.scrollHeight - i), s.scrollTop(h)
+                })
+        }
+    }, t.fn[h] = function (e) { return this.each(function () { t.data(this, o) || t.data(this, o, new s(this, e)) }), this }
+}(jQuery, window, document);
+
+// Initialize Textarea
+$('.textarea-autosize').textareaAutoSize();
+
+
+
+
+
+/* end TextArea autosize*/

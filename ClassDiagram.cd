@@ -43,7 +43,7 @@
   <Class Name="MarkMyDoctor.Models.Entities.Review">
     <Position X="4.5" Y="0.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAADBAAAEACAgNAMAABAAAgAAAACAAQAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAADBAAAAACAgNAMAABAAAgAAAACAAQAAAAAAAAAAAI=</HashCode>
       <FileName>Models\Entities\Review.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -59,10 +59,24 @@
   <Class Name="MarkMyDoctor.Models.Entities.User">
     <Position X="4.5" Y="5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAACAEAAAAAAAAAAAABAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAEAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Entities\User.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MarkMyDoctor.Models.ViewModels.DoctorViewModel">
+    <Position X="12.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAQAAAAAAAAAAAAAAAABQAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ViewModels\DoctorViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MarkMyDoctor.Controllers.HomeController">
+    <Position X="0.5" Y="2" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQBAAAAAAAAAIAAAAQAAAAEAAAAgAAA=</HashCode>
+      <FileName>Controllers\HomeController.cs</FileName>
+    </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

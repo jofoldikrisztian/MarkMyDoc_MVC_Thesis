@@ -18,12 +18,12 @@ namespace MarkMyDoctor.Controllers
     public class DoctorsController : Controller
     {
         private readonly IDoctorService DoctorService;
-        private readonly IWebHostEnvironment hostingEnvironment;
 
-        public DoctorsController(IDoctorService doctorService, IWebHostEnvironment hostingEnvironment)
+
+        public DoctorsController(IDoctorService doctorService)
         {
             DoctorService = doctorService;
-            this.hostingEnvironment = hostingEnvironment;
+          
         }
 
 
@@ -36,8 +36,6 @@ namespace MarkMyDoctor.Controllers
             }
 
             var doctor = await DoctorService.GetDoctorByIdAsync(id);
-
-
 
             if (doctor == null)
             {
@@ -55,13 +53,9 @@ namespace MarkMyDoctor.Controllers
                 Specialities = await DoctorService.GetSpecialitiesToSelectListAsync(),
             };
 
-
             return View(doctorViewModel);
         }
 
-        // POST: Doctors/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DoctorViewModel doctorViewModel)
@@ -89,31 +83,43 @@ namespace MarkMyDoctor.Controllers
                                 await doctorViewModel.Image.CopyToAsync(target);
                                 p1 = target.ToArray();
                             }
-
                             doctor.PorfilePicture = p1;
                         }
                     }
 
                     doctor = doctorViewModel.Doctor;
 
-                    //CreateDoctorMethod
+                    await DoctorService.CreateDoctor(doctor);
+
+                    var docSpecList = new List<DoctorSpeciality>();
+
+                    foreach (var item in selectedSpecialities)
+                    {
+                        var docSpec = new DoctorSpeciality()
+                        {
+                            Speciality = item,
+                            Doctor = doctor
+                        };
+
+                        docSpecList.Add(docSpec);
+                    }
+
+                    await DoctorService.AddDoctorSpecialities(docSpecList);
 
                     await DoctorService.SaveChangesAsync();
 
-                   
-                    
+                    return RedirectToAction("Details", "Doctors", new { id = doctor.Id });
 
                 }
                 catch (Exception)
                 {
-
                     throw;
                 }
             }
             return View(doctorViewModel);
         }
 
-        // GET: Doctors/Edit/5
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -137,7 +143,6 @@ namespace MarkMyDoctor.Controllers
 
             ViewBag.returnUrl = Request.Headers["Referer"].ToString();
 
-
             if (doctorViewModel == null)
             {
                 return NotFound();
@@ -146,9 +151,7 @@ namespace MarkMyDoctor.Controllers
             return View(doctorViewModel);
         }
 
-        // POST: Doctors/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, DoctorViewModel doctorViewModel)
@@ -177,19 +180,11 @@ namespace MarkMyDoctor.Controllers
                     {
                         if (doctorViewModel.Image.Length > 0)
                         {
-
-
-                            //var image = Image.Load(doctorViewModel.Image.OpenReadStream());
-                            //image.Mutate(x => x.Resize(256, 256));
-                            //image.Save("...");
-                            //return Ok();
-
-                            byte[] p1 = null;
+                            byte[]? p1 = null;
                             using (var target = new MemoryStream())
                             {
                                 await doctorViewModel.Image.CopyToAsync(target);
-
-                            
+                                                       
                                 p1 = target.ToArray();
                             }
 
@@ -242,7 +237,7 @@ namespace MarkMyDoctor.Controllers
             return View(doctorViewModel);
         }
 
-        // GET: Doctors/Delete/5
+        [HttpGet]
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -252,6 +247,7 @@ namespace MarkMyDoctor.Controllers
             }
 
             var doctor = await DoctorService.GetDoctorByIdAsync(id);
+
             if (doctor == null)
             {
                 return NotFound();
@@ -270,7 +266,5 @@ namespace MarkMyDoctor.Controllers
             await DoctorService.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
-
     }
 }

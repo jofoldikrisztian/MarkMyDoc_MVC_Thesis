@@ -670,19 +670,14 @@ hr {
 
 .reviewRatings {
     width: auto;
+    padding-left: 1.2rem;
 }
 
 
-.reviewRatings div span {
-            padding-left: 1rem;
-}
 
     .reviewRatings div i {
         color: var(--yellow-color);
-        font-size: 2rem;
-        padding-left: 1rem;
-        padding-bottom: 1.5rem;
-
+        font-size: 1.4rem;
     }
 
 .reviewInformation {
@@ -701,13 +696,19 @@ hr {
 /* #endregion ReviewCard */
 
 
-.container-block {
-    width: 50%;
-    margin: 3rem auto;
-    background-color: aliceblue;
+textarea.textarea-autosize {
+    height: 2.25rem;
+    min-height: 2.25rem;
+    resize: none;
+    overflow-y: hidden;
 }
 
-.container-form {
-    text-align: center;
-    margin-bottom: 3rem;
+textarea.textarea-autosize.form-control-lg {
+        height: 3.75rem;
+        min-height: 3.75rem;
+}
+
+textarea.textarea-autosize.form-control-sm {
+        height: 2rem;
+        min-height: 2rem;
 }

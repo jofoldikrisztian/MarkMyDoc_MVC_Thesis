@@ -168,7 +168,7 @@ namespace MarkMyDoctor.Migrations
                     b.Property<byte>("EmpathyRating")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("FlexibilityRating")
+                    b.Property<byte>("TrustAtmosphereRating")
                         .HasColumnType("tinyint");
 
                     b.Property<byte>("HumanityRating")

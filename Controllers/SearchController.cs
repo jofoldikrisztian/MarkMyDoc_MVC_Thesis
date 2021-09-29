@@ -33,22 +33,33 @@ namespace MarkMyDoctor.Controllers
 
             ViewBag.toSearch = toSearch;
 
-            if (DoctorService.IsValidCity(toSearch))
+            var doctors = await DoctorService.GetDoctorSearchResult(toSearch, pageNumber);
+
+            if (doctors.Count() > 0)
             {
-                return View(await DoctorService.GetDoctorsByCityAsync(toSearch, pageNumber));
+                return View(doctors);
+            }
+            else
+            {
+                return View(await DoctorService.GetAllDoctorAsync(pageNumber));
             }
 
-            if (DoctorService.IsValidDoctor(toSearch))
-            {
-                return View(await DoctorService.GetDoctorsByNameAsync(toSearch, pageNumber));
-            }
 
-            if (DoctorService.IsValidSpeciality(toSearch))
-            {
-                return View(await DoctorService.GetDoctorsBySpeciality(toSearch, pageNumber));
-            }
+            //if (DoctorService.IsValidCity(toSearch))
+            //{
+            //    return View(await DoctorService.GetDoctorsByCityAsync(toSearch, pageNumber));
+            //}
 
-            return View(await DoctorService.GetAllDoctorAsync(pageNumber));
+            //if (DoctorService.IsValidDoctor(toSearch))
+            //{
+            //    return View(await DoctorService.GetDoctorsByNameAsync(toSearch, pageNumber));
+            //}
+
+            //if (DoctorService.IsValidSpeciality(toSearch))
+            //{
+            //    return View(await DoctorService.GetDoctorsBySpeciality(toSearch, pageNumber));
+            //}
+
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿
-using MarkMyDoctor.Models.Entities;
+﻿using MarkMyDoctor.Models.Entities;
 
 namespace MarkMyDoctor.Models.ViewModels
 {

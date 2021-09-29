@@ -9,6 +9,7 @@ using MarkMyDoctor.Data;
 using MarkMyDoctor.Models.Entities;
 using MarkMyDoctor.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MarkMyDoctor.Controllers
 {
@@ -26,6 +27,7 @@ namespace MarkMyDoctor.Controllers
 
 
         // GET: Reviews/Create
+        [Authorize]
         public async Task<IActionResult> Create(int? id)
         {
             if (id == null)
@@ -68,7 +70,7 @@ namespace MarkMyDoctor.Controllers
 
             var reviewScore = review.CommunicationRating +
                               review.EmpathyRating +
-                              review.FlexibilityRating +
+                              review.TrustAtmosphereRating +
                               review.HumanityRating +
                               review.ProfessionalismRating;
 

@@ -55,10 +55,12 @@
         {
             <a class="doctor-details__a" asp-action="Delete" asp-controller="Doctors" asp-route-id="@Model.Id">Orvos törlése</a>
         }
-        <a class="doctor-details__a" asp-action="Create" asp-controller="Reviews" asp-route-id="@Model.Id">Orvos értékelése</a>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <a class="doctor-details__a" asp-action="Create" asp-controller="Reviews" asp-route-id="@Model.Id">Orvos értékelése</a>
+        }
         <div class="doctor-details-reviews">
             <h4>Értékelések:</h4>
-            <hr>
             <div class="doctor-review">
 
                 @if (Model.Reviews.Any())
