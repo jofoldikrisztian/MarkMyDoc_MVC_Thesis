@@ -65,33 +65,6 @@ namespace MarkMyDoctor.Data
             return model;
         }
 
-        public List<string> GetSearchResults(string toSearch)
-        {
-            var result = Cities.Where(c => c.Name.Contains(toSearch)).Select(c => c.Name).ToList();
-
-            result.AddRange(Doctors.Where(d => d.Name.Contains(toSearch)).Select(d => d.Name).ToList());
-
-            result.AddRange(Specialities.Where(s => s.Name.Contains(toSearch)).Select(s => s.Name).ToList());
-
-            result.Sort();
-
-            return result;
-        }
-
-        public bool IsValidCity(string toSearch)
-        {
-            return Cities.Any(c => c.Name.Equals(toSearch));
-        }
-
-        public bool IsValidDoctor(string toSearch)
-        {
-            return Doctors.Any(d => d.Name.Equals(toSearch));
-        }
-
-        public bool IsValidSpeciality(string toSearch)
-        {
-            return Specialities.Any(s => s.Name.Equals(toSearch));
-        }
 
         public bool DoctorExists(int id)
         {
@@ -168,9 +141,9 @@ namespace MarkMyDoctor.Data
                     var humanity = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.HumanityRating);
                     var communication = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.CommunicationRating);
                     var empathy = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.EmpathyRating);
-                    var flexibility = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.TrustAtmosphereRating);
+                    var trust = Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.TrustAtmosphereRating);
 
-                    doc.OverallRating = Convert.ToByte(Math.Round((professionalism + humanity + flexibility + empathy + communication + actualReviewScore) / 5.0));
+                    doc.OverallRating = Convert.ToByte(Math.Round((professionalism + humanity + trust + empathy + communication + actualReviewScore) / 5.0));
                 }
                 else
                 {

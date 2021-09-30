@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MarkMyDoctor.Migrations
 {
     [DbContext(typeof(DoctorDbContext))]
-    [Migration("20210914213727_AddIdentity")]
-    partial class AddIdentity
+    [Migration("20210930120835_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -168,9 +168,6 @@ namespace MarkMyDoctor.Migrations
                     b.Property<byte>("EmpathyRating")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("TrustAtmosphereRating")
-                        .HasColumnType("tinyint");
-
                     b.Property<byte>("HumanityRating")
                         .HasColumnType("tinyint");
 
@@ -193,6 +190,9 @@ namespace MarkMyDoctor.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte>("TrustAtmosphereRating")
+                        .HasColumnType("tinyint");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -253,11 +253,6 @@ namespace MarkMyDoctor.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -286,9 +281,6 @@ namespace MarkMyDoctor.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");

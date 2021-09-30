@@ -13,13 +13,12 @@ namespace MarkMyDoctor.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IUnitOfWork unitOfWork;
 
-        private IDoctorService DoctorService { get; }
-
-        public HomeController(ILogger<HomeController> logger, IDoctorService doctorService)
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
-            DoctorService = doctorService;
+            this.unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
@@ -38,10 +37,11 @@ namespace MarkMyDoctor.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+
         [HttpPost]
-        public JsonResult Search(string toSearch)
+        public JsonResult AutoComplete(string toSearch)
         {
-            return Json(DoctorService.GetSearchResults(toSearch));
+            return Json(unitOfWork.DoctorRepository.GetAutoCompleteSearchResults(toSearch));
         }
     }
 }

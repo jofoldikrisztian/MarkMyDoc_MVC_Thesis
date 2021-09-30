@@ -166,9 +166,6 @@ namespace MarkMyDoctor.Migrations
                     b.Property<byte>("EmpathyRating")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("TrustAtmosphereRating")
-                        .HasColumnType("tinyint");
-
                     b.Property<byte>("HumanityRating")
                         .HasColumnType("tinyint");
 
@@ -191,6 +188,9 @@ namespace MarkMyDoctor.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte>("TrustAtmosphereRating")
+                        .HasColumnType("tinyint");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");

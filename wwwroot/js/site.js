@@ -25,7 +25,7 @@ $(function () {
     $("#input-text").autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: '/Home/Search/',
+                url: '/Home/AutoComplete/',
                 data: { "toSearch": request.term },
                 type: "POST",
                 success: function (data) {

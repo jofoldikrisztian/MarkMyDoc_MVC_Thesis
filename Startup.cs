@@ -62,7 +62,7 @@ namespace MarkMyDoctor
 
             services.AddScoped<IDoctorService, DoctorService>();
 
-
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<IRoleSeedService, RoleSeedService>();
 
@@ -105,8 +105,8 @@ namespace MarkMyDoctor
                 endpoints.MapRazorPages();
             });
 
-            Seed.Data(app);
-            Seed.UserAndRoles(app);
+            SeedData.SeedData.SeedEntitiesData(app);
+            SeedData.SeedData.UserAndRoles(app);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MarkMyDoctor.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MarkMyDoctor.Models.Entities
 {
-    public class DoctorFacility : IEntityTypeConfiguration<DoctorFacility>
+    public class DoctorFacility : IEntityTypeConfiguration<DoctorFacility>, IEntity
     {
         public int Id { get; set; }
         public int DoctorId { get; set; }

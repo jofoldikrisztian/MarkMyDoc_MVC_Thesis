@@ -12,18 +12,21 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using static System.Net.Mime.MediaTypeNames;
+using Microsoft.Extensions.Logging;
 
 namespace MarkMyDoctor.Controllers
 {
     public class DoctorsController : Controller
     {
         private readonly IDoctorService DoctorService;
+        private readonly ILogger<DoctorsController> logger;
+        private readonly IUnitOfWork unitOfWork;
 
-
-        public DoctorsController(IDoctorService doctorService)
+        public DoctorsController(IDoctorService doctorService, ILogger<DoctorsController> logger, IUnitOfWork unitOfWork)
         {
             DoctorService = doctorService;
-          
+            this.logger = logger;
+            this.unitOfWork = unitOfWork;
         }
 
 
@@ -35,8 +38,12 @@ namespace MarkMyDoctor.Controllers
                 return NotFound();
             }
 
-            var doctor = await DoctorService.GetDoctorByIdAsync(id);
-
+            var doctor = await unitOfWork.DoctorRepository.GetByIdAsync(id.Value, d => d.Include(d => d.DoctorSpecialities)
+                                                                                        .ThenInclude(s => s.Speciality)
+                                                                                        .Include(d => d.DoctorFacilities)
+                                                                                        .ThenInclude(f => f.Facility)
+                                                                                        .Include(d => d.Reviews)
+                                                                                        .ThenInclude(d => d.User));
             if (doctor == null)
             {
                 return NotFound();
@@ -48,12 +55,14 @@ namespace MarkMyDoctor.Controllers
         // GET: Doctors/Create
         public async Task<IActionResult> Create()
         {
-            var doctorViewModel = new DoctorViewModel()
-            {
-                Specialities = await DoctorService.GetSpecialitiesToSelectListAsync(),
-            };
+            var doctorViewModel = await unitOfWork.DoctorRepository.CollectDataForANewDoctorAsync();
 
-            return View(doctorViewModel);
+            if (doctorViewModel != null)
+            {
+                return View(doctorViewModel);
+            }
+
+            return NotFound();
         }
 
         [HttpPost]

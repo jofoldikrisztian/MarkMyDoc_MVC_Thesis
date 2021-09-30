@@ -11,12 +11,10 @@ namespace MarkMyDoctor.SeedData
     public class UserSeedService : IUserSeedService
     {
         private readonly UserManager<User> userManager;
-        private readonly IDoctorService doctorService;
 
-        public UserSeedService(UserManager<User> userManager, IDoctorService doctorService)
+        public UserSeedService(UserManager<User> userManager)
         {
             this.userManager = userManager;
-            this.doctorService = doctorService;
         }
         public async Task SeedUserAsync()
         {

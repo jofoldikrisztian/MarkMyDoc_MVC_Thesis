@@ -10,10 +10,10 @@ using System.Linq;
 
 namespace MarkMyDoctor.SeedData
 {
-    public static class Seed
+    public static class SeedData
     {
 
-        public async static void Data(IApplicationBuilder app)
+        public async static void SeedEntitiesData(IApplicationBuilder app)
         {
             using (var dbContext = app.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<DoctorDbContext>())
             {
@@ -39,7 +39,7 @@ namespace MarkMyDoctor.SeedData
 
                 if (!dbContext.Specialities.Any())
                 {
-                    dbContext.Specialities.AddRange(ReadSpecialities(dbContext));
+                    dbContext.Specialities.AddRange(ReadSpecialities());
                 }
 
                 await dbContext.SaveChangesAsync();
@@ -137,7 +137,7 @@ namespace MarkMyDoctor.SeedData
         }
 
 
-        private static IEnumerable<Speciality> ReadSpecialities(object context)
+        private static IEnumerable<Speciality> ReadSpecialities()
         {
             return File.ReadAllLines(@"./SeedData/PopulateData/specialities.txt").Select(speciality => new Speciality() { Name = speciality.ToLower() }).ToList();
         }

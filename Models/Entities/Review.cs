@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MarkMyDoctor.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MarkMyDoctor.Models.Entities
 {
-    public class Review : IEntityTypeConfiguration<Review>
+    public class Review : IEntityTypeConfiguration<Review>, IEntity
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "A mező kitöltése kötelező")]

@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MarkMyDoctor.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Collections.Generic;
 
 namespace MarkMyDoctor.Models.Entities
 {
-    public class City : IEntityTypeConfiguration<City>
+    public class City : IEntityTypeConfiguration<City>, IEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }
