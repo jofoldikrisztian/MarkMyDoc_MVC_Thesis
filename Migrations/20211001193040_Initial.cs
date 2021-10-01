@@ -46,7 +46,7 @@ namespace MarkMyDoctor.Migrations
                     CanPayWithCard = table.Column<bool>(type: "bit", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WebAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PorfilePicture = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    ProfilePicture = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     OverallRating = table.Column<byte>(type: "tinyint", nullable: true)
                 },
                 constraints: table =>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MarkMyDoctor.Data
 {
-    public class Repository<T> : IRepository<T> where T : class , IEntity
+    public class Repository<T> : IRepository<T> where T : class, IEntity
     {
         protected readonly DbSet<T> _entities;
 
@@ -29,9 +29,13 @@ namespace MarkMyDoctor.Data
             _entities.Remove(entity);
         }
 
+        public async Task<T> GetByIdAsync(int id)
+        {
+            return await _entities.FirstOrDefaultAsync(e => e.Id == id);
+        }
+
         public async Task<T> GetByIdAsync(int id, Func<IQueryable<T>, IQueryable<T>> predicate)
         {
-
             IQueryable<T> _entitiesWithEagerLoading = predicate(_entities);
 
             return await _entitiesWithEagerLoading.FirstOrDefaultAsync(e => e.Id == id);

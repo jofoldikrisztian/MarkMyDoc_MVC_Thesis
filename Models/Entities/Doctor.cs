@@ -16,7 +16,7 @@ namespace MarkMyDoctor.Models.Entities
         public bool CanPayWithCard { get; set; }
         public string? Email { get; set; }
         public string? WebAddress { get; set; }
-        public byte[]? PorfilePicture { get; set; }
+        public byte[]? ProfilePicture { get; set; }
         public byte? OverallRating { get; set; }
 
         public ICollection<Review>? Reviews { get; set; }

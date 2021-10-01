@@ -64,7 +64,7 @@ namespace MarkMyDoctor.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("PorfilePicture")
+                    b.Property<byte[]>("ProfilePicture")
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("WebAddress")

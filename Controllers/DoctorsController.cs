@@ -55,7 +55,7 @@ namespace MarkMyDoctor.Controllers
         // GET: Doctors/Create
         public async Task<IActionResult> Create()
         {
-            var doctorViewModel = await unitOfWork.DoctorRepository.CollectDataForANewDoctorAsync();
+            var doctorViewModel = await unitOfWork.DoctorRepository.CollectDataForDoctorFormAsync();
 
             if (doctorViewModel != null)
             {
@@ -73,51 +73,16 @@ namespace MarkMyDoctor.Controllers
             {
                 try
                 {
-                    var selectedSpecialities = new List<Speciality>();
-                    var doctor = new Doctor();
+                    var doctor = await unitOfWork.DoctorRepository.CreateDoctorAsync(doctorViewModel);
 
-                    await foreach (var spec in DoctorService.GetSelectedSpecialitiesAsync(doctorViewModel.SelectedSpecialityIds))
+                    unitOfWork.Save();
+
+                    if (doctor != null)
                     {
-                        selectedSpecialities.Add(spec);
+                        return RedirectToAction("Details", "Doctors", new { id = doctor.Id });
                     }
 
-                    if (doctorViewModel.Image != null)
-                    {
-                        if (doctorViewModel.Image.Length > 0)
-                        {   
-
-                            byte[]? p1 = null;
-                            using (var target = new MemoryStream())
-                            {
-                                await doctorViewModel.Image.CopyToAsync(target);
-                                p1 = target.ToArray();
-                            }
-                            doctor.PorfilePicture = p1;
-                        }
-                    }
-
-                    doctor = doctorViewModel.Doctor;
-
-                    await DoctorService.CreateDoctor(doctor);
-
-                    var docSpecList = new List<DoctorSpeciality>();
-
-                    foreach (var item in selectedSpecialities)
-                    {
-                        var docSpec = new DoctorSpeciality()
-                        {
-                            Speciality = item,
-                            Doctor = doctor
-                        };
-
-                        docSpecList.Add(docSpec);
-                    }
-
-                    await DoctorService.AddDoctorSpecialities(docSpecList);
-
-                    await DoctorService.SaveChangesAsync();
-
-                    return RedirectToAction("Details", "Doctors", new { id = doctor.Id });
+                    return NotFound();
 
                 }
                 catch (Exception)
@@ -136,19 +101,7 @@ namespace MarkMyDoctor.Controllers
                 return NotFound();
             }
 
-            var doctor = await DoctorService.GetDoctorByIdAsync(id);
-
-            if (doctor == null)
-            {
-                return NotFound();
-            }
-
-            var doctorViewModel = new DoctorViewModel()
-            {
-                Specialities = await DoctorService.GetSpecialitiesToSelectListAsync(),
-                Doctor = doctor,
-                SelectedSpecialityIds = doctor.DoctorSpecialities.Select(d => d.Speciality.Id.ToString()).ToList()
-            };
+            var doctorViewModel = await unitOfWork.DoctorRepository.CollectDataForDoctorFormAsync(id.Value);
 
             ViewBag.returnUrl = Request.Headers["Referer"].ToString();
 
@@ -165,82 +118,26 @@ namespace MarkMyDoctor.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, DoctorViewModel doctorViewModel)
         {
-            var doctor = await DoctorService.GetDoctorByIdAsync(id);
+            var doctor = await unitOfWork.DoctorRepository.GetByIdAsync(id);
 
             if (doctor == null)
             {
                 return NotFound();
             }
 
-            var selectedSpecialities = new List<Speciality>();
-
 
             if (ModelState.IsValid)
             {
-                try
+
+                if (await unitOfWork.DoctorRepository.UpdateDoctor(id, doctorViewModel))
                 {
-
-                    await foreach (var spec in DoctorService.GetSelectedSpecialitiesAsync(doctorViewModel.SelectedSpecialityIds))
-                    {
-                        selectedSpecialities.Add(spec);
-                    }
-
-                    if (doctorViewModel.Image != null)
-                    {
-                        if (doctorViewModel.Image.Length > 0)
-                        {
-                            byte[]? p1 = null;
-                            using (var target = new MemoryStream())
-                            {
-                                await doctorViewModel.Image.CopyToAsync(target);
-                                                       
-                                p1 = target.ToArray();
-                            }
-
-                            doctor.PorfilePicture = p1;
-                        }
-                    }
-
-                    doctor.Name = doctorViewModel.Doctor.Name;
-                    doctor.CanPayWithCard = doctorViewModel.Doctor.CanPayWithCard;
-                    doctor.Email = doctorViewModel.Doctor.Email;
-                    doctor.PhoneNumber = doctorViewModel.Doctor.PhoneNumber;
-                    //doctor.PorfilePicture = doctorViewModel.Doctor.PorfilePicture;
-                    doctor.WebAddress = doctorViewModel.Doctor.WebAddress;
-
-                    //A megszüntetett kijelölésű specialitások eltávolítása az orvos specialitásai közül
-                    doctor.DoctorSpecialities.Where(m => !selectedSpecialities.Contains(m.Speciality)).ToList().ForEach(spec => doctor.DoctorSpecialities.Remove(spec));
-
-                    //A "megmaradt" specialitások tárolása egy ideiglenes objektumba
-                    var existingSpecialities = doctor.DoctorSpecialities.Select(m => m.Speciality.Id).ToList();
-
-                    //Az új specialitások hozzáadása az orvoshoz
-
-                    foreach (var speciality in selectedSpecialities)
-                    {
-                        if (!existingSpecialities.Any(ex => ex.Equals(speciality.Id)))
-                        {
-                            doctor.DoctorSpecialities.Add(new DoctorSpeciality() { 
-                                SpecialityId = speciality.Id,
-                                DoctorId = id
-                            });
-                        }
-                    }
-
-                    await DoctorService.SaveChangesAsync();
+                    return RedirectToAction("Details", "Doctors", new { id = id });
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!DoctorService.DoctorExists(doctor.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return NotFound();
                 }
-                return RedirectToAction("Details", "Doctors", new { id = id });
+               
             }
 
             return View(doctorViewModel);
@@ -255,7 +152,7 @@ namespace MarkMyDoctor.Controllers
                 return NotFound();
             }
 
-            var doctor = await DoctorService.GetDoctorByIdAsync(id);
+            var doctor = await unitOfWork.DoctorRepository.GetByIdAsync(id.Value);
 
             if (doctor == null)
             {
@@ -271,9 +168,12 @@ namespace MarkMyDoctor.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var doctor = await DoctorService.GetDoctorByIdAsync(id);
-            DoctorService.Remove(doctor);
-            await DoctorService.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            
+            unitOfWork.DoctorRepository.Remove(doctor);
+
+            unitOfWork.Save();
+
+            return RedirectToAction("SearchResult", "Search");
         }
     }
 }

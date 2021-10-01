@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MarkMyDoctor.Migrations
 {
     [DbContext(typeof(DoctorDbContext))]
-    [Migration("20210930120835_Initial")]
+    [Migration("20211001193040_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,7 +66,7 @@ namespace MarkMyDoctor.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("PorfilePicture")
+                    b.Property<byte[]>("ProfilePicture")
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("WebAddress")

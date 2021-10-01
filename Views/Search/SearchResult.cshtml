@@ -15,9 +15,9 @@
     <div class="doctor-card">
         <div class="image">
           
-                @if (doc.PorfilePicture != null)
+                @if (doc.ProfilePicture != null)
                 {
-            <img alt="" src="data:image/jpg;base64,@Convert.ToBase64String(doc.PorfilePicture)" /> }
+            <img alt="" src="data:image/jpg;base64,@Convert.ToBase64String(doc.ProfilePicture)" /> }
                             else
                             {
             <img src="~/images/surgeon-doctor-svgrepo-com.svg" alt="">}
