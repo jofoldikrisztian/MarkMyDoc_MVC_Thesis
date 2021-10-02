@@ -1,32 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using MarkMyDoctor.Data;
-using MarkMyDoctor.Models.Entities;
+﻿using MarkMyDoctor.Data;
 using MarkMyDoctor.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
-using System.IO;
-using static System.Net.Mime.MediaTypeNames;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MarkMyDoctor.Controllers
 {
     public class DoctorsController : Controller
     {
-        private readonly IDoctorService DoctorService;
         private readonly ILogger<DoctorsController> logger;
         private readonly IUnitOfWork unitOfWork;
 
-        public DoctorsController(IDoctorService doctorService, ILogger<DoctorsController> logger, IUnitOfWork unitOfWork)
+        public DoctorsController(ILogger<DoctorsController> logger, IUnitOfWork unitOfWork)
         {
-            DoctorService = doctorService;
             this.logger = logger;
             this.unitOfWork = unitOfWork;
+        }
+
+        public async Task<IActionResult> Index(int pageNumber = 1)
+        {
+
+            ViewBag.Action = "Index";
+
+            var doctors = await unitOfWork.DoctorRepository.GetDoctorsAsync(pageNumber);
+
+            if (doctors.Count() > 0)
+            {
+                return View(doctors);
+            }
+            else
+            {
+                return RedirectToAction("NoResult", "Home");
+            }
         }
 
 
@@ -113,7 +122,7 @@ namespace MarkMyDoctor.Controllers
             return View(doctorViewModel);
         }
 
-       
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, DoctorViewModel doctorViewModel)
@@ -129,7 +138,7 @@ namespace MarkMyDoctor.Controllers
             if (ModelState.IsValid)
             {
 
-                if (await unitOfWork.DoctorRepository.UpdateDoctor(id, doctorViewModel))
+                if (await unitOfWork.DoctorRepository.UpdateDoctorAsync(id, doctorViewModel))
                 {
                     return RedirectToAction("Details", "Doctors", new { id = id });
                 }
@@ -137,7 +146,7 @@ namespace MarkMyDoctor.Controllers
                 {
                     return NotFound();
                 }
-               
+
             }
 
             return View(doctorViewModel);
@@ -167,8 +176,8 @@ namespace MarkMyDoctor.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var doctor = await DoctorService.GetDoctorByIdAsync(id);
-            
+            var doctor = await unitOfWork.DoctorRepository.GetByIdAsync(id);
+
             unitOfWork.DoctorRepository.Remove(doctor);
 
             unitOfWork.Save();

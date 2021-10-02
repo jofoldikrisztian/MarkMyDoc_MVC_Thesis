@@ -88,16 +88,16 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label asp-for="Review.TrustAtmosphereRating" class="control-label">Rugalmasság</label>
+                        <label asp-for="Review.TrustAtmosphereRating" class="control-label">Bizalmi légkör</label>
                         <div onmouseout="CreateSelected('TrustAtmosphere')">
-                            <i id="Flexibility1" onmouseout="CreateOut(1, 'TrustAtmosphere')" onmouseover="CreateOver(1, 'TrustAtmosphere')" onclick="CreateClick(1, 'TrustAtmosphere')" class="far fa-star"></i>
-                            <i id="Flexibility2" onmouseout="CreateOut(2, 'TrustAtmosphere')" onmouseover="CreateOver(2, 'TrustAtmosphere')" onclick="CreateClick(2, 'TrustAtmosphere')" class="far fa-star"></i>
-                            <i id="Flexibility3" onmouseout="CreateOut(3, 'TrustAtmosphere')" onmouseover="CreateOver(3, 'TrustAtmosphere')" onclick="CreateClick(3, 'TrustAtmosphere')" class="far fa-star"></i>
-                            <i id="Flexibility4" onmouseout="CreateOut(4, 'TrustAtmosphere')" onmouseover="CreateOver(4, 'TrustAtmosphere')" onclick="CreateClick(4, 'TrustAtmosphere')" class="far fa-star"></i>
-                            <i id="Flexibility5" onmouseout="CreateOut(5, 'TrustAtmosphere')" onmouseover="CreateOver(5, 'TrustAtmosphere')" onclick="CreateClick(5, 'TrustAtmosphere')" class="far fa-star"></i>
+                            <i id="TrustAtmosphere1" onmouseout="CreateOut(1, 'TrustAtmosphere')" onmouseover="CreateOver(1, 'TrustAtmosphere')" onclick="CreateClick(1, 'TrustAtmosphere')" class="far fa-star"></i>
+                            <i id="TrustAtmosphere2" onmouseout="CreateOut(2, 'TrustAtmosphere')" onmouseover="CreateOver(2, 'TrustAtmosphere')" onclick="CreateClick(2, 'TrustAtmosphere')" class="far fa-star"></i>
+                            <i id="TrustAtmosphere3" onmouseout="CreateOut(3, 'TrustAtmosphere')" onmouseover="CreateOver(3, 'TrustAtmosphere')" onclick="CreateClick(3, 'TrustAtmosphere')" class="far fa-star"></i>
+                            <i id="TrustAtmosphere4" onmouseout="CreateOut(4, 'TrustAtmosphere')" onmouseover="CreateOver(4, 'TrustAtmosphere')" onclick="CreateClick(4, 'TrustAtmosphere')" class="far fa-star"></i>
+                            <i id="TrustAtmosphere5" onmouseout="CreateOut(5, 'TrustAtmosphere')" onmouseover="CreateOver(5, 'TrustAtmosphere')" onclick="CreateClick(5, 'TrustAtmosphere')" class="far fa-star"></i>
                         </div>
                         <div>
-                            @Html.HiddenFor(m => m.Review.TrustAtmosphereRating, new { id = "TrustAtmosphere", value = "0" })
+                            @Html.HiddenFor(m => m.Review.TrustAtmosphereRating, new { id = "TrustAtmosphereRating", value = "0" })
                         </div>
                         <span asp-validation-for="Review.TrustAtmosphereRating" class="text-danger"></span>
                     </div>

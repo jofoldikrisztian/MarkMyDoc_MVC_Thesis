@@ -16,13 +16,12 @@ namespace MarkMyDoctor.Controllers
     public class ReviewsController : Controller
     {
         private readonly UserManager<User> userManager;
+        private readonly IUnitOfWork unitOfWork;
 
-        private IDoctorService DoctorService { get; }
-
-        public ReviewsController(IDoctorService doctorService, UserManager<User> userManager)
+        public ReviewsController(UserManager<User> userManager, IUnitOfWork unitOfWork)
         {
-            DoctorService = doctorService;
             this.userManager = userManager;
+            this.unitOfWork = unitOfWork;
         }
 
 
@@ -35,50 +34,38 @@ namespace MarkMyDoctor.Controllers
                 return NotFound();
             }
 
-            if (await DoctorService.GetDoctorByIdAsync(id) == null)
-            {
-                return NotFound();
-            }
+            var doctorReviewViewModel = new DoctorReviewViewModel() 
+                                                { 
+                                                    Doctor = await unitOfWork.DoctorRepository.GetByIdAsync(id.Value) 
+                                                };
 
-            var doctorReviewViewModel = new DoctorReviewViewModel() { Doctor = await DoctorService.GetDoctorByIdAsync(id) };
+            if (doctorReviewViewModel.Doctor == null)
+            {
+               return RedirectToAction("NoResult", "Home"); //!!!!!!!!!!!!Kicserélni!!!!!!!!!!!!!!
+            }
 
             return View(doctorReviewViewModel);
         }
 
         // POST: Reviews/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int id, DoctorReviewViewModel doctorReviewViewModel)
+        public async Task<IActionResult> Create(DoctorReviewViewModel doctorReviewViewModel)
         {
-            var review = doctorReviewViewModel.Review;
+            var user = await userManager.GetUserAsync(User);
 
-            review.Doctor = await DoctorService.GetDoctorByIdAsync(id);
+            var isCreated = await unitOfWork.ReviewRepository.Create(doctorReviewViewModel, user);
 
-            if (review.Doctor == null)
+
+            if (isCreated)
             {
-                return NotFound();
+                return RedirectToAction("Details", "Doctors", new { id = doctorReviewViewModel.Doctor.Id });
             }
-
-            review.ReviewedOn = DateTime.Today;
-
-
-            review.User = await userManager.GetUserAsync(User);
-
-            DoctorService.CreateReview(review);
-
-            var reviewScore = review.CommunicationRating +
-                              review.EmpathyRating +
-                              review.TrustAtmosphereRating +
-                              review.HumanityRating +
-                              review.ProfessionalismRating;
-
-            await DoctorService.CalculateDoctorOverall(id, reviewScore);
-
-            await DoctorService.SaveChangesAsync();
-
-            return RedirectToAction("Details", "Doctors", new { id = id });
+            else
+            {
+                return RedirectToAction("NoResult", "Home"); //!!!!!!!!!!Kicsierélni!!!!!!!!!!!!
+            }
+            
         }
 
         //// GET: Reviews/Edit/5
@@ -100,8 +87,6 @@ namespace MarkMyDoctor.Controllers
         //}
 
         // POST: Reviews/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ReviewBody,Recommend,ReviewedOn,IsReported,ProfessionalismRating,HumanityRating,CommunicationRating,EmpathyRating,FelxibilityRating,DoctorId,UserId")] Review review)

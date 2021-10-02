@@ -712,3 +712,15 @@ textarea.textarea-autosize.form-control-sm {
         height: 2rem;
         min-height: 2rem;
 }
+
+
+.noResult {
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}

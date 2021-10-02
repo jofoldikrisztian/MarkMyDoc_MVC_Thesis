@@ -1,72 +1,61 @@
-﻿@model IEnumerable<MarkMyDoctor.Models.Entities.Doctor>
+﻿@model PaginatedList<MarkMyDoctor.Models.Entities.Doctor>
 
-@{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+@{ ViewData["Title"] = "Találatok"; }
 
-<h1>Index</h1>
+<div class="search-result">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PhoneNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CanPayWithCard)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WebAddress)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProfilePicture)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OverallRating)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CanPayWithCard)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WebAddress)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProfilePicture)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OverallRating)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="navigationButtons navTop">
+        <partial Name="_NavigationPartial" model="@Model" />
+    </div>
+
+    @foreach (var doc in Model)
+    {
+
+<div class="doctor-card-container">
+    <div class="doctor-card">
+        <div class="image">
+
+            @if (doc.ProfilePicture != null)
+            {
+<img alt="" src="data:image/jpg;base64,@Convert.ToBase64String(doc.ProfilePicture)" /> }
+else
+{
+<img src="~/images/surgeon-doctor-svgrepo-com.svg" alt="">}
+        </div>
+
+        <div class="infos">
+            <h3>@doc.Name</h3>
+            <div class="reviews">
+                @for (byte i = 0; i < @doc.OverallRating; i++)
+                {
+<i class="fas fa-star"></i>}
+                @for (byte i = @doc.OverallRating ?? 0; i < 5; i++)
+                {
+<i class="far fa-star"></i>}
+            </div>
+            <div class="more-infos">
+                <h5>Értékelések</h5>
+                <h5>Szakterületek</h5>
+                <h5>Elérhetőség</h5>
+            </div>
+            <div class="info-content">
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur dolores voluptatum unde cum
+                    dolorum, vero blanditiis molestiae minima reprehenderit eius. Sapiente suscipit minima tempore
+                    assumenda quibusdam alias eveniet dolorem rerum?
+                </p>
+            </div>
+            <div class="buttons">
+                <a class="fas fa-info-circle" asp-action="Details" asp-controller="Doctors"
+                   asp-route-id="@doc.Id"> Adatlap</a>
+                <a class="fas fa-marker" asp-action="Create" asp-controller="Reviews"
+                   asp-route-id="@doc.Id"> Értékelés</a>
+            </div>
+        </div>
+    </div>
+</div>}
+
+    <div class="navigationButtons navBottom">
+        <partial Name="_NavigationPartial" model="@Model" />
+    </div>
+</div>

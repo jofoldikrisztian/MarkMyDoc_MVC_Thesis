@@ -1,4 +1,5 @@
-﻿using MarkMyDoctor.Models.Entities;
+﻿using MarkMyDoctor.Infrastructure;
+using MarkMyDoctor.Models.Entities;
 using MarkMyDoctor.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -75,7 +76,7 @@ namespace MarkMyDoctor.Data
             };
         }
 
-        public async Task<bool> UpdateDoctor(int id, DoctorViewModel doctorViewModel)
+        public async Task<bool> UpdateDoctorAsync(int id, DoctorViewModel doctorViewModel)
         {
             try
             {
@@ -197,7 +198,29 @@ namespace MarkMyDoctor.Data
 
         }
 
+        public async Task<PaginatedList<Doctor>> GetSearchResultAsync(string toSearch, int pageNumber)
+        {
+            var query = dbContext.Doctors.Where(
+                d =>
+                d.DoctorSpecialities.Any(s => s.Speciality.Name.Contains(toSearch)) ||
+                d.Name.Contains(toSearch) ||
+                d.DoctorFacilities.Any(f => f.Facility.City.Name.Contains(toSearch))
+                ).OrderBy(d => d.Name);
 
+            var model = await PaginatedList<Doctor>.CreateAsync(query, pageNumber, 5);
+
+            return model;
+        }
+
+        public async Task<PaginatedList<Doctor>> GetDoctorsAsync(int pageNumber)
+        {
+            var query = dbContext.Doctors.OrderBy(d => d.Name).AsQueryable();
+
+            var model = await PaginatedList<Doctor>.CreateAsync(query, pageNumber, 5);
+
+            return model;
+
+        }
 
 
 

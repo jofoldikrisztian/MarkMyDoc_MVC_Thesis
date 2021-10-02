@@ -2,8 +2,6 @@
 using MarkMyDoctor.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,12 +12,12 @@ namespace MarkMyDoctor.Controllers
     {
 
         private readonly ILogger<SearchController> _logger;
-        public IDoctorService DoctorService { get; }
+        private readonly IUnitOfWork unitOfWork;
 
-        public SearchController(ILogger<SearchController> logger, IDoctorService doctorService)
+        public SearchController(ILogger<SearchController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
-            DoctorService = doctorService;
+            this.unitOfWork = unitOfWork;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -32,8 +30,9 @@ namespace MarkMyDoctor.Controllers
         {
 
             ViewBag.toSearch = toSearch;
+            ViewBag.Action = "SearchResult";
 
-            var doctors = await DoctorService.GetDoctorSearchResult(toSearch, pageNumber);
+            var doctors = await unitOfWork.DoctorRepository.GetSearchResultAsync(toSearch, pageNumber);
 
             if (doctors.Count() > 0)
             {
@@ -41,25 +40,10 @@ namespace MarkMyDoctor.Controllers
             }
             else
             {
-                return View(await DoctorService.GetAllDoctorAsync(pageNumber));
+                return RedirectToAction("NoResult", "Home");
             }
-
-
-            //if (DoctorService.IsValidCity(toSearch))
-            //{
-            //    return View(await DoctorService.GetDoctorsByCityAsync(toSearch, pageNumber));
-            //}
-
-            //if (DoctorService.IsValidDoctor(toSearch))
-            //{
-            //    return View(await DoctorService.GetDoctorsByNameAsync(toSearch, pageNumber));
-            //}
-
-            //if (DoctorService.IsValidSpeciality(toSearch))
-            //{
-            //    return View(await DoctorService.GetDoctorsBySpeciality(toSearch, pageNumber));
-            //}
-
         }
+
+       
     }
 }
