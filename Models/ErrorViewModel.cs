@@ -1,5 +1,3 @@
-using System;
-
 namespace MarkMyDoctor.Models
 {
     public class ErrorViewModel

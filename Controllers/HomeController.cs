@@ -1,4 +1,4 @@
-﻿using MarkMyDoctor.Data;
+﻿using MarkMyDoctor.Interfaces;
 using MarkMyDoctor.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -34,6 +34,11 @@ namespace MarkMyDoctor.Controllers
         }
 
         public IActionResult NoResult()
+        {
+            return View();
+        }
+
+        public IActionResult SomethingWentWrong()
         {
             return View();
         }

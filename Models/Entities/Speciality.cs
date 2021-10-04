@@ -1,4 +1,4 @@
-﻿using MarkMyDoctor.Data;
+﻿using MarkMyDoctor.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace MarkMyDoctor.Models.Entities
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public  ICollection<DoctorSpeciality>? DoctorSpecialities { get; set; }
+        public ICollection<DoctorSpeciality>? DoctorSpecialities { get; set; }
 
         public void Configure(EntityTypeBuilder<Speciality> builder)
         {

@@ -59,7 +59,7 @@ namespace MarkMyDoctor.SeedData
             }
         }
 
-        public async static void UserAndRoles(IApplicationBuilder app)
+        public async static void UsersAndRoles(IApplicationBuilder app)
         {
             using (var scope = app.ApplicationServices.CreateScope())
             {

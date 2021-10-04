@@ -1,13 +1,8 @@
-﻿using MarkMyDoctor.Models;
-using MarkMyDoctor.Models.Entities;
+﻿using MarkMyDoctor.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace MarkMyDoctor.Data
 {
@@ -44,7 +39,7 @@ namespace MarkMyDoctor.Data
 
         }
 
-        
+
 
     }
 }

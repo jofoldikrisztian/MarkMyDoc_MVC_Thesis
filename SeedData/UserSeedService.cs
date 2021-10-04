@@ -1,12 +1,10 @@
-﻿using MarkMyDoctor.Data;
-using MarkMyDoctor.Models.Entities;
+﻿using MarkMyDoctor.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MarkMyDoctor.SeedData 
+namespace MarkMyDoctor.SeedData
 {
     public class UserSeedService : IUserSeedService
     {

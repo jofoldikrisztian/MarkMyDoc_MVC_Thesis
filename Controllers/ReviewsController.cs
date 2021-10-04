@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using MarkMyDoctor.Data;
+﻿using MarkMyDoctor.Interfaces;
 using MarkMyDoctor.Models.Entities;
 using MarkMyDoctor.Models.ViewModels;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace MarkMyDoctor.Controllers
 {
@@ -34,14 +29,14 @@ namespace MarkMyDoctor.Controllers
                 return NotFound();
             }
 
-            var doctorReviewViewModel = new DoctorReviewViewModel() 
-                                                { 
-                                                    Doctor = await unitOfWork.DoctorRepository.GetByIdAsync(id.Value) 
-                                                };
+            var doctorReviewViewModel = new DoctorReviewViewModel()
+            {
+                Doctor = await unitOfWork.DoctorRepository.GetByIdAsync(id.Value)
+            };
 
             if (doctorReviewViewModel.Doctor == null)
             {
-               return RedirectToAction("NoResult", "Home"); //!!!!!!!!!!!!Kicserélni!!!!!!!!!!!!!!
+                return RedirectToAction("NoResult", "Home"); //!!!!!!!!!!!!Kicserélni!!!!!!!!!!!!!!
             }
 
             return View(doctorReviewViewModel);
@@ -54,7 +49,7 @@ namespace MarkMyDoctor.Controllers
         {
             var user = await userManager.GetUserAsync(User);
 
-            var isCreated = await unitOfWork.ReviewRepository.Create(doctorReviewViewModel, user);
+            var isCreated = await unitOfWork.ReviewRepository.CreateAsync(doctorReviewViewModel, user);
 
 
             if (isCreated)
@@ -65,7 +60,7 @@ namespace MarkMyDoctor.Controllers
             {
                 return RedirectToAction("NoResult", "Home"); //!!!!!!!!!!Kicsierélni!!!!!!!!!!!!
             }
-            
+
         }
 
         //// GET: Reviews/Edit/5

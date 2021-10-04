@@ -1,9 +1,9 @@
-﻿using MarkMyDoctor.Data;
+﻿using MarkMyDoctor.Interfaces;
 using MarkMyDoctor.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MarkMyDoctor.Controllers
@@ -29,21 +29,24 @@ namespace MarkMyDoctor.Controllers
         public async Task<IActionResult> SearchResult(string toSearch, int pageNumber = 1)
         {
 
-            ViewBag.toSearch = toSearch;
-            ViewBag.Action = "SearchResult";
-
-            var doctors = await unitOfWork.DoctorRepository.GetSearchResultAsync(toSearch, pageNumber);
-
-            if (doctors.Count() > 0)
+            try
             {
+                ViewBag.toSearch = toSearch;
+                ViewBag.Action = "SearchResult";
+
+                var doctors = await unitOfWork.DoctorRepository.GetSearchResultAsync(toSearch, pageNumber);
+
                 return View(doctors);
             }
-            else
+            catch (Exception ex)
             {
+                unitOfWork.Rollback();
+                _logger.LogError("Hiba a művelet végrehajtása során: {0}", ex.Message);
                 return RedirectToAction("NoResult", "Home");
             }
+
         }
 
-       
+
     }
 }

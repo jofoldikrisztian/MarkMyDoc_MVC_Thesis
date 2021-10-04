@@ -1,11 +1,10 @@
-﻿using MarkMyDoctor.Data;
+﻿using MarkMyDoctor.Interfaces;
 using MarkMyDoctor.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MarkMyDoctor.Controllers
@@ -26,14 +25,15 @@ namespace MarkMyDoctor.Controllers
 
             ViewBag.Action = "Index";
 
-            var doctors = await unitOfWork.DoctorRepository.GetDoctorsAsync(pageNumber);
-
-            if (doctors.Count() > 0)
+            try
             {
+                var doctors = await unitOfWork.DoctorRepository.GetDoctorsAsync(pageNumber);
                 return View(doctors);
             }
-            else
+            catch (Exception ex)
             {
+                unitOfWork.Rollback();
+                logger.LogInformation("Hiba a művelet végrehajtása során: {0}", ex.Message);
                 return RedirectToAction("NoResult", "Home");
             }
         }
@@ -44,34 +44,44 @@ namespace MarkMyDoctor.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NoResult", "Home");
             }
 
-            var doctor = await unitOfWork.DoctorRepository.GetByIdAsync(id.Value, d => d.Include(d => d.DoctorSpecialities)
+            try
+            {
+                var doctor = await unitOfWork.DoctorRepository.GetByIdAsync(id.Value, d => d.Include(d => d.DoctorSpecialities)
                                                                                         .ThenInclude(s => s.Speciality)
                                                                                         .Include(d => d.DoctorFacilities)
                                                                                         .ThenInclude(f => f.Facility)
                                                                                         .Include(d => d.Reviews)
                                                                                         .ThenInclude(d => d.User));
-            if (doctor == null)
-            {
-                return NotFound();
-            }
 
-            return View(doctor);
+                return View(doctor);
+            }
+            catch (Exception ex)
+            {
+                unitOfWork.Rollback();
+                logger.LogError("Hiba a művelet végrehajtása során: {0}", ex.Message);
+                return RedirectToAction("NoResult", "Home");
+            }
         }
 
         // GET: Doctors/Create
         public async Task<IActionResult> Create()
         {
-            var doctorViewModel = await unitOfWork.DoctorRepository.CollectDataForDoctorFormAsync();
 
-            if (doctorViewModel != null)
+            try
             {
+                var doctorViewModel = await unitOfWork.DoctorRepository.CollectDataForDoctorFormAsync();
                 return View(doctorViewModel);
             }
+            catch (Exception ex)
+            {
 
-            return NotFound();
+                unitOfWork.Rollback();
+                logger.LogError("Hiba a művelet végrehajtása során: {0}", ex.Message);
+                return RedirectToAction("SomethingWentWrong", "Home");
+            }
         }
 
         [HttpPost]
@@ -84,19 +94,18 @@ namespace MarkMyDoctor.Controllers
                 {
                     var doctor = await unitOfWork.DoctorRepository.CreateDoctorAsync(doctorViewModel);
 
-                    unitOfWork.Save();
+                    unitOfWork.Commit();
 
-                    if (doctor != null)
-                    {
-                        return RedirectToAction("Details", "Doctors", new { id = doctor.Id });
-                    }
+                    logger.LogInformation("Az új orvos hozzáadásra került az adatbázishoz.");
 
-                    return NotFound();
+                    return RedirectToAction("Details", "Doctors", new { id = doctor.Id });
 
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    throw;
+                    unitOfWork.Rollback();
+                    logger.LogInformation("Hiba a művelet végrehajtása során: {0}", ex.Message);
+                    return RedirectToAction("SomethingWentWrong", "Home");
                 }
             }
             return View(doctorViewModel);
@@ -107,19 +116,23 @@ namespace MarkMyDoctor.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NoResult", "Home");
             }
 
-            var doctorViewModel = await unitOfWork.DoctorRepository.CollectDataForDoctorFormAsync(id.Value);
-
-            ViewBag.returnUrl = Request.Headers["Referer"].ToString();
-
-            if (doctorViewModel == null)
+            try
             {
-                return NotFound();
-            }
+                var doctorViewModel = await unitOfWork.DoctorRepository.CollectDataForDoctorFormAsync(id.Value);
 
-            return View(doctorViewModel);
+                ViewBag.returnUrl = Request.Headers["Referer"].ToString();
+
+                return View(doctorViewModel);
+            }
+            catch (Exception ex)
+            {
+                unitOfWork.Rollback();
+                logger.LogInformation("Hiba a művelet végrehajtása során: {0}", ex.Message);
+                return RedirectToAction("NoResult", "Home");
+            }
         }
 
 
@@ -127,26 +140,32 @@ namespace MarkMyDoctor.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, DoctorViewModel doctorViewModel)
         {
-            var doctor = await unitOfWork.DoctorRepository.GetByIdAsync(id);
 
-            if (doctor == null)
+            try
             {
-                return NotFound();
-            }
+                var doctor = await unitOfWork.DoctorRepository.GetByIdAsync(id);
 
-
-            if (ModelState.IsValid)
-            {
-
-                if (await unitOfWork.DoctorRepository.UpdateDoctorAsync(id, doctorViewModel))
+                if (ModelState.IsValid)
                 {
+
+                    await unitOfWork.DoctorRepository.UpdateDoctorAsync(id, doctorViewModel);
+
+                    unitOfWork.Commit();
+
+                    logger.LogInformation("A(z) {0} id-val rendelkező orvos adatlapja sikeresen frissítésre került.", id);
+
                     return RedirectToAction("Details", "Doctors", new { id = id });
-                }
-                else
-                {
-                    return NotFound();
+
                 }
 
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("Hiba az adatlap szerkesztése során:", ex.Message);
+
+                unitOfWork.Rollback();
+
+                return RedirectToAction("SomethingWentWrong", "Home");
             }
 
             return View(doctorViewModel);
@@ -156,19 +175,26 @@ namespace MarkMyDoctor.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
+
+
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NoResult", "Home");
             }
 
-            var doctor = await unitOfWork.DoctorRepository.GetByIdAsync(id.Value);
-
-            if (doctor == null)
+            try
             {
-                return NotFound();
+                var doctor = await unitOfWork.DoctorRepository.GetByIdAsync(id.Value);
+
+                return View(doctor);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("Hiba történt az orvos törlése során. Hiba: {}", ex.Message);
+                unitOfWork.Rollback();
+                return RedirectToAction("SomethingWentWrong", "Home");
             }
 
-            return View(doctor);
         }
 
         // POST: Doctors/Delete/5
@@ -176,13 +202,30 @@ namespace MarkMyDoctor.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var doctor = await unitOfWork.DoctorRepository.GetByIdAsync(id);
 
-            unitOfWork.DoctorRepository.Remove(doctor);
+            try
+            {
+                var doctor = await unitOfWork.DoctorRepository.GetByIdAsync(id);
 
-            unitOfWork.Save();
+                unitOfWork.DoctorRepository.Remove(doctor);
 
-            return RedirectToAction("SearchResult", "Search");
+                unitOfWork.Commit();
+
+                logger.LogInformation("A(z) {} id-val rendelkező orvos eltávolításra került az adatbázisból", id);
+
+                return RedirectToAction("Index", "Home"); //Az orvos eltávolításra került oldal létrehozása
+
+            }
+            catch (Exception ex)
+            {
+
+                logger.LogError("Hiba történt az orvos törlése során. Hiba: {}", ex.Message);
+                unitOfWork.Rollback();
+                return RedirectToAction("SomethingWentWrong", "Home");
+            }
+
+
+
         }
     }
 }

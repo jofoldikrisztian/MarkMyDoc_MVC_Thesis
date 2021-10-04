@@ -1,16 +1,13 @@
-﻿using MarkMyDoctor.Data;
+﻿using MarkMyDoctor.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MarkMyDoctor.Models.Entities
 {
     public class Doctor : IEntityTypeConfiguration<Doctor>, IEntity
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public bool CanPayWithCard { get; set; }
@@ -28,6 +25,6 @@ namespace MarkMyDoctor.Models.Entities
             builder.Property(d => d.Name).HasMaxLength(50);
         }
 
-     
+
     }
 }

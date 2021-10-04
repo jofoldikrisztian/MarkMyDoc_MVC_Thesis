@@ -1,8 +1,6 @@
 ﻿using MarkMyDoctor.Models.Entities;
 using MarkMyDoctor.Models.ViewModels;
-using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,7 +18,7 @@ namespace MarkMyDoctor.Data
         }
 
 
-        public async Task<bool> Create(DoctorReviewViewModel doctorReviewViewModel, User user)
+        public async Task<bool> CreateAsync(DoctorReviewViewModel doctorReviewViewModel, User user)
         {
             var review = doctorReviewViewModel.Review;
 

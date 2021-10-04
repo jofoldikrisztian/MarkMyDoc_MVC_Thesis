@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MarkMyDoctor.Data
+﻿namespace MarkMyDoctor.Interfaces
 {
     public interface IUnitOfWork
     {
         IDoctorRepository DoctorRepository { get; }
         IReviewRepository ReviewRepository { get; }
-        void Save();
+        void Commit();
+        void Rollback();
     }
 }

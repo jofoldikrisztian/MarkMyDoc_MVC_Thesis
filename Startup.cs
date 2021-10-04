@@ -1,22 +1,17 @@
 using MarkMyDoctor.Data;
-using MarkMyDoctor.Models;
+using MarkMyDoctor.Interfaces;
 using MarkMyDoctor.Models.Entities;
 using MarkMyDoctor.SeedData;
 using MarkMyDoctor.Services;
 using MarkMyDoctor.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MarkMyDoctor
 {
@@ -60,7 +55,6 @@ namespace MarkMyDoctor
 
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
 
-            services.AddScoped<IDoctorService, DoctorService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -106,7 +100,7 @@ namespace MarkMyDoctor
             });
 
             SeedData.SeedData.SeedEntitiesData(app);
-            SeedData.SeedData.UserAndRoles(app);
+            SeedData.SeedData.UsersAndRoles(app);
         }
     }
 }

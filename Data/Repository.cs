@@ -22,23 +22,40 @@ namespace MarkMyDoctor.Data
         }
         public void Add(T entity)
         {
+            if (entity == null) throw new ArgumentNullException("entity");
             _entities.Add(entity);
         }
         public void Remove(T entity)
         {
+            if (entity == null) throw new ArgumentNullException("entity");
             _entities.Remove(entity);
         }
 
         public async Task<T> GetByIdAsync(int id)
         {
-            return await _entities.FirstOrDefaultAsync(e => e.Id == id);
+
+            var record = await _entities.FirstOrDefaultAsync(e => e.Id == id);
+
+            if (record == null)
+            {
+                throw new KeyNotFoundException("A keresett elem nem található");
+            }
+
+            return record;
         }
 
         public async Task<T> GetByIdAsync(int id, Func<IQueryable<T>, IQueryable<T>> predicate)
         {
             IQueryable<T> _entitiesWithEagerLoading = predicate(_entities);
 
-            return await _entitiesWithEagerLoading.FirstOrDefaultAsync(e => e.Id == id);
+            var records = await _entitiesWithEagerLoading.FirstOrDefaultAsync(e => e.Id == id);
+
+            if (records == null)
+            {
+                throw new KeyNotFoundException("A keresett elem nem található");
+            }
+
+            return records;
         }
     }
 }

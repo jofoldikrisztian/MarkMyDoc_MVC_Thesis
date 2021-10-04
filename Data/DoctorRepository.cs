@@ -44,7 +44,7 @@ namespace MarkMyDoctor.Data
         /// <returns></returns>
         public async Task<DoctorViewModel> CollectDataForDoctorFormAsync()
         {
-            return new DoctorViewModel()
+            var dvm = new DoctorViewModel()
             {
                 Specialities = (from spec in await dbContext.Specialities
                                                             .OrderBy(s => s.Name)
@@ -54,36 +54,52 @@ namespace MarkMyDoctor.Data
                                     Value = spec.Id.ToString(),
                                     Text = spec.Name
                                 }).ToList()
-            }; 
+            };
+
+
+            if (dvm == null)
+            {
+                throw new ApplicationException("Hiba történt a model létrehozása során.");
+            }
+
+            return dvm;
         }
 
         public async Task<DoctorViewModel> CollectDataForDoctorFormAsync(int id)
         {
-            var doctor = await GetByIdAsync(id, d => d.Include(d => d.DoctorSpecialities));
-
-            return new DoctorViewModel()
+            try
             {
-                Specialities = (from spec in await dbContext.Specialities
-                                                            .OrderBy(s => s.Name)
-                                                            .ToListAsync()
-                                select new SelectListItem
-                                {
-                                    Value = spec.Id.ToString(),
-                                    Text = spec.Name
-                                }).ToList(),
-                Doctor = doctor,
-                SelectedSpecialityIds = doctor.DoctorSpecialities.Select(d => d.Speciality.Id.ToString()).ToList()
-            };
+                var doctor = await GetByIdAsync(id, d => d.Include(d => d.DoctorSpecialities));
+
+                return new DoctorViewModel()
+                {
+                    Specialities = (from spec in await dbContext.Specialities
+                                                                .OrderBy(s => s.Name)
+                                                                .ToListAsync()
+                                    select new SelectListItem
+                                    {
+                                        Value = spec.Id.ToString(),
+                                        Text = spec.Name
+                                    }).ToList(),
+                    Doctor = doctor,
+                    SelectedSpecialityIds = doctor.DoctorSpecialities.Select(d => d.Speciality.Id.ToString()).ToList()
+                };
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
-        public async Task<bool> UpdateDoctorAsync(int id, DoctorViewModel doctorViewModel)
+        public async Task UpdateDoctorAsync(int id, DoctorViewModel doctorViewModel)
         {
             try
             {
                 var doctor = await GetByIdAsync(doctorViewModel.Doctor.Id, d => d.Include(d => d.DoctorSpecialities));
 
                 if (doctor == null)
-                    return false;
+                    throw new KeyNotFoundException("A keresett orvos nem található!");
 
                 var selectedSpecialities = new List<Speciality>();
 
@@ -112,7 +128,6 @@ namespace MarkMyDoctor.Data
                 doctor.CanPayWithCard = doctorViewModel.Doctor.CanPayWithCard;
                 doctor.Email = doctorViewModel.Doctor.Email;
                 doctor.PhoneNumber = doctorViewModel.Doctor.PhoneNumber;
-                //doctor.PorfilePicture = doctorViewModel.Doctor.PorfilePicture;
                 doctor.WebAddress = doctorViewModel.Doctor.WebAddress;
 
                 //A megszüntetett kijelölésű specialitások eltávolítása az orvos specialitásai közül
@@ -135,14 +150,10 @@ namespace MarkMyDoctor.Data
                     }
                 }
 
-                await dbContext.SaveChangesAsync();
-
-                return true;
-             
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                return false;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -153,73 +164,104 @@ namespace MarkMyDoctor.Data
         /// <returns></returns>
         public async Task<Doctor> CreateDoctorAsync(DoctorViewModel doctorViewModel)
         {
-            var selectedSpecialities = new List<Speciality>();
-            var doctor = new Doctor();
-
-            await foreach (var spec in GetSelectedSpecialitiesAsync(doctorViewModel.SelectedSpecialityIds))
+            try
             {
-                selectedSpecialities.Add(spec);
-            }
+                var selectedSpecialities = new List<Speciality>();
+                var doctor = new Doctor();
 
-            if (doctorViewModel.Image != null)
-            {
-                if (doctorViewModel.Image.Length > 0)
+                await foreach (var spec in GetSelectedSpecialitiesAsync(doctorViewModel.SelectedSpecialityIds))
                 {
-                    byte[]? p1 = null;
-                    using (var target = new MemoryStream())
-                    {
-                        await doctorViewModel.Image.CopyToAsync(target);
-                        p1 = target.ToArray();
-                    }
-                    doctor.ProfilePicture = p1;
+                    selectedSpecialities.Add(spec);
                 }
-            }
 
-            doctor = doctorViewModel.Doctor;
 
-            await dbContext.Doctors.AddAsync(doctor);
-
-            var docSpecList = new List<DoctorSpeciality>();
-
-            foreach (var item in selectedSpecialities)
-            {
-                var docSpec = new DoctorSpeciality()
+                if (doctorViewModel.Image != null)
                 {
-                    Speciality = item,
-                    Doctor = doctor
-                };
+                    if (doctorViewModel.Image.Length > 0)
+                    {
+                        byte[]? p1 = null;
+                        using (var target = new MemoryStream())
+                        {
+                            await doctorViewModel.Image.CopyToAsync(target);
+                            p1 = target.ToArray();
+                        }
+                        doctor.ProfilePicture = p1;
+                    }
+                }
 
-                docSpecList.Add(docSpec);
+                doctor = doctorViewModel.Doctor;
+
+                await dbContext.Doctors.AddAsync(doctor);
+
+                var docSpecList = new List<DoctorSpeciality>();
+
+                foreach (var item in selectedSpecialities)
+                {
+                    var docSpec = new DoctorSpeciality()
+                    {
+                        Speciality = item,
+                        Doctor = doctor
+                    };
+
+                    docSpecList.Add(docSpec);
+                }
+
+                await dbContext.DoctorSpecialities.AddRangeAsync(docSpecList);
+
+                return doctor;
             }
-
-            await dbContext.DoctorSpecialities.AddRangeAsync(docSpecList);
-
-            return doctor;
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
 
         }
 
         public async Task<PaginatedList<Doctor>> GetSearchResultAsync(string toSearch, int pageNumber)
         {
-            var query = dbContext.Doctors.Where(
+            try
+            {
+                var query = dbContext.Doctors.Where(
                 d =>
                 d.DoctorSpecialities.Any(s => s.Speciality.Name.Contains(toSearch)) ||
                 d.Name.Contains(toSearch) ||
                 d.DoctorFacilities.Any(f => f.Facility.City.Name.Contains(toSearch))
                 ).OrderBy(d => d.Name);
 
-            var model = await PaginatedList<Doctor>.CreateAsync(query, pageNumber, 5);
+                var model = await PaginatedList<Doctor>.CreateAsync(query, pageNumber, 5);
 
-            return model;
+                if (model.Count() == 0)
+                {
+                    throw new KeyNotFoundException("Nincs a keresési kritériumnak megfelelő orvos.");
+                }
+
+                return model;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<PaginatedList<Doctor>> GetDoctorsAsync(int pageNumber)
         {
-            var query = dbContext.Doctors.OrderBy(d => d.Name).AsQueryable();
+            try
+            {
+                var query = dbContext.Doctors.OrderBy(d => d.Name).AsQueryable();
 
-            var model = await PaginatedList<Doctor>.CreateAsync(query, pageNumber, 5);
+                var model = await PaginatedList<Doctor>.CreateAsync(query, pageNumber, 5);
 
-            return model;
+                if (model.Count() == 0)
+                {
+                    throw new KeyNotFoundException("Nincs a keresési kritériumnak megfelelő orvos.");
+                }
 
+                return model;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
 

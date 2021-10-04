@@ -1,8 +1,4 @@
 ﻿using MarkMyDoctor.Models.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MarkMyDoctor.Data
 {
@@ -17,7 +13,7 @@ namespace MarkMyDoctor.Data
             this.context = context;
         }
 
-      public IDoctorRepository DoctorRepository
+        public IDoctorRepository DoctorRepository
         {
             get
             {
@@ -34,9 +30,14 @@ namespace MarkMyDoctor.Data
             }
         }
 
-        public void Save()
+        public void Commit()
         {
             this.context.SaveChanges();
+        }
+
+        public void Rollback()
+        {
+            this.context.Dispose();
         }
     }
 }

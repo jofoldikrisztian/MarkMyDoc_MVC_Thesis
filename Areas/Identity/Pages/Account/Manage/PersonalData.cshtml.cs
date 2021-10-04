@@ -1,9 +1,9 @@
-﻿using System.Threading.Tasks;
-using MarkMyDoctor.Models.Entities;
+﻿using MarkMyDoctor.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace MarkMyDoctor.Areas.Identity.Pages.Account.Manage
 {
