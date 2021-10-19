@@ -7,4 +7,4 @@ dotnet_diagnostic.CS8618.severity = none
 dotnet_diagnostic.CS8604.severity = none
 
 # CS8602: Dereference of a possibly null reference.
-dotnet_diagnostic.CS8602.severity = silent
+dotnet_diagnostic.CS8602.severity = warning

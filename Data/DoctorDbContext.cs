@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Reflection;
 
 namespace MarkMyDoctor.Data
@@ -18,6 +20,7 @@ namespace MarkMyDoctor.Data
         public DbSet<Facility> Facilities { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Speciality> Specialities { get; set; }
+
 
 
 
@@ -38,6 +41,19 @@ namespace MarkMyDoctor.Data
             modelBuilder.Entity<User>().ToTable("Users");
 
         }
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    base.OnConfiguring(optionsBuilder);
+
+        //    IConfigurationRoot configuration = new ConfigurationBuilder()
+        //                                                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+        //                                                .AddJsonFile("appsettings.json")
+        //                                                .Build();
+
+        //    optionsBuilder.UseSqlServer(configuration.GetConnectionString("MarkMyDoctorDB"), o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))
+        //                                    .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+        //}
 
 
 

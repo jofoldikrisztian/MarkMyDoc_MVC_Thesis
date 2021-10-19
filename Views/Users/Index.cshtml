@@ -1,0 +1,68 @@
+﻿@model IEnumerable<MarkMyDoctor.Models.ViewModels.UserRolesViewModel>
+
+@{
+    ViewData["Title"] = "Felhasználók";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="bg-light p-3 min-vh-80">
+    <h1 class="text-center p-5 text-muted">Felhasználók</h1>
+
+    <table id="users" class="table table-striped table-bordered dt-responsive nowrap users-table" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Felhasználónév</th>
+                <th>E-mail</th>
+                <th>Telefonszám</th>
+                <th>Szerepkörök</th>
+                <th>Szerkesztés</th>
+                <th>Törlés</th>
+            </tr>
+        </thead>
+    </table>
+
+    @section Scripts{
+
+        <script src="~/lib/datatables/js/jquery.dataTables.js"></script>
+        <script src="~/lib/datatables/js/dataTables.bootstrap4.js"></script>
+        <script src="~/js/userDataTable.js"></script>
+    }
+</div>
+
+
+@*<table id="users" class="table table-striped table-bordered dt-responsive nowrap">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PhoneNumber)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Szerkesztés</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Részletek</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Törlés</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>*@

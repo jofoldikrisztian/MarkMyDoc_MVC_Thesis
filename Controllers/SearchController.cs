@@ -1,9 +1,7 @@
 ﻿using MarkMyDoctor.Interfaces;
-using MarkMyDoctor.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace MarkMyDoctor.Controllers
@@ -20,12 +18,6 @@ namespace MarkMyDoctor.Controllers
             this.unitOfWork = unitOfWork;
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
         public async Task<IActionResult> SearchResult(string toSearch, int pageNumber = 1)
         {
 
@@ -40,7 +32,7 @@ namespace MarkMyDoctor.Controllers
             }
             catch (Exception ex)
             {
-                unitOfWork.Rollback();
+                unitOfWork.Dispose();
                 _logger.LogError("Hiba a művelet végrehajtása során: {0}", ex.Message);
                 return RedirectToAction("NoResult", "Home");
             }

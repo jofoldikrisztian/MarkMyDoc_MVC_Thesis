@@ -1,20 +1,18 @@
 ﻿using MarkMyDoctor.Interfaces;
-using MarkMyDoctor.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Diagnostics;
 
 namespace MarkMyDoctor.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
         public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
-            this.unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
@@ -25,12 +23,6 @@ namespace MarkMyDoctor.Controllers
         public IActionResult Privacy()
         {
             return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
         public IActionResult NoResult()
@@ -47,7 +39,7 @@ namespace MarkMyDoctor.Controllers
         [HttpPost]
         public JsonResult AutoComplete(string toSearch)
         {
-            return Json(unitOfWork.DoctorRepository.GetAutoCompleteSearchResults(toSearch));
+            return Json(_unitOfWork.DoctorRepository.GetAutoCompleteSearchResults(toSearch));
         }
 
     }

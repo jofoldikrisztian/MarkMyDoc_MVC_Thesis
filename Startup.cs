@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using static MarkMyDoctor.SeedData.SeedData;
 
 namespace MarkMyDoctor
 {
@@ -24,12 +26,13 @@ namespace MarkMyDoctor
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DoctorDbContext>(options =>
                                         options.UseSqlServer(Configuration.GetConnectionString("MarkMyDoctorDB"),
-                                        o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
+                                        o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))
+                                        .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information));
+
 
             services.AddIdentity<User, IdentityRole<int>>()
                 .AddEntityFrameworkStores<DoctorDbContext>()
@@ -93,14 +96,14 @@ namespace MarkMyDoctor
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapRazorPages();
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapRazorPages();
             });
 
-            SeedData.SeedData.SeedEntitiesData(app);
-            SeedData.SeedData.UsersAndRoles(app);
+            SeedEntitiesData(app);
+            UsersAndRoles(app);
         }
     }
 }

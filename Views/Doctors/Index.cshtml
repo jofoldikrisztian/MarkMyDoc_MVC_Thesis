@@ -17,10 +17,11 @@
 
             @if (doc.ProfilePicture != null)
             {
-<img alt="" src="data:image/jpg;base64,@Convert.ToBase64String(doc.ProfilePicture)" /> }
-else
-{
-<img src="~/images/surgeon-doctor-svgrepo-com.svg" alt="">}
+                <img alt="" src="data:image/jpg;base64,@Convert.ToBase64String(doc.ProfilePicture)" /> }
+            else
+            {
+                <img src="~/images/surgeon-doctor-svgrepo-com.svg" alt="">
+            }
         </div>
 
         <div class="infos">
@@ -28,13 +29,14 @@ else
             <div class="reviews">
                 @for (byte i = 0; i < @doc.OverallRating; i++)
                 {
-<i class="fas fa-star"></i>}
+                    <i class="fas fa-star"></i>
+                }
                 @for (byte i = @doc.OverallRating ?? 0; i < 5; i++)
                 {
-<i class="far fa-star"></i>}
+                    <i class="far fa-star"></i>
+                }
             </div>
             <div class="more-infos">
-                <h5>Értékelések</h5>
                 <h5>Szakterületek</h5>
                 <h5>Elérhetőség</h5>
             </div>
@@ -46,10 +48,8 @@ else
                 </p>
             </div>
             <div class="buttons">
-                <a class="fas fa-info-circle" asp-action="Details" asp-controller="Doctors"
-                   asp-route-id="@doc.Id"> Adatlap</a>
-                <a class="fas fa-marker" asp-action="Create" asp-controller="Reviews"
-                   asp-route-id="@doc.Id"> Értékelés</a>
+                <a class="fas fa-info-circle" asp-action="Details" asp-controller="Doctors" asp-route-id="@doc.Id"> Adatlap</a>
+                <a class="fas fa-marker" asp-action="Create" asp-controller="Reviews" asp-route-id="@doc.Id"> Értékelés</a>
             </div>
         </div>
     </div>

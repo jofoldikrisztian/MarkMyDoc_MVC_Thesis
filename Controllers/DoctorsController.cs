@@ -32,7 +32,7 @@ namespace MarkMyDoctor.Controllers
             }
             catch (Exception ex)
             {
-                unitOfWork.Rollback();
+                unitOfWork.Dispose();
                 logger.LogInformation("Hiba a művelet végrehajtása során: {0}", ex.Message);
                 return RedirectToAction("NoResult", "Home");
             }
@@ -60,7 +60,7 @@ namespace MarkMyDoctor.Controllers
             }
             catch (Exception ex)
             {
-                unitOfWork.Rollback();
+                unitOfWork.Dispose();
                 logger.LogError("Hiba a művelet végrehajtása során: {0}", ex.Message);
                 return RedirectToAction("NoResult", "Home");
             }
@@ -78,7 +78,7 @@ namespace MarkMyDoctor.Controllers
             catch (Exception ex)
             {
 
-                unitOfWork.Rollback();
+                unitOfWork.Dispose();
                 logger.LogError("Hiba a művelet végrehajtása során: {0}", ex.Message);
                 return RedirectToAction("SomethingWentWrong", "Home");
             }
@@ -103,7 +103,7 @@ namespace MarkMyDoctor.Controllers
                 }
                 catch (Exception ex)
                 {
-                    unitOfWork.Rollback();
+                    unitOfWork.Dispose();
                     logger.LogInformation("Hiba a művelet végrehajtása során: {0}", ex.Message);
                     return RedirectToAction("SomethingWentWrong", "Home");
                 }
@@ -112,24 +112,21 @@ namespace MarkMyDoctor.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles ="Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
-            {
                 return RedirectToAction("NoResult", "Home");
-            }
 
             try
             {
                 var doctorViewModel = await unitOfWork.DoctorRepository.CollectDataForDoctorFormAsync(id.Value);
-
                 ViewBag.returnUrl = Request.Headers["Referer"].ToString();
-
                 return View(doctorViewModel);
             }
             catch (Exception ex)
             {
-                unitOfWork.Rollback();
+                unitOfWork.Dispose();
                 logger.LogInformation("Hiba a művelet végrehajtása során: {0}", ex.Message);
                 return RedirectToAction("NoResult", "Home");
             }
@@ -163,7 +160,7 @@ namespace MarkMyDoctor.Controllers
             {
                 logger.LogError("Hiba az adatlap szerkesztése során:", ex.Message);
 
-                unitOfWork.Rollback();
+                unitOfWork.Dispose();
 
                 return RedirectToAction("SomethingWentWrong", "Home");
             }
@@ -191,7 +188,7 @@ namespace MarkMyDoctor.Controllers
             catch (Exception ex)
             {
                 logger.LogError("Hiba történt az orvos törlése során. Hiba: {}", ex.Message);
-                unitOfWork.Rollback();
+                unitOfWork.Dispose();
                 return RedirectToAction("SomethingWentWrong", "Home");
             }
 
@@ -220,7 +217,7 @@ namespace MarkMyDoctor.Controllers
             {
 
                 logger.LogError("Hiba történt az orvos törlése során. Hiba: {}", ex.Message);
-                unitOfWork.Rollback();
+                unitOfWork.Dispose();
                 return RedirectToAction("SomethingWentWrong", "Home");
             }
 

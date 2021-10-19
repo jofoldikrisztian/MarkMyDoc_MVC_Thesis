@@ -12,7 +12,7 @@ namespace MarkMyDoctor.Models.ViewModels
         public Doctor Doctor { get; init; }
         [Display(Name = "Specialitások:")]
         public List<string> SelectedSpecialityIds { get; init; }
-
+        [Display(Name = "Profilkép:")]
         public IFormFile? Image { get; set; }
 
     }

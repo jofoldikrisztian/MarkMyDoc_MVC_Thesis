@@ -19,22 +19,11 @@
                         <input asp-for="Doctor.Name" class="form-control" />
                         <span asp-validation-for="Doctor.Name" class="text-danger"></span>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label asp-for="SelectedSpecialityIds"></label>
-                        <select multiple="multiple" class="select2-mmd" asp-for="SelectedSpecialityIds" asp-items="Model.Specialities"></select>
-                        <span asp-validation-for="SelectedSpecialityIds" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="form-row">
+
                     <div class="form-group col-md-6">
                         <label asp-for="Doctor.PhoneNumber" class="control-label"></label>
                         <input asp-for="Doctor.PhoneNumber" class="form-control" />
                         <span asp-validation-for="Doctor.PhoneNumber" class="text-danger"></span>
-                    </div>
-                    <div class="form-group form-check col-md-6">
-                        <label class="form-check-label">
-                            <input class="form-check-input" asp-for="Doctor.CanPayWithCard" /> @Html.DisplayNameFor(model => model.Doctor.CanPayWithCard)
-                        </label>
                     </div>
                 </div>
                 <div class="form-row">
@@ -51,15 +40,23 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
+                        <label asp-for="SelectedSpecialityIds"></label>
+                        <select multiple="multiple" class="select2-mmd" asp-for="SelectedSpecialityIds" asp-items="Model.Specialities"></select>
+                        <span asp-validation-for="SelectedSpecialityIds" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
                         <label asp-for="Image" class="control-label"></label>
                         <input asp-for="Image" name="Image" type="file" accept="image/*" class="form-control" />
                         <span asp-validation-for="Image" class="text-danger"></span>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label asp-for="Doctor.OverallRating" class="control-label"></label>
-                        <input asp-for="Doctor.OverallRating" class="form-control" />
-                        <span asp-validation-for="Doctor.OverallRating" class="text-danger"></span>
-                    </div>
+                </div>
+                <div class="form-group form-check col-md-6 m-2">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Doctor.CanPayWithCard" />
+                        @Html.DisplayNameFor(model => model.Doctor.CanPayWithCard)
+                    </label>
                 </div>
                 <div class="form-group text-center">
                     <input type="submit" value="Mentés" class="btn btn-primary" />

@@ -94,6 +94,125 @@ body {
 
 
 
+
+
+
+div.login-logout-tab div.card-header {
+    padding: 0px 0px 12px 0px;
+}
+
+div.login-logout-tab ul.nav-tabs {
+    margin: 0px 0px -12px 0px;
+}
+
+div.login-logout-tab li.nav-item {
+    width: 50%;
+}
+
+div.login-logout-tab a.nav-link {
+    font-size: 25px;
+    color: #495057;
+    text-align: center;
+}
+
+div.card-content {
+    padding: 10px 20px;
+}
+
+
+/* #region usersTable */
+
+
+
+.users-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.users-table thead tr {
+        background-color: #1b6ec2;
+        color: #ffffff;
+        text-align: center;
+}
+
+.users-table th,
+.users-table td {
+    padding: 12px 15px;
+}
+
+
+.users-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.users-table tbody tr:nth-of-type(even) {
+        background-color: #f3f3f3;
+}
+
+.users-table tbody tr:nth-of-type(odd) {
+        background-color: #dddddd;
+    }
+
+.users-table tbody tr:last-of-type {
+        border-bottom: 2px solid #1b6ec2;
+}
+
+
+
+
+/* #endregion usersTable*/
+
+/*login form*/
+div.login-form-icon {
+    text-align: center;
+}
+
+/* #region identity design */
+
+/*.login-form-outer{
+    padding: 150px;
+}
+
+.login-form {
+    width: 340px;
+    margin: auto;
+    font-size: 15px;
+}
+
+ .login-form form {
+        margin-bottom: 15px;
+        background: #ffffff;
+        box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+ }
+
+.form-control, .btn {
+    min-height: 38px;
+    border-radius: 2px;
+}
+
+.btn {
+    font-size: 15px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.login-form .title {
+    font-size: 20px;
+    font-weight: 700;
+    font-family: verdana;
+}*/
+
+
+/* #endregion identity design*/
+
+
+
 /* #region forms */
 
 
@@ -110,7 +229,7 @@ label {
     border-radius: 0;
     padding: 26px;
     background-color: rgba(255,255,255,0.8);
-    border: none;
+    /*border: none;*/
 }
 
 .btn {
@@ -388,6 +507,7 @@ label {
 
 .navigationButtons a {
     font-size: 1.5rem;
+   
     text-decoration: none;
     color: black;
     border: 2px solid #5fdffc;
@@ -469,7 +589,7 @@ label {
 .infos .more-infos {
     display: flex;
     width: 80%;
-    justify-content: space-between;
+    justify-content: space-around;
     color: gray;
 }
 
@@ -500,6 +620,7 @@ label {
     .buttons a {
         width: 30%;
         border: 2px solid #5fdffc;
+        font-weight: 900;
         border-radius: 25px;
         background-color: white;
         text-decoration: none;
@@ -581,7 +702,8 @@ label {
 
     .lower-container .reviews {
         padding-top: 5px;
-        font-size: 2rem;
+        font-size: 1.8rem;
+        padding-bottom: 10px;
     }
 
     .lower-container span {
@@ -591,14 +713,14 @@ label {
 .doctor-details,
 .doctor-details-reviews {
     width: 90%;
-    padding-top: 5rem;
+    padding-top: 2rem;
     text-align: left;
     display: flex;
     justify-content: space-between;
     color: var(--body-font-color);
 }
 
-.specialities ul {
+ul {
     list-style-type: none;
 }
 
@@ -606,9 +728,9 @@ label {
     min-width: 40%;
 }
 
-.doctor-details .doc-address {
+/*.doctor-details .doc-address {
     min-width: 40%;
-}
+}*/
 
 hr {
     color: rgba(0, 0, 0, 0.2);
@@ -649,6 +771,10 @@ hr {
     font-size: 1.5rem;
     color: var(--blue-color);
     text-decoration: none;
+    border: 1px solid var(--blue-color);
+    border-radius: 30px;
+    padding: 10px;
+    margin: 5px;
 }
 
     .doctor-details__a:hover {
@@ -671,6 +797,8 @@ hr {
 .reviewRatings {
     width: auto;
     padding-left: 1.2rem;
+    border-right: 1px solid #e5e5e5;
+    padding-right: 15px;
 }
 
 

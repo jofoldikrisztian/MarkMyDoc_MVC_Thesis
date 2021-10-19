@@ -1,5 +1,8 @@
-﻿using MarkMyDoctor.Models.Entities;
+﻿using MarkMyDoctor.Interfaces;
+using MarkMyDoctor.Models.Entities;
 using MarkMyDoctor.Models.ViewModels;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,29 +11,31 @@ namespace MarkMyDoctor.Data
 {
     public class ReviewRepository : Repository<Review>, IReviewRepository
     {
+        private readonly UserManager<User> userManager;
         private readonly DoctorDbContext dbContext;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public ReviewRepository(DoctorDbContext dbContext)
+        public ReviewRepository(UserManager<User> userManager, DoctorDbContext dbContext, IHttpContextAccessor httpContextAccessor)
             : base(dbContext)
         {
+            this.userManager = userManager;
             this.dbContext = dbContext;
-
+            this.httpContextAccessor = httpContextAccessor;
         }
 
 
-        public async Task<bool> CreateAsync(DoctorReviewViewModel doctorReviewViewModel, User user)
+        public async Task<bool> CreateAsync(DoctorReviewViewModel doctorReviewViewModel)
         {
             var review = doctorReviewViewModel.Review;
+
+            var felhasznalo = httpContextAccessor.HttpContext?.User;
+
+            var user = await userManager.GetUserAsync(felhasznalo);
 
             review.DoctorId = doctorReviewViewModel.Doctor.Id;
             review.UserId = user.Id;
             review.ReviewedOn = DateTime.Today;
 
-
-            //if (review.Doctor == null || review.User == null)
-            //{
-            //    return false;
-            //}
 
             await dbContext.Reviews.AddAsync(review);
 

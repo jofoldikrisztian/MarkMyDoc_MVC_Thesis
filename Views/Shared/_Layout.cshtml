@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - MarkMyDoctor</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/lib/datatables/css/jquery.dataTables.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" />
+
 </head>
 <body>
     <header>
@@ -31,6 +33,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" id="btnDoctors" asp-area="" asp-controller="Doctors" asp-action="Index">Orvosok A-Z</a>
                         </li>
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Felhasználók</a>
+                            </li>
+                        }
                     </ul>
                     <partial Name="_LoginPartial" />
                 </div>

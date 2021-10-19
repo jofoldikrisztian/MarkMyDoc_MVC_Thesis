@@ -42,10 +42,7 @@ $(function () {
             });
 
         },
-        select: function (e, i) {
-            $("#hfCity").val(i.item.val);
-        },
-        minLength: 2,
+        minLength: 3,
         appendTo: '#search-box',
     });
 });
@@ -138,8 +135,5 @@ function VerifyRating(ratingAspect) {
 // Initialize Textarea
 $('.textarea-autosize').textareaAutoSize();
 
-
-
-
-
 /* end TextArea autosize*/
+

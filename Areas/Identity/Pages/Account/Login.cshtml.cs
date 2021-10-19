@@ -40,14 +40,15 @@ namespace MarkMyDoctor.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
+            [Required(ErrorMessage = "A felhasználónév megadása kötelező!")]
             public string UserName { get; set; }
 
-            [Required]
+      
             [DataType(DataType.Password)]
+            [Required(ErrorMessage = "A jelszó megadása kötelező!")]
             public string Password { get; set; }
 
-            [Display(Name = "Remember me?")]
+            [Display(Name = "Emlékezz rám")]
             public bool RememberMe { get; set; }
         }
 
@@ -81,7 +82,7 @@ namespace MarkMyDoctor.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
+                    _logger.LogInformation("A felhasználó bejelentkezett");
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -90,12 +91,12 @@ namespace MarkMyDoctor.Areas.Identity.Pages.Account
                 }
                 if (result.IsLockedOut)
                 {
-                    _logger.LogWarning("User account locked out.");
+                    _logger.LogWarning("A felhasználói fiók zárolásra került.");
                     return RedirectToPage("./Lockout");
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Hibás bejelentkezési kísérlet");
                     return Page();
                 }
             }

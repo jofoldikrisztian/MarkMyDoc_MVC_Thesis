@@ -4,7 +4,8 @@
     {
         IDoctorRepository DoctorRepository { get; }
         IReviewRepository ReviewRepository { get; }
+        IUserRepository UserRepository { get; }
         void Commit();
-        void Rollback();
+        void Dispose();
     }
 }

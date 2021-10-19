@@ -1,8 +1,6 @@
 ﻿using MarkMyDoctor.Interfaces;
-using MarkMyDoctor.Models.Entities;
 using MarkMyDoctor.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -10,17 +8,17 @@ namespace MarkMyDoctor.Controllers
 {
     public class ReviewsController : Controller
     {
-        private readonly UserManager<User> userManager;
+       // private readonly UserManager<User> userManager;
         private readonly IUnitOfWork unitOfWork;
 
-        public ReviewsController(UserManager<User> userManager, IUnitOfWork unitOfWork)
+        public ReviewsController(IUnitOfWork unitOfWork)
         {
-            this.userManager = userManager;
             this.unitOfWork = unitOfWork;
         }
 
 
         // GET: Reviews/Create
+        [HttpGet]
         [Authorize]
         public async Task<IActionResult> Create(int? id)
         {
@@ -47,9 +45,9 @@ namespace MarkMyDoctor.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DoctorReviewViewModel doctorReviewViewModel)
         {
-            var user = await userManager.GetUserAsync(User);
+        
 
-            var isCreated = await unitOfWork.ReviewRepository.CreateAsync(doctorReviewViewModel, user);
+            var isCreated = await unitOfWork.ReviewRepository.CreateAsync(doctorReviewViewModel);
 
 
             if (isCreated)
@@ -58,7 +56,7 @@ namespace MarkMyDoctor.Controllers
             }
             else
             {
-                return RedirectToAction("NoResult", "Home"); //!!!!!!!!!!Kicsierélni!!!!!!!!!!!!
+                return RedirectToAction("SomethingWentWrong", "Home"); //!!!!!!!!!!
             }
 
         }

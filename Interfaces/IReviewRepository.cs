@@ -7,7 +7,7 @@ namespace MarkMyDoctor.Interfaces
     public interface IReviewRepository : IRepository<Review>
     {
 
-        Task<bool> CreateAsync(DoctorReviewViewModel doctorReviewViewModel, User user);
+        Task<bool> CreateAsync(DoctorReviewViewModel doctorReviewViewModel);
 
     }
 }

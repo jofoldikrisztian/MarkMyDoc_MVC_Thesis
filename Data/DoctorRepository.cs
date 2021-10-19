@@ -1,4 +1,5 @@
 ﻿using MarkMyDoctor.Infrastructure;
+using MarkMyDoctor.Interfaces;
 using MarkMyDoctor.Models.Entities;
 using MarkMyDoctor.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -191,7 +192,7 @@ namespace MarkMyDoctor.Data
 
                 doctor = doctorViewModel.Doctor;
 
-                await dbContext.Doctors.AddAsync(doctor);
+                await AddAsync(doctor);
 
                 var docSpecList = new List<DoctorSpeciality>();
 

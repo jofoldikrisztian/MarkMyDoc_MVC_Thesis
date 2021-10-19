@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MarkMyDoctor.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,14 +17,11 @@ namespace MarkMyDoctor.Data
             _entities = context.Set<T>();
         }
 
-        public IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
-        {
-            return _entities.Where(predicate);
-        }
-        public void Add(T entity)
+   
+        public async Task AddAsync(T entity)
         {
             if (entity == null) throw new ArgumentNullException("entity");
-            _entities.Add(entity);
+            await _entities.AddAsync(entity);
         }
         public void Remove(T entity)
         {

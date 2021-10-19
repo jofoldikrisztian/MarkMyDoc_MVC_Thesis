@@ -1,16 +1,26 @@
-﻿using MarkMyDoctor.Models.Entities;
+﻿using MarkMyDoctor.Interfaces;
+using MarkMyDoctor.Models.Entities;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace MarkMyDoctor.Data
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork, IDisposable
     {
-        private IRepository<Doctor> doctorRepo;
-        private IRepository<Review> reviewRepo;
+        //private IRepository<Doctor> doctorRepo;
+        //private IRepository<Review> reviewRepo;
+        private readonly UserManager<User> userManager;
         private DoctorDbContext context;
+        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly RoleManager<IdentityRole<int>> roleManager;
 
-        public UnitOfWork(DoctorDbContext context)
+        public UnitOfWork(UserManager<User> userManager, DoctorDbContext context, IHttpContextAccessor httpContextAccessor, RoleManager<IdentityRole<int>> roleManager)
         {
+            this.userManager = userManager;
             this.context = context;
+            this.httpContextAccessor = httpContextAccessor;
+            this.roleManager = roleManager;
         }
 
         public IDoctorRepository DoctorRepository
@@ -26,7 +36,15 @@ namespace MarkMyDoctor.Data
         {
             get
             {
-                return new ReviewRepository(context);
+                return new ReviewRepository(userManager, context, httpContextAccessor);
+            }
+        }
+
+        public IUserRepository UserRepository
+        {
+            get
+            {
+                return new UserRepository(userManager, context, roleManager);
             }
         }
 
@@ -35,7 +53,7 @@ namespace MarkMyDoctor.Data
             this.context.SaveChanges();
         }
 
-        public void Rollback()
+        public void Dispose()
         {
             this.context.Dispose();
         }

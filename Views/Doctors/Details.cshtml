@@ -1,8 +1,5 @@
 ﻿@model MarkMyDoctor.Models.Entities.Doctor
 
-
-@inject SignInManager<User> SignInManager
-
 @{
     ViewData["Title"] = Model.Name;
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -26,39 +23,49 @@
         <h3>@Model.Name</h3>
         <div class="reviews">
             @for (var i = 0; i < @Model.OverallRating; i++)
-            {
-                <i class="fas fa-star"></i>}
+            { 
+                <i class="fas fa-star"></i>
+            }
             @for (var i = @Model.OverallRating; i < 5; i++)
             {
-                <i class="far fa-star"></i>}
+                <i class="far fa-star"></i>
+            }
             <span> (@Model?.Reviews?.Count())</span>
         </div>
-
+        <div>
+            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+            {
+                <a class="btn btn-primary" asp-action="Delete" asp-controller="Doctors" asp-route-id="@Model.Id">Orvos törlése</a>
+            }
+            @if (SignInManager.IsSignedIn(User) && (User.IsInRole("Administrator") || User.IsInRole("Moderator")))
+            {
+                <a class="btn btn-primary" asp-action="Edit" asp-controller="Doctors" asp-route-id="@Model.Id">Adatlap szerkesztése</a>
+            }
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <a class="btn btn-primary" asp-action="Create" asp-controller="Reviews" asp-route-id="@Model.Id">Orvos értékelése</a>
+            }
+        </div>
         <div class="doctor-details">
-
             <div class="specialities">
                 <h4 id="address">Szakterületek:</h4>
                 @foreach (var spec in Model.DoctorSpecialities)
                 {
                     <ul>
                         <li>@spec.Speciality.Name</li>
-                    </ul>}
+                    </ul>
+                }
             </div>
             <div class="doc-address">
-                <h4 id="address" data-city=@ViewBag.City>Cím:</h4>
-                @*<span>@Model.DoctorFacilities,</span>
-                <span>@Model.Address</span>*@
+                <h4 id="address" data-city=@ViewBag.City>Intézmények:</h4>
+                @foreach (var spec in Model.DoctorFacilities)
+                {
+                    <ul>
+                        <li>@spec.Facility.Name</li>
+                    </ul>
+                }
             </div>
         </div>
-        <a class="doctor-details__a" asp-action="Edit" asp-controller="Doctors" asp-route-id="@Model.Id">Adatlap szerkesztése</a>
-        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
-        {
-            <a class="doctor-details__a" asp-action="Delete" asp-controller="Doctors" asp-route-id="@Model.Id">Orvos törlése</a>
-        }
-        @if (SignInManager.IsSignedIn(User))
-        {
-            <a class="doctor-details__a" asp-action="Create" asp-controller="Reviews" asp-route-id="@Model.Id">Orvos értékelése</a>
-        }
         <div class="doctor-details-reviews">
             <h4>Értékelések:</h4>
             <div class="doctor-review">
@@ -68,16 +75,12 @@
                     <partial Name="_ReviewListPartial" model="@Model" /> }
                 else
                 {
-
                     <div class="empty-box">
                         <span>Még nem érkezett értékelés!</span>
-                    </div>}
+                    </div>
+                }
             </div>
         </div>
         @*<div id="map-div"></div>*@
     </div>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
 </div>
