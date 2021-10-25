@@ -6,6 +6,7 @@ using MarkMyDoctor.Services;
 using MarkMyDoctor.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -28,15 +29,23 @@ namespace MarkMyDoctor
 
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders =
+                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
+
             services.AddDbContext<DoctorDbContext>(options =>
-                                        options.UseSqlServer(Configuration.GetConnectionString("MarkMyDoctorDB"),
+                                        options.UseSqlServer(Configuration.GetConnectionString("UbuntuDb"),
                                         o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))
                                         .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information));
 
 
-            services.AddIdentity<User, IdentityRole<int>>()
+            services.AddIdentity<User, IdentityRole<int>>(o => o.User.RequireUniqueEmail = true)
                 .AddEntityFrameworkStores<DoctorDbContext>()
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders()
+                .AddErrorDescriber<AppErrorDescriber>();
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -54,7 +63,7 @@ namespace MarkMyDoctor
 
             });
 
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IAppEmailSender, EmailSender>();
 
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
 
@@ -78,14 +87,16 @@ namespace MarkMyDoctor
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseForwardedHeaders();
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                app.UseForwardedHeaders();
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();

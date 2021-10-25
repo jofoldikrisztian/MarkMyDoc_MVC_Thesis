@@ -1,4 +1,4 @@
-﻿@model MarkMyDoctor.Models.ViewModels.UserRolesViewModel
+﻿@model MarkMyDoctor.Models.ViewModels.UserViewModel
 
 @{
     ViewData["Title"] = "Felhasználó adatlap szerkesztése";
@@ -8,7 +8,7 @@
 <div>
     <div class="row">
         <div class="col-12 text-white p-5 mt-5 bg-black">
-            <h2>Felhasználó adatlap szerkesztése</h2>
+            <h2>@ViewBag.UserName adatlapjának szerkesztése</h2>
             <hr />
             <form asp-action="Edit">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -25,13 +25,18 @@
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="PhoneNumber" class="control-label">Telefonszám:</label>
-                    <input asp-for="PhoneNumber" class="form-control" />
-                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="PhoneNumber" class="control-label">Telefonszám:</label>
+                        <input asp-for="PhoneNumber" class="form-control" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="Password" class="control-label">Új jelszó beállítása:</label>
+                        <input type="password" asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
                 </div>
-
-               
                 <div class="form-group">
                     <input type="submit" value="Mentés" class="btn btn-primary" />
                 </div>

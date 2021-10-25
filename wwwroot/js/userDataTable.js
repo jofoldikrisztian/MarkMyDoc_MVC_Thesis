@@ -22,10 +22,13 @@ $(document).ready(function () {
             { "data": "phoneNumber", "name": "phoneNumber", "autoWidth": true },
             { "data": "roles", "name": "roles", "autoWidth": true },
             {
+                "render": function (data, type, full, meta) { return '<a class="btn btn-info" href="/Users/Manage/' + full.id + '">Szerepkörök kezelése</a>'; }
+            },
+            {
                 "render": function (data, type, full, meta) { return '<a class="btn btn-info" href="/Users/Edit/' + full.id + '">Szerkesztés</a>'; }
             },
             {
-                "render": function (data, type, full, meta) { return '<a class="btn btn-info" href="/Users/Delete/' + full.id + '">Törlés</a>'; }
+                "render": function (data, type, full, meta) { return '<a class="btn btn-danger" href="/Users/Delete/' + full.id + '">Törlés</a>'; }
             },
         ]
 

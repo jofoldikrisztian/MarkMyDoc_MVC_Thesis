@@ -1,4 +1,5 @@
-﻿using MarkMyDoctor.Settings;
+﻿using MarkMyDoctor.Interfaces;
+using MarkMyDoctor.Settings;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using System.Net;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MarkMyDoctor.Services
 {
-    public class EmailSender : IEmailSender
+    public class EmailSender : IAppEmailSender
     {
         private readonly MailSettings mailSettings;
 
@@ -19,12 +20,25 @@ namespace MarkMyDoctor.Services
         {
             var client = new SmtpClient(mailSettings.Host, mailSettings.Port)
             {
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(mailSettings.Mail, mailSettings.Password),
+                EnableSsl = true                     
+            };
+
+
+             await client.SendMailAsync(new MailMessage(mailSettings.Mail, email, subject, htmlMessage) { IsBodyHtml = true });
+        }
+
+        public async Task SendEmailToStaffAsync(string name, string from, string message)
+        {
+            var client = new SmtpClient(mailSettings.Host, mailSettings.Port)
+            {
+                UseDefaultCredentials = false,
                 Credentials = new NetworkCredential(mailSettings.Mail, mailSettings.Password),
                 EnableSsl = true
             };
 
-
-            await client.SendMailAsync(new MailMessage(mailSettings.Mail, email, subject, htmlMessage) { IsBodyHtml = true });
+            await client.SendMailAsync(new MailMessage(from, mailSettings.Mail, name, message));
         }
     }
 }

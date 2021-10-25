@@ -1,6 +1,10 @@
 ﻿using MarkMyDoctor.Interfaces;
+using MarkMyDoctor.Models.ViewModels;
+using MarkMyDoctor.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace MarkMyDoctor.Controllers
 {
@@ -8,19 +12,16 @@ namespace MarkMyDoctor.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IAppEmailSender emailSender;
 
-        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork, IAppEmailSender emailSender)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
+            this.emailSender = emailSender;
         }
 
         public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
         {
             return View();
         }
@@ -40,6 +41,26 @@ namespace MarkMyDoctor.Controllers
         public JsonResult AutoComplete(string toSearch)
         {
             return Json(_unitOfWork.DoctorRepository.GetAutoCompleteSearchResults(toSearch));
+        }
+
+        public IActionResult Contact()
+        {
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Contact(ContactViewModel contact)
+        {
+            if (ModelState.IsValid)
+            {
+                await emailSender.SendEmailToStaffAsync(contact.Name, contact.Email, contact.Message);
+                contact.StatusMessage = "Köszönjük az üzenetet, hamarosan jelentkezünk!";
+                return View(contact);
+
+            }
+
+            return View();
         }
 
     }

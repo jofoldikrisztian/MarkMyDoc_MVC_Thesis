@@ -1,0 +1,35 @@
+﻿@model ContactViewModel 
+
+@{
+    ViewData["Title"] = "Kapcsolat";
+}
+
+
+<div class="card">
+    <div class="card-header">
+        <h1>Kapcsolat</h1>
+    </div>
+    <div class="card-body">
+
+        <form asp-action="Contact" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <partial name="_StatusMessage" model="Model?.StatusMessage" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Név:</label>
+                <input asp-for="Name" class="form-control">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label">Email cím:</label>
+                <input asp-for="Email" class="form-control">
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Message" class="control-label">Üzenet:</label>
+                <textarea asp-for="Message" class="form-control textarea-autosize"></textarea>
+                <span asp-validation-for="Message" class="text-danger"></span>
+            </div>
+            <input type="submit" value="Küldés" class="btn btn-primary" style="width:auto" />
+        </form>
+    </div>
+</div>

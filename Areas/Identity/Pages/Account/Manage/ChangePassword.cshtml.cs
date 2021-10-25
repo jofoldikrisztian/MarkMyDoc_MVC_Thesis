@@ -31,20 +31,21 @@ namespace MarkMyDoctor.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
-            [Required]
+            [Required(ErrorMessage = "A jelenlegi jelszó megadása kötelező!")]
             [DataType(DataType.Password)]
-            [Display(Name = "Current password")]
+            [Display(Name = "Jelenlegi jelszó")]
             public string OldPassword { get; set; }
 
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage = "Az új jelszó megadása kötelező!")]
+            [StringLength(100, ErrorMessage = "Az {0}-nak legalább {2} és maximum {1} karakter hosszúnak kell lennie.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "New password")]
+            [Display(Name = "Új jelszó")]
             public string NewPassword { get; set; }
 
+            [Required(ErrorMessage = "Az új jelszó megerősítése kötelező!")]
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm new password")]
-            [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+            [Display(Name = "Jelszó megerősítése")]
+            [Compare("NewPassword", ErrorMessage = "Az új jelszónak, és a megerősítő jelszónak egyeznie kell!")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -53,7 +54,7 @@ namespace MarkMyDoctor.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Az '{_userManager.GetUserId(User)}'-val rendelkező felhazsnálót nem sikerült megtalálni.");
             }
 
             var hasPassword = await _userManager.HasPasswordAsync(user);
@@ -75,7 +76,7 @@ namespace MarkMyDoctor.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Az '{_userManager.GetUserId(User)}'-val rendelkező felhazsnálót nem sikerült megtalálni.");
             }
 
             var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
@@ -89,8 +90,8 @@ namespace MarkMyDoctor.Areas.Identity.Pages.Account.Manage
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            _logger.LogInformation("User changed their password successfully.");
-            StatusMessage = "Your password has been changed.";
+            _logger.LogInformation("A felhasználó sikeresen megváltoztatta a jelszavát");
+            StatusMessage = "A jelszavad megváltozott.";
 
             return RedirectToPage();
         }

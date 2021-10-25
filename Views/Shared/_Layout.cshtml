@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="~/lib/datatables/css/jquery.dataTables.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" />
-
 </head>
 <body>
     <header>
@@ -28,9 +27,6 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Főoldal</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Contact">Kapcsolat</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-dark" id="btnDoctors" asp-area="" asp-controller="Doctors" asp-action="Index">Orvosok A-Z</a>
                         </li>
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
@@ -39,6 +35,9 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Felhasználók</a>
                             </li>
                         }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Contact">Kapcsolat</a>
+                        </li>
                     </ul>
                     <partial Name="_LoginPartial" />
                 </div>
@@ -64,7 +63,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - MarkMyDoctor - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2021 - MarkMyDoctor
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

@@ -1,4 +1,5 @@
-﻿using MarkMyDoctor.Models.Entities;
+﻿using MarkMyDoctor.Interfaces;
+using MarkMyDoctor.Models.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -22,13 +23,13 @@ namespace MarkMyDoctor.Areas.Identity.Pages.Account
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
+        private readonly IAppEmailSender _emailSender;
 
         public RegisterModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IAppEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -45,21 +46,22 @@ namespace MarkMyDoctor.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
+            [Required(ErrorMessage = "Az email cím megadása kötelező!")]
             [EmailAddress]
             [Display(Name = "E-mail cím")]
             public string Email { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "A felhasználónév megadása kötelező!")]
             [Display(Name = "Felhasználónév")]
             public string UserName { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "A jelszó megadása kötelező!")]
             [StringLength(100, ErrorMessage = "Legalább {2} és maximum {1} karakter hosszú lehet.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Jelszó")]
             public string Password { get; set; }
 
+            [Required(ErrorMessage = "A jelszó megerősítése kötelező!")]
             [DataType(DataType.Password)]
             [Display(Name = "Jelszó megerősítése")]
             [Compare("Password", ErrorMessage = "A jelszavak nem egyeznek.")]
@@ -82,7 +84,7 @@ namespace MarkMyDoctor.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    _logger.LogInformation("Felhasználó létrehozva");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     await _userManager.AddToRoleAsync(user, "User");
@@ -93,8 +95,8 @@ namespace MarkMyDoctor.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    await _emailSender.SendEmailAsync(Input.Email, "Email megerősítése",
+                        $"Kérlek erősítsd meg az email címed a következő linkre történő kattintással: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Email megerősítése</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
@@ -112,7 +114,6 @@ namespace MarkMyDoctor.Areas.Identity.Pages.Account
                 }
             }
 
-            // If we got this far, something failed, redisplay form
             return Page();
         }
     }

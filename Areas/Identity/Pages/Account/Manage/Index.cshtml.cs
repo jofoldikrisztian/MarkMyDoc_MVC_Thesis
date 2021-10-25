@@ -53,7 +53,7 @@ namespace MarkMyDoctor.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Nem sikerült betölteni a felhasználó adatait:'{_userManager.GetUserId(User)}'.");
             }
 
             await LoadAsync(user);
@@ -65,7 +65,7 @@ namespace MarkMyDoctor.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Nem sikerült betölteni a felhasználó adatait: '{_userManager.GetUserId(User)}'.");
             }
 
             if (!ModelState.IsValid)
@@ -80,13 +80,13 @@ namespace MarkMyDoctor.Areas.Identity.Pages.Account.Manage
                 var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
+                    StatusMessage = "Váratlan hiba történt a telefonszám frissítése során";
                     return RedirectToPage();
                 }
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = "A felhasználói adatok frissítésre kerültek.";
             return RedirectToPage();
         }
     }

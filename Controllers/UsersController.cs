@@ -3,25 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using MarkMyDoctor.Data;
-using MarkMyDoctor.Models.Entities;
 using System.Linq.Dynamic.Core;
 using MarkMyDoctor.Interfaces;
 using MarkMyDoctor.Models.ViewModels;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MarkMyDoctor.Controllers
 {
+    [Authorize(Roles ="Administrator")]
     public class UsersController : Controller
     {
         private readonly DoctorDbContext _context;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogger<UsersController> _logger;
 
-        public UsersController(DoctorDbContext context, IUnitOfWork unitOfWork)
+        public UsersController(DoctorDbContext context, IUnitOfWork unitOfWork, ILogger<UsersController> logger)
         {
             _context = context;
-            this.unitOfWork = unitOfWork;
+            this._unitOfWork = unitOfWork;
+            this._logger = logger;
         }
 
         // GET: Users
@@ -52,7 +54,7 @@ namespace MarkMyDoctor.Controllers
 
                 int recordsTotal = 0;
 
-                var userData = await unitOfWork.UserRepository.GetUsersAndRolesAsync();
+                var userData = await _unitOfWork.UserRepository.GetUsersAndRolesAsync();
 
 
                 if (!string.IsNullOrEmpty(searchValue))
@@ -78,7 +80,7 @@ namespace MarkMyDoctor.Controllers
         public async Task<IActionResult> Manage(int id)
         {
             ViewBag.userId = id;
-            var user = await unitOfWork.UserRepository.GetByIdAsync(id);
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(id);
 
             if (user == null)
             {
@@ -90,7 +92,7 @@ namespace MarkMyDoctor.Controllers
 
             var model = new List<ManageUserRolesViewModel>();
 
-            foreach (var role in await unitOfWork.UserRepository.GetRolesAsync())
+            foreach (var role in await _unitOfWork.UserRepository.GetRolesAsync())
             {
                 var userRolesViewModel = new ManageUserRolesViewModel
                 {
@@ -98,7 +100,7 @@ namespace MarkMyDoctor.Controllers
                     RoleName = role.Name
                 };
 
-                if (await unitOfWork.UserRepository.IsInRoleAsync(user, role.Name))
+                if (await _unitOfWork.UserRepository.IsInRoleAsync(user, role.Name))
                 {
                     userRolesViewModel.Selected = true;
                 }
@@ -115,16 +117,16 @@ namespace MarkMyDoctor.Controllers
         [HttpPost]
         public async Task<IActionResult> Manage(List<ManageUserRolesViewModel> model, int id)
         {
-            var user = await unitOfWork.UserRepository.GetByIdAsync(id);
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(id);
 
             if (user == null)
             {
                 return View();
             }
 
-            var roles = await unitOfWork.UserRepository.GetRolesAsync(user);
+            var roles = await _unitOfWork.UserRepository.GetRolesAsync(user);
 
-            var result = await unitOfWork.UserRepository.RemoveFromRolesAsync(user, roles);
+            var result = await _unitOfWork.UserRepository.RemoveFromRolesAsync(user, roles);
 
             if (!result.Succeeded)
             {
@@ -132,7 +134,7 @@ namespace MarkMyDoctor.Controllers
                 return View(model);
             }
 
-            result = await unitOfWork.UserRepository.AddToRolesAsync(user, model.Where(x => x.Selected).Select(y => y.RoleName));
+            result = await _unitOfWork.UserRepository.AddToRolesAsync(user, model.Where(x => x.Selected).Select(y => y.RoleName));
 
             if (!result.Succeeded)
             {
@@ -147,43 +149,56 @@ namespace MarkMyDoctor.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NoResult", "Home");
             }
 
-            var user = await _context.Users.FindAsync(id);
+            ViewBag.userId = id;
+
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(id.Value);
+
             if (user == null)
             {
-                return NotFound();
+                ViewBag.ErrorMessage = $"{id} ID-val rendelkező felhasználó nem található!";
+                return RedirectToAction("NoResult", "Home");
             }
-            return View(user);
+
+            ViewBag.UserName = user.UserName;
+
+            var userViewmodel = new UserViewModel()
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber
+            };
+
+            return View(userViewmodel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserName,NormalizedUserName,Email,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] User user)
+        public async Task<IActionResult> Edit(int? id, UserViewModel user)
         {
-            if (id != user.Id)
+            if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NoResult", "Home");
             }
+
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
+                    await _unitOfWork.UserRepository.UpdateUserAsync(user);
+
+                    _unitOfWork.Commit();
+
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!UserExists(user.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    _logger.LogError("Hiba történt az orvos törlése során. Hiba: {}", ex.Message);
+                    _unitOfWork.Dispose();
+                    return RedirectToAction("SomethingWentWrong", "Home");
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -195,17 +210,25 @@ namespace MarkMyDoctor.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NoResult", "Home");
             }
 
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(id.Value);
+
             if (user == null)
             {
-                return NotFound();
+                return RedirectToAction("NoResult", "Home");
             }
 
-            return View(user);
+            var userViewModel = new UserViewModel()
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                PhoneNumber = user.PhoneNumber,
+                Email = user.Email
+            };
+
+            return View(userViewModel);
         }
 
 
@@ -213,15 +236,14 @@ namespace MarkMyDoctor.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(id);
+
+            _unitOfWork.UserRepository.Remove(user);
+
+            _unitOfWork.Commit();
+
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.Id == id);
-        }
     }
 }

@@ -40,9 +40,14 @@ namespace MarkMyDoctor.SeedData
                 var addToRoleResult = await userManager.AddToRoleAsync(user, "Administrator");
 
 
-                if (!result.Succeeded || !addToRoleResult.Succeeded)
+                if (!result.Succeeded)
                 {
                     throw new ApplicationException("Nem sikerült létrehozni az Administrator felhasználót");
+                }
+
+                if (!addToRoleResult.Succeeded)
+                {
+                    throw new ApplicationException("Nem sikerült a felhasználóhoz szerepkört rendelni.");
                 }
             }
         }

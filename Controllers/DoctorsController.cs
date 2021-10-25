@@ -183,7 +183,15 @@ namespace MarkMyDoctor.Controllers
             {
                 var doctor = await unitOfWork.DoctorRepository.GetByIdAsync(id.Value);
 
-                return View(doctor);
+                var deleteDoctorViewModel = new DeleteDoctorViewModel()
+                                                                 {
+                                                                     Id = doctor.Id,
+                                                                     Email = doctor.Email,
+                                                                     Name = doctor.Name,
+                                                                     PhoneNumber = doctor.PhoneNumber
+                                                                 };
+
+                return View(deleteDoctorViewModel);
             }
             catch (Exception ex)
             {
@@ -210,7 +218,7 @@ namespace MarkMyDoctor.Controllers
 
                 logger.LogInformation("A(z) {} id-val rendelkező orvos eltávolításra került az adatbázisból", id);
 
-                return RedirectToAction("Index", "Home"); //Az orvos eltávolításra került oldal létrehozása
+                return RedirectToAction("Index", "Home"); //TODO Az orvos eltávolításra került oldal létrehozása
 
             }
             catch (Exception ex)

@@ -75,5 +75,28 @@ namespace MarkMyDoctor.Data
         {
             return await _userManager.AddToRolesAsync(user, roles);
         }
+
+        public async Task UpdateUserAsync(UserViewModel user)
+        {
+            var userToUpdate = await _userManager.Users.FirstOrDefaultAsync(u => u.Id.Equals(user.Id));
+
+            if (userToUpdate == null)
+                throw new KeyNotFoundException("A keresett felhasználó nem található!");
+
+            userToUpdate.UserName = user.UserName;
+            userToUpdate.PhoneNumber = user.PhoneNumber;
+            userToUpdate.Email = user.Email;
+            userToUpdate.NormalizedUserName = user.UserName.ToUpper();
+            userToUpdate.NormalizedEmail = user.Email.ToUpper();
+
+            if (user.Password != null)
+            {
+                var password = new PasswordHasher<User>();
+                var hashed = password.HashPassword(userToUpdate, user.Password);
+                userToUpdate.PasswordHash = hashed;
+            }
+
+
+        }
     }
 }

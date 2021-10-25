@@ -10,10 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarkMyDoctorTests", "..\MarkMyDoctorTests\MarkMyDoctorTests.csproj", "{C47E0182-1732-4D15-9BFC-36478CE11E7C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarkMyDoctorTests1", "..\MarkMyDoctorTests1\MarkMyDoctorTests1.csproj", "{F1F6042D-8C1A-4A8B-9A97-945D5009D2EF}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,14 +20,6 @@ Global
 		{6E2EF1C5-7EEB-43DF-9CFA-45371BD1ABB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E2EF1C5-7EEB-43DF-9CFA-45371BD1ABB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E2EF1C5-7EEB-43DF-9CFA-45371BD1ABB9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C47E0182-1732-4D15-9BFC-36478CE11E7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C47E0182-1732-4D15-9BFC-36478CE11E7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C47E0182-1732-4D15-9BFC-36478CE11E7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C47E0182-1732-4D15-9BFC-36478CE11E7C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F1F6042D-8C1A-4A8B-9A97-945D5009D2EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F1F6042D-8C1A-4A8B-9A97-945D5009D2EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F1F6042D-8C1A-4A8B-9A97-945D5009D2EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F1F6042D-8C1A-4A8B-9A97-945D5009D2EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
