@@ -132,33 +132,33 @@ div.card-content {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
-.users-table thead tr {
+    .users-table thead tr {
         background-color: #1b6ec2;
         color: #ffffff;
         text-align: center;
-}
-
-.users-table th,
-.users-table td {
-    padding: 12px 15px;
-}
-
-
-.users-table tbody tr {
-    border-bottom: 1px solid #dddddd;
-}
-
-.users-table tbody tr:nth-of-type(even) {
-        background-color: #f3f3f3;
-}
-
-.users-table tbody tr:nth-of-type(odd) {
-        background-color: #dddddd;
     }
 
-.users-table tbody tr:last-of-type {
-        border-bottom: 2px solid #1b6ec2;
-}
+    .users-table th,
+    .users-table td {
+        padding: 12px 15px;
+    }
+
+
+    .users-table tbody tr {
+        border-bottom: 1px solid #dddddd;
+    }
+
+        .users-table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        .users-table tbody tr:nth-of-type(odd) {
+            background-color: #dddddd;
+        }
+
+        .users-table tbody tr:last-of-type {
+            border-bottom: 2px solid #1b6ec2;
+        }
 
 
 
@@ -382,10 +382,10 @@ label {
 /* #region Autocomplete */
 
 .ui-autocomplete {
-    border-radius: 30px;
+    border-radius: 10px;
     list-style-type: none;
     background-color: #fff;
-    font-size: 3rem;
+    font-size: 1rem;
     max-height: 200px;
     overflow-y: scroll;
 }
@@ -401,18 +401,18 @@ label {
 
 .ui-menu-item {
     font-family: "Lato", sans-serif;
-    font-size: 2rem;
+    font-size: 1.2rem;
     text-transform: none;
     padding-top: 10px;
     padding-bottom: 10px;
     text-decoration: none;
 }
 
-    .ui-menu-item:hover {
+/*    .ui-menu-item:hover {
         background-color: var(--light-gray-color);
         border-radius: 30px;
         cursor: pointer;
-    }
+    }*/
 
 /* #endregion Autocomplete */
 
@@ -428,9 +428,9 @@ label {
     top: 0;
     left: 0;
     background-color: var(--dark-color);
-    filter: alpha(opacity=60);
+    /*  filter: alpha(opacity=60);*/
     opacity: 0.6;
-    -moz-opacity: 0.8;
+    /*    -moz-opacity: 0.8;*/
 }
 
 .center-div {
@@ -507,7 +507,6 @@ label {
 
 .navigationButtons a {
     font-size: 1.5rem;
-   
     text-decoration: none;
     color: black;
     border: 2px solid #5fdffc;
@@ -539,6 +538,26 @@ label {
 
 /* #endregion NavigationButtons */
 
+/* #region SearchCard */
+.search-card-container {
+    height: 15vh;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-card {
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    width: 90%;
+    height: 90%;
+    border-radius: 20px;
+    display: flex;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.3);
+}
+/* #endregion SearchCard */
 /* #region SearchResultCard */
 
 .doctor-card-container {
@@ -562,13 +581,12 @@ label {
         width: 30%;
     }
 
-        .doctor-card .image  img {
+        .doctor-card .image img {
             width: 70%;
             position: relative;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-
         }
 
     .doctor-card .infos {
@@ -683,11 +701,11 @@ label {
     box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.3);
 }
 
-.image-container img {
+    .image-container img {
         border-radius: 50%;
         width: 170px;
         height: 170px;
-}
+    }
 
 .lower-container {
     height: auto;
@@ -757,9 +775,9 @@ hr {
     margin: 15px;
 }
 
-.empty-box span {
-    padding: 0;
-}
+    .empty-box span {
+        padding: 0;
+    }
 
 #map-div {
     margin-top: 30px;
@@ -814,7 +832,7 @@ hr {
     padding: 1rem;
 }
 
-.review-title{
+.review-title {
     display: flex;
     justify-content: space-between;
     padding-top: 1rem;
@@ -831,15 +849,15 @@ textarea.textarea-autosize {
     overflow-y: hidden;
 }
 
-textarea.textarea-autosize.form-control-lg {
+    textarea.textarea-autosize.form-control-lg {
         height: 3.75rem;
         min-height: 3.75rem;
-}
+    }
 
-textarea.textarea-autosize.form-control-sm {
+    textarea.textarea-autosize.form-control-sm {
         height: 2rem;
         min-height: 2rem;
-}
+    }
 
 
 .noResult {

@@ -2,6 +2,20 @@
 
 @{ ViewData["Title"] = "Találatok"; }
 
+
+<div class="search-card-container">
+    <div class="search-card">
+        <form asp-controller="Search" asp-action="SearchResult">
+            <div class="input-group mb-3">
+                <input type="text" id="input-text" placeholder="Kezdj el gépelni..." name="toSearch" class="btn btn-outline-primary" aria-label="" aria-describedby="basic-addon1" />
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Keresés</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="search-result">
 
     <div class="navigationButtons navTop">
@@ -20,7 +34,7 @@
                 <img alt="" src="data:image/jpg;base64,@Convert.ToBase64String(doc.ProfilePicture)" /> }
             else
             {
-                <img src="~/images/surgeon-doctor-svgrepo-com.svg" alt="">
+                <img src="~/images/doctor.svg" alt="">
             }
         </div>
 

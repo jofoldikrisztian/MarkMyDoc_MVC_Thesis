@@ -39,16 +39,9 @@ namespace MarkMyDoctor.Controllers
             {
                 var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
 
-                // Skip number of Rows count  
                 var start = Request.Form["start"].FirstOrDefault();
 
-
-                // Sort Column Name  
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-
-                // Search Value from (Search box)  
                 var searchValue = Request.Form["search[value]"].FirstOrDefault();
-
 
                 int skip = start != null ? Convert.ToInt32(start) : 0;
 
@@ -61,12 +54,11 @@ namespace MarkMyDoctor.Controllers
                 {
                     userData = userData.Where(m => m.UserName.Contains(searchValue));
                 }
-
-                //total number of rows counts     
+ 
                 recordsTotal = userData.Count();
-                //Paging   
+
                 var data = userData.Skip(skip).Take(20).ToList();
-                //Returning Json Data  
+
                 return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
 
             }

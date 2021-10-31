@@ -21,31 +21,11 @@ if (x != null) {
 }
 
 
-$(function () {
+$(document).ready(function () {
     $("#input-text").autocomplete({
-        source: function (request, response) {
-            $.ajax({
-                url: '/Home/AutoComplete/',
-                data: { "toSearch": request.term },
-                type: "POST",
-                success: function (data) {
-                    response($.map(data, function (item) {
-                        return item;
-                    }))
-                },
-                error: function (response) {
-                    alert(response.responseText);
-                },
-                failure: function (response) {
-                    alert(response.responseText);
-                }
-            });
-
-        },
-        minLength: 3,
-        appendTo: '#search-box',
-    });
-});
+        source: '/api/autocompleteapi/search'
+    })
+})
 
 //#region Oldal töltő 
 

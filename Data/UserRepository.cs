@@ -32,12 +32,14 @@ namespace MarkMyDoctor.Data
 
             foreach (User user in users)
             {
-                var thisViewModel = new UserRolesViewModel();
-                thisViewModel.Id = user.Id;
-                thisViewModel.Email = user.Email;
-                thisViewModel.UserName = user.UserName;
-                thisViewModel.PhoneNumber = user.PhoneNumber;
-                thisViewModel.Roles = await GetUserRoles(user);
+                var thisViewModel = new UserRolesViewModel
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    UserName = user.UserName,
+                    PhoneNumber = user.PhoneNumber,
+                    Roles = await GetUserRoles(user)
+                };
                 userRolesViewModel.Add(thisViewModel);
             }
 

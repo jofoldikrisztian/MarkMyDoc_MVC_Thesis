@@ -3,7 +3,9 @@ using MarkMyDoctor.Models.Entities;
 using MarkMyDoctor.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,7 +26,7 @@ namespace MarkMyDoctor.Data
         }
 
 
-        public async Task<bool> CreateAsync(DoctorReviewViewModel doctorReviewViewModel)
+        public async Task CreateAsync(DoctorReviewViewModel doctorReviewViewModel)
         {
             var review = doctorReviewViewModel.Review;
 
@@ -35,6 +37,7 @@ namespace MarkMyDoctor.Data
             review.DoctorId = doctorReviewViewModel.Doctor.Id;
             review.UserId = user.Id;
             review.ReviewedOn = DateTime.Today;
+            review.IsApproved = false;
 
 
             await dbContext.Reviews.AddAsync(review);
@@ -47,9 +50,9 @@ namespace MarkMyDoctor.Data
 
             await CalculateDoctorOverall(review.DoctorId, reviewScore);
 
-            await dbContext.SaveChangesAsync();
 
-            return true;
+
+            
         }
 
 
@@ -69,7 +72,7 @@ namespace MarkMyDoctor.Data
                     var empathy = dbContext.Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.EmpathyRating);
                     var trust = dbContext.Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.TrustAtmosphereRating);
 
-                    doc.OverallRating = Convert.ToByte(Math.Round((professionalism + humanity + trust + empathy + communication + actualReviewScore) / 5.0));
+                    doc.OverallRating = Convert.ToByte(Math.Round(((professionalism + humanity + trust + empathy + communication + (Math.Round((actualReviewScore) / 5.0))) / 6.0)));
                 }
                 else
                 {
@@ -78,6 +81,35 @@ namespace MarkMyDoctor.Data
 
                 dbContext.Doctors.Update(doc);
             }
+        }
+
+        public async Task<IEnumerable<UnApprovedReviewViewModel>> GetUnApprovedReviewsAsync()
+        {
+            var reviews = await dbContext.Reviews.Where(r => r.IsApproved == false).Include( r => r.User).Include(r => r.Doctor).ToListAsync();
+
+            var unAprrovedReviews = new List<UnApprovedReviewViewModel>();
+
+            foreach (Review review in reviews)
+            {
+                var thisViewModel = new UnApprovedReviewViewModel
+                {
+                    Id = review.Id,
+                    UserName = review.User.UserName,
+                    Title = review.Title,
+                    Doctor = review.Doctor.Name
+                };
+                unAprrovedReviews.Add(thisViewModel);
+            }
+
+            return unAprrovedReviews;
+        }
+
+        public async Task ApproveReviewAsync(int id)
+        {
+            var review = await dbContext.Reviews.FindAsync(id);
+
+            review.IsApproved = true;
+
         }
 
     }

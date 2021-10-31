@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
 using System.Reflection;
 
 namespace MarkMyDoctor.Data
@@ -22,8 +20,6 @@ namespace MarkMyDoctor.Data
         public DbSet<Speciality> Specialities { get; set; }
 
 
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -40,22 +36,14 @@ namespace MarkMyDoctor.Data
             modelBuilder.Entity<Speciality>().ToTable("Specialities");
             modelBuilder.Entity<User>().ToTable("Users");
 
+            modelBuilder.Entity<IdentityRole<int>>(entity => { entity.ToTable(name: "Roles"); });
+            modelBuilder.Entity<IdentityUserRole<int>>(entity => { entity.ToTable("UserRoles"); });
+            modelBuilder.Entity<IdentityUserClaim<int>>(entity => { entity.ToTable("UserClaims"); });
+            modelBuilder.Entity<IdentityUserLogin<int>>(entity => { entity.ToTable("UserLogins"); });
+            modelBuilder.Entity<IdentityUserToken<int>>(entity => { entity.ToTable("UserTokens"); });
+            modelBuilder.Entity<IdentityRoleClaim<int>>(entity => { entity.ToTable("RoleClaims"); });
         }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    base.OnConfiguring(optionsBuilder);
-
-        //    IConfigurationRoot configuration = new ConfigurationBuilder()
-        //                                                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-        //                                                .AddJsonFile("appsettings.json")
-        //                                                .Build();
-
-        //    optionsBuilder.UseSqlServer(configuration.GetConnectionString("MarkMyDoctorDB"), o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))
-        //                                    .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
-        //}
-
-
-
+       
     }
 }

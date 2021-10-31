@@ -1,5 +1,6 @@
 ﻿using MarkMyDoctor.Models.Entities;
 using MarkMyDoctor.Models.ViewModels;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MarkMyDoctor.Interfaces
@@ -7,7 +8,9 @@ namespace MarkMyDoctor.Interfaces
     public interface IReviewRepository : IRepository<Review>
     {
 
-        Task<bool> CreateAsync(DoctorReviewViewModel doctorReviewViewModel);
+        Task CreateAsync(DoctorReviewViewModel doctorReviewViewModel);
+        Task<IEnumerable<UnApprovedReviewViewModel>> GetUnApprovedReviewsAsync();
+        Task ApproveReviewAsync(int id);
 
     }
 }

@@ -2,6 +2,11 @@
     ViewData["Title"] = "Főoldal";
 }
 
+<div>
+   
+
+</div>
+
 <form class="search-form" asp-controller="Search" asp-action="SearchResult">
     <div class="main-text">
         <div id="search-box">
@@ -12,6 +17,12 @@
             <button type="submit" id="btnSubmit" class="search-icon">
                 <i class="fas fa-search"></i>
             </button>
+            <div>
+                <input type="radio" name="gender" value="Male" />
+                <input type="radio" name="gender" value="Female" />
+                <input type="radio" name="gender" value="Unspecified" />
+            </div>
+
             <label for="input-text">Magyarország orvos, és egészségügyi intézmény nyílvántartása.<br>Keress, értékelj!</label>
             <div class="search-data"></div>
         </div>

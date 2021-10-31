@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MarkMyDoctor.Controllers
@@ -28,7 +29,8 @@ namespace MarkMyDoctor.Controllers
             try
             {
                 var doctors = await unitOfWork.DoctorRepository.GetDoctorsAsync(pageNumber);
-                return View(doctors);
+
+              return View(doctors);
             }
             catch (Exception ex)
             {
@@ -67,6 +69,7 @@ namespace MarkMyDoctor.Controllers
         }
 
         // GET: Doctors/Create
+        [Authorize(Roles ="Administrator")]
         public async Task<IActionResult> Create()
         {
 
@@ -112,7 +115,7 @@ namespace MarkMyDoctor.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles ="Administrator")]
+        [Authorize(Roles ="Administrator,Moderator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)

@@ -1,0 +1,33 @@
+﻿@model IEnumerable<MarkMyDoctor.Models.ViewModels.UnApprovedReviewViewModel>
+
+@{
+    ViewData["Title"] = "Értékelések";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">  
+    <div>
+        <h1 class="card-header text-center">Függőben lévő értékelések</h1>
+    </div>
+    <div class="card-body">
+        <table id="reviews" class="table table-striped table-bordered dt-responsive nowrap users-table text-center" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Felhasználónév</th>
+                    <th>Értékelés címe</th>
+                    <th>Értékelt orvos</th>
+                    <th>Jóváhagyás</th>
+                    <th>Törlés</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    @section Scripts{
+
+        <script src="~/lib/datatables/js/jquery.dataTables.js"></script>
+        <script src="~/lib/datatables/js/dataTables.bootstrap4.js"></script>
+        <script src="~/js/unApprovedReviewDataTable.js"></script>
+    }
+</div>

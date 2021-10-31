@@ -21,6 +21,7 @@ namespace MarkMyDoctor.Models.Entities
         public byte CommunicationRating { get; set; }
         public byte EmpathyRating { get; set; }
         public byte TrustAtmosphereRating { get; set; }
+        public bool IsApproved { get; set; }
 
         public int DoctorId { get; set; }
         public Doctor Doctor { get; set; }

@@ -37,7 +37,7 @@ namespace MarkMyDoctor
             });
 
             services.AddDbContext<DoctorDbContext>(options =>
-                                        options.UseSqlServer(Configuration.GetConnectionString("UbuntuDb"),
+                                        options.UseSqlServer(Configuration.GetConnectionString("MarkMyDoctorDB"),
                                         o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))
                                         .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information));
 
@@ -100,6 +100,7 @@ namespace MarkMyDoctor
             app.UseStaticFiles();
 
             app.UseRouting();
+
 
 
             app.UseAuthentication();

@@ -4,7 +4,7 @@
 dotnet_diagnostic.CS8618.severity = none
 
 # CS8604: Possible null reference argument.
-dotnet_diagnostic.CS8604.severity = none
+dotnet_diagnostic.CS8604.severity = silent
 
 # CS8602: Dereference of a possibly null reference.
 dotnet_diagnostic.CS8602.severity = silent
@@ -17,3 +17,6 @@ dotnet_diagnostic.CS8625.severity = silent
 
 # CS8600: Converting null literal or possible null value to non-nullable type.
 dotnet_diagnostic.CS8600.severity = silent
+
+# CS8669: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context. Auto-generated code requires an explicit '#nullable' directive in source.
+dotnet_diagnostic.CS8669.severity = silent

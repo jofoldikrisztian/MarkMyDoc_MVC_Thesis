@@ -222,14 +222,14 @@ namespace MarkMyDoctor.Data
         {
             try
             {
-                var query = dbContext.Doctors.Where(
-                d =>
-                d.DoctorSpecialities.Any(s => s.Speciality.Name.Contains(toSearch)) ||
-                d.Name.Contains(toSearch) ||
-                d.DoctorFacilities.Any(f => f.Facility.City.Name.Contains(toSearch))
-                ).OrderBy(d => d.Name);
+                var query = dbContext.Doctors.Where(d => d.DoctorSpecialities.Any(s => s.Speciality.Name.Contains(toSearch)) ||
+                                                         d.Name.Contains(toSearch) ||
+                                                         d.DoctorFacilities.Any(f => f.Facility.City.Name.Contains(toSearch)))
+                                                         .OrderBy(d => d.Name);
 
                 var model = await PaginatedList<Doctor>.CreateAsync(query, pageNumber, 5);
+
+
 
                 if (model.Count() == 0)
                 {

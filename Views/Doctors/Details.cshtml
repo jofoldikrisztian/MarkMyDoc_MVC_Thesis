@@ -15,7 +15,7 @@
             }
             else
             {
-            <img src="~/images/surgeon-doctor-svgrepo-com.svg" alt="">
+            <img src="~/images/doctor.svg" alt="">
             }
         </div>
     </div>
@@ -70,9 +70,16 @@
             <h4>Értékelések:</h4>
             <div class="doctor-review">
 
-                @if (Model.Reviews.Any())
+                @if (Model.Reviews.Any(r => r.IsApproved == true))
                 {
-                    <partial Name="_ReviewListPartial" model="@Model" /> }
+                    <partial Name="_ReviewListPartial" model="@Model" />
+                }
+                else if (Model.Reviews.All(r => r.IsApproved == false))
+                {
+                    <div class="empty-box">
+                        <span>Még nincs jóváhagyott értékelés!</span>
+                    </div>
+                }
                 else
                 {
                     <div class="empty-box">

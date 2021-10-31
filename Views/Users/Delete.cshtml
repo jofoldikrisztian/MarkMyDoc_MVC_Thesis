@@ -26,13 +26,14 @@
                 @Html.DisplayFor(model => model.Email)
             </dd>
         </dl>
-        <div class="text-center">
-            <input type="submit" value="Törlés" class="btn btn-danger" />
-        </div>
+        
     </div>
     <div class="card-footer">
-        <form asp-action="Delete">
+        <form asp-action="Delete" asp-controller="Users" method="post">
             <input type="hidden" asp-for="Id" />
+            <div class="text-center">
+                <input type="submit" value="Törlés" class="btn btn-danger" />
+            </div>
             <a class="btn btn-primary" asp-action="Index">Vissza a listához</a>
         </form>
     </div>

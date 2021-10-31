@@ -29,7 +29,7 @@ namespace MarkMyDoctor.Services
              await client.SendMailAsync(new MailMessage(mailSettings.Mail, email, subject, htmlMessage) { IsBodyHtml = true });
         }
 
-        public async Task SendEmailToStaffAsync(string name, string from, string message)
+        public async Task SendEmailToStaffAsync(string name, string from, string message)   
         {
             var client = new SmtpClient(mailSettings.Host, mailSettings.Port)
             {
@@ -39,6 +39,8 @@ namespace MarkMyDoctor.Services
             };
 
             await client.SendMailAsync(new MailMessage(from, mailSettings.Mail, name, message));
+
+            await client.SendMailAsync(new MailMessage(mailSettings.Mail, from, "Rendszerüzenet", "Köszönjük megkeresésed, hamarosan jelentkezünk!"));
         }
     }
 }

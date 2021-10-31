@@ -1747,7 +1747,7 @@
 			// Backwards compatibility - if there is no sEmptyTable given, then use the same as
 			// sZeroRecords - assuming that is given.
 			if ( ! lang.sEmptyTable && zeroRecords &&
-				defaults.sEmptyTable === "No data available in table" )
+				defaults.sEmptyTable === "Nincs elérhető adat" )
 			{
 				_fnMap( lang, lang, 'sZeroRecords', 'sEmptyTable' );
 			}
@@ -11460,7 +11460,7 @@
 			 * parameter - if it is not given, the value of `zeroRecords` will be used
 			 * instead (either the default or given value).
 			 *  @type string
-			 *  @default No data available in table
+			 *  @default Nincs elérhető adat
 			 *
 			 *  @dtopt Language
 			 *  @name DataTable.defaults.language.emptyTable
@@ -11469,12 +11469,12 @@
 			 *    $(document).ready( function() {
 			 *      $('#example').dataTable( {
 			 *        "language": {
-			 *          "emptyTable": "No data available in table"
+			 *          "emptyTable": "Nincs elérhető adat"
 			 *        }
 			 *      } );
 			 *    } );
 			 */
-			"sEmptyTable": "No data available in table",
+			"sEmptyTable": "Nincs elérhető adat",
 	
 	
 			/**
@@ -11527,7 +11527,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfoEmpty": "Showing 0 to 0 of 0 entries",
+			"sInfoEmpty": "Nincs találat megjelenítve.",
 	
 	
 			/**

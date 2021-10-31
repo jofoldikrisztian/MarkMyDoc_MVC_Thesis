@@ -2,6 +2,10 @@
 using MarkMyDoctor.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MarkMyDoctor.Controllers
@@ -9,11 +13,13 @@ namespace MarkMyDoctor.Controllers
     public class ReviewsController : Controller
     {
        // private readonly UserManager<User> userManager;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogger<ReviewsController> _logger;
 
-        public ReviewsController(IUnitOfWork unitOfWork)
+        public ReviewsController(IUnitOfWork unitOfWork, ILogger<ReviewsController> logger)
         {
-            this.unitOfWork = unitOfWork;
+            this._unitOfWork = unitOfWork;
+            this._logger = logger;
         }
 
 
@@ -29,7 +35,7 @@ namespace MarkMyDoctor.Controllers
 
             var doctorReviewViewModel = new DoctorReviewViewModel()
             {
-                Doctor = await unitOfWork.DoctorRepository.GetByIdAsync(id.Value)
+                Doctor = await _unitOfWork.DoctorRepository.GetByIdAsync(id.Value)
             };
 
             if (doctorReviewViewModel.Doctor == null)
@@ -45,109 +51,167 @@ namespace MarkMyDoctor.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DoctorReviewViewModel doctorReviewViewModel)
         {
-        
 
-            var isCreated = await unitOfWork.ReviewRepository.CreateAsync(doctorReviewViewModel);
-
-
-            if (isCreated)
+            try
             {
+                await _unitOfWork.ReviewRepository.CreateAsync(doctorReviewViewModel);
+
+                _unitOfWork.Commit();
+
+                _logger.LogInformation("Értékelés hozzáadva: {0}", doctorReviewViewModel.Doctor.Id);
+
                 return RedirectToAction("Details", "Doctors", new { id = doctorReviewViewModel.Doctor.Id });
             }
-            else
+            catch (Exception ex)
             {
-                return RedirectToAction("SomethingWentWrong", "Home"); //!!!!!!!!!!
-            }
 
+                _logger.LogError("Hiba történt az értékelés során. Hiba: {0}", ex.Message);
+                _unitOfWork.Dispose();
+                return RedirectToAction("SomethingWentWrong", "Home");
+            }
+            
         }
 
-        //// GET: Reviews/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
 
-        //    var review = await _context.Reviews.FindAsync(id);
-        //    if (review == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    ViewData["DoctorId"] = new SelectList(_context.Doctors, "Id", "Id", review.DoctorId);
-        //    ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", review.UserId);
-        //    return View(review);
-        //}
+        // GET: UnApproved
+        [Authorize(Roles="Administrator,Moderator")]
+        public IActionResult UnApprovedReviews()
+        {
+            return View();
+        }
 
-        // POST: Reviews/Edit/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ReviewBody,Recommend,ReviewedOn,IsReported,ProfessionalismRating,HumanityRating,CommunicationRating,EmpathyRating,FelxibilityRating,DoctorId,UserId")] Review review)
-        //{
-        //    if (id != review.Id)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpPost]
+        public async Task<IActionResult> LoadUnApprovedReviews()
+        {
+            try
+            {
+                var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(review);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!ReviewExists(review.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["DoctorId"] = new SelectList(_context.Doctors, "Id", "Id", review.DoctorId);
-        //    ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", review.UserId);
-        //    return View(review);
-        //}
+                // Indulási érték (hányadiktól) 
+                var start = Request.Form["start"].FirstOrDefault();
 
-        // GET: Reviews/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+                // Keresési érték (search box)
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
 
-        //    var review = await _context.Reviews
-        //        .Include(r => r.Doctor)
-        //        .Include(r => r.User)
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (review == null)
-        //    {
-        //        return NotFound();
-        //    }
 
-        //    return View(review);
-        //}
+                int skip = start != null ? Convert.ToInt32(start) : 0;
 
-        // POST: Reviews/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var review = await _context.Reviews.FindAsync(id);
-        //    _context.Reviews.Remove(review);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
+                int recordsTotal = 0;
 
-        //private bool ReviewExists(int id)
-        //{
-        //    return _context.Reviews.Any(e => e.Id == id);
-        //}
+                var reviewData = await _unitOfWork.ReviewRepository.GetUnApprovedReviewsAsync();
+
+
+                if (!string.IsNullOrEmpty(searchValue))
+                {
+                    reviewData = reviewData.Where(m => m.UserName.Contains(searchValue));
+                }
+
+                //rekordok száma  
+                recordsTotal = reviewData.Count();
+                //oldalazása   
+                var data = reviewData.Skip(skip).Take(20).ToList();
+
+                return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Hiba történt az értékelések betöltése során. Hiba: {}", ex.Message);
+                return RedirectToAction("SomethingWentWrong", "Home");
+            }
+        }
+        [Authorize(Roles = "Administrator,Moderator")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var review = await _unitOfWork.ReviewRepository.GetByIdAsync(id.Value, r => r.Include(m => m.User));
+
+
+            if (review == null)
+            {
+                return RedirectToAction("NoResult", "Home");
+            }
+
+            var unApprovedReview = new UnApprovedReviewViewModel()
+            {
+                Id = review.Id,
+                UserName = review.User.UserName,
+                Title = review.Title
+            };
+
+            return View(unApprovedReview);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            try
+            {
+                var review = await _unitOfWork.ReviewRepository.GetByIdAsync(id);
+
+                _unitOfWork.ReviewRepository.Remove(review);
+
+                _unitOfWork.Commit();
+
+                return RedirectToAction("UnApprovedReviews", "Reviews");
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError("Hiba történt az értékelés törlése során. Hiba: {}", ex.Message);
+                _unitOfWork.Dispose();
+                return RedirectToAction("SomethingWentWrong", "Home");
+            }
+        }
+        [Authorize(Roles = "Administrator,Moderator")]
+        public async Task<IActionResult> Approve(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var review = await _unitOfWork.ReviewRepository.GetByIdAsync(id.Value, r => r.Include(m => m.User).Include(m => m.Doctor));
+
+
+            if (review == null)
+            {
+                return RedirectToAction("NoResult", "Home");
+            }
+
+            var unApprovedReview = new UnApprovedReviewViewModel()
+            {
+                Id = review.Id,
+                UserName = review.User.UserName,
+                Title = review.Title,
+                Body = review.ReviewBody,
+                Doctor = review.Doctor.Name                
+            };
+
+            return View(unApprovedReview);
+        }
+
+        [HttpPost, ActionName("Approve")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApproveConfirmed(int id)
+        {
+            try
+            {
+              await _unitOfWork.ReviewRepository.ApproveReviewAsync(id);
+              _unitOfWork.Commit();
+              return RedirectToAction("UnApprovedReviews", "Reviews");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Hiba történt az értékelés jóváhagyása során. Hiba: {}", ex.Message);
+                _unitOfWork.Dispose();
+                return RedirectToAction("SomethingWentWrong", "Home");
+            }     
+        }
     }
 }
