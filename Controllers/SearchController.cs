@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MarkMyDoctor.Controllers
@@ -18,7 +19,7 @@ namespace MarkMyDoctor.Controllers
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<IActionResult> SearchResult(string toSearch, int pageNumber = 1)
+        public async Task<IActionResult> SearchResult(bool byName, bool byCity, bool bySpeciality, string toSearch, int pageNumber = 1)
         {
 
             try
@@ -26,7 +27,14 @@ namespace MarkMyDoctor.Controllers
                 ViewBag.toSearch = toSearch;
                 ViewBag.Action = "SearchResult";
 
-                var doctors = await unitOfWork.DoctorRepository.GetSearchResultAsync(toSearch, pageNumber);
+       
+                    if (toSearch.Contains("dr.", StringComparison.OrdinalIgnoreCase))
+                    {
+                        toSearch = Regex.Replace(toSearch, @"\A\bDr\b.?", "", RegexOptions.IgnoreCase).Trim();
+                    }
+                
+
+                var doctors = await unitOfWork.DoctorRepository.GetSearchResultAsync(toSearch, pageNumber, byName, byCity, bySpeciality);
 
                 return View(doctors);
             }

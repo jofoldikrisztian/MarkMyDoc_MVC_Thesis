@@ -263,17 +263,59 @@ namespace MarkMyDoctor.Data
 
         }
 
-        public async Task<PaginatedList<Doctor>> GetSearchResultAsync(string toSearch, int pageNumber)
+        public async Task<PaginatedList<Doctor>> GetSearchResultAsync(string toSearch, int pageNumber, bool byName, bool byCity, bool bySpeciality)
         {
             try
             {
 
-                var query = dbContext.Doctors.Where(d => d.DoctorSpecialities.Any(s => s.Speciality.Name.Contains(toSearch)) ||
-                                                         d.Name.Contains(toSearch) ||
-                                                         d.DoctorFacilities.Any(f => f.Facility.City.Name.Contains(toSearch)))
-                                                         .OrderBy(d => d.Name);
+                IQueryable<Doctor> query;
 
-                var model = await PaginatedList<Doctor>.CreateAsync(query, pageNumber, 5);
+              
+                if (byName && byCity && bySpeciality)
+                {
+                    query = dbContext.Doctors.Where(d => d.DoctorSpecialities.Any(s => s.Speciality.Name.Contains(toSearch)) ||
+                                                        d.Name.Contains(toSearch) ||
+                                                        d.DoctorFacilities.Any(f => f.Facility.City.Name.Contains(toSearch)))
+                                                        .OrderBy(d => d.Name);
+                }
+                else if(byName && byCity && !bySpeciality)
+                {
+                    query = dbContext.Doctors.Where(d => d.Name.Contains(toSearch) ||
+                                                        d.DoctorFacilities.Any(f => f.Facility.City.Name.Contains(toSearch)))
+                                                        .OrderBy(d => d.Name);
+                }
+                else if (byName && !byCity && bySpeciality)
+                {
+                    query = dbContext.Doctors.Where(d => d.DoctorSpecialities.Any(s => s.Speciality.Name.Contains(toSearch)) ||
+                                           d.Name.Contains(toSearch))
+                                           .OrderBy(d => d.Name);
+                }
+                else if (byName && !byCity && !bySpeciality)
+                {
+                    query = dbContext.Doctors.Where(d => d.Name.Contains(toSearch))
+                                                               .OrderBy(d => d.Name);
+                }
+                else if (!byName && byCity && bySpeciality)
+                {
+                    query = dbContext.Doctors.Where(d => d.DoctorSpecialities.Any(s => s.Speciality.Name.Contains(toSearch)) ||
+                                                        d.DoctorFacilities.Any(f => f.Facility.City.Name.Contains(toSearch)))
+                                                        .OrderBy(d => d.Name);
+                }
+                else if (!byName && byCity && !bySpeciality)
+                {
+                    query = dbContext.Doctors.Where(d => d.DoctorFacilities.Any(f => f.Facility.City.Name.Contains(toSearch))).OrderBy(d => d.Name);
+                }
+                else if (!byName && !byCity && bySpeciality)
+                {
+                    query = dbContext.Doctors.Where(d => d.DoctorSpecialities.Any(s => s.Speciality.Name.Contains(toSearch))) 
+                                                        .OrderBy(d => d.Name);
+                }
+                else
+                {
+                    query = dbContext.Doctors;
+                }
+
+                var model = await PaginatedList<Doctor>.CreateAsync(query, pageNumber, 5, byName, byCity, bySpeciality);
 
 
 

@@ -1,6 +1,12 @@
 ﻿@model PaginatedList<Doctor>
 
+
 @{ ViewData["Title"] = "Találatok"; }
+
+@{ var bySpecialityIsChecked = Model.BySpeciality ? "checked" : "";
+   var byNameIsChecked = Model.ByName ? "checked" : "";
+    var byCityIsChecked = Model.ByCity ? "checked" : "";
+     }
 
 
 <div class="search-card-container">
@@ -11,10 +17,19 @@
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="submit">Keresés</button>
                 </div>
-                <div>
-                    <input type="radio" name="gender" value="Male" />
-                    <input type="radio" name="gender" value="Female" />
-                    <input type="radio" name="gender" value="Unspecified" />
+            </div>
+            <div class="search-card-checkboxes">
+                <div class="form-check m-1">
+                    <input class="form-check-input" @bySpecialityIsChecked type="checkbox" name="bySpeciality" value="true" title="Szakterület" />
+                    <label class="form-check-label" for="bySpeciality">Szakterület</label>
+                </div>
+                <div class="form-check m-1">
+                    <input class="form-check-input" @byNameIsChecked type="checkbox" name="byName" value="true" title="Név" />
+                    <label class="form-check-label" for="byName">Név</label>
+                </div>
+                <div class="form-check m-1">
+                    <input class="form-check-input" @byCityIsChecked type="checkbox" name="byCity" value="true" title="Város" />
+                    <label class="form-check-label" for="byCity">Város</label>
                 </div>
             </div>
         </form>
@@ -27,6 +42,13 @@
         <partial Name="_NavigationPartial" model="@Model" />
     </div>
 
+    <div class="navigationButtons letters">
+        @foreach (var character in Model.Characters)
+        {
+            <a>@character</a>
+        }
+    </div>
+
     @foreach (var doc in Model)
     {
 
@@ -36,11 +58,10 @@
 
             @if (doc.ProfilePicture != null)
             {
-                <img alt="" src="data:image/jpg;base64,@Convert.ToBase64String(doc.ProfilePicture)" /> }
-            else
-            {
-                <img src="~/images/doctor.svg" alt="">
-            }
+<img alt="" src="data:image/jpg;base64,@Convert.ToBase64String(doc.ProfilePicture)" /> }
+else
+{
+<img src="~/images/doctor.svg" alt="">}
         </div>
 
         <div class="infos">
@@ -51,10 +72,10 @@
             <div class="reviews">
                 @for (byte i = 0; i < @doc.OverallRating; i++)
                 {
-        <i class="fas fa-star"></i>                }
+<i class="fas fa-star"></i>}
                 @for (byte i = @doc.OverallRating ?? 0; i < 5; i++)
                 {
-        <i class="far fa-star"></i>                }
+<i class="far fa-star"></i>}
             </div>
             <div class="more-infos">
                 <h5>Szakterületek</h5>

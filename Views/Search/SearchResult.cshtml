@@ -2,6 +2,11 @@
 
 @{ ViewData["Title"] = "Találatok"; }
 
+@{ var bySpecialityIsChecked = Model.BySpeciality ? "checked" : "";
+    var byNameIsChecked = Model.ByName ? "checked" : "";
+    var byCityIsChecked = Model.ByCity ? "checked" : ""; }
+
+
 <div class="search-card-container">
     <div class="search-card">
         <form asp-controller="Search" asp-action="SearchResult">
@@ -9,6 +14,20 @@
                 <input type="text" id="input-text" placeholder="Kezdj el gépelni..." name="toSearch" class="btn btn-outline-primary" aria-label="" aria-describedby="basic-addon1" />
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="submit">Keresés</button>
+                </div>
+            </div>
+            <div class="search-card-checkboxes">
+                <div class="form-check m-1">
+                    <input class="form-check-input" @bySpecialityIsChecked type="checkbox" name="bySpeciality" value="true" title="Szakterület" />
+                    <label class="form-check-label" for="bySpeciality">Szakterület</label>
+                </div>
+                <div class="form-check m-1">
+                    <input class="form-check-input" @byNameIsChecked type="checkbox" name="byName" value="true" title="Név" />
+                    <label class="form-check-label" for="byName">Név</label>
+                </div>
+                <div class="form-check m-1">
+                    <input class="form-check-input" @byCityIsChecked type="checkbox" name="byCity" value="true" title="Város" />
+                    <label class="form-check-label" for="byCity">Város</label>
                 </div>
             </div>
         </form>
@@ -21,54 +40,63 @@
         <partial Name="_NavigationPartial" model="@Model" />
     </div>
 
+    <div class="navigationButtons navTop">
+        @foreach (var character in Model.Characters)
+        {
+            <a>@character</a>
+        }
+    </div>
+
     @foreach (var doc in Model)
     {
 
-<div class="doctor-card-container">
-    <div class="doctor-card">
-        <div class="image">
+        <div class="doctor-card-container">
+            <div class="doctor-card">
+                <div class="image">
 
-            @if (doc.ProfilePicture != null)
-            {
-                <img alt="" src="data:image/jpg;base64,@Convert.ToBase64String(doc.ProfilePicture)" /> }
-            else
-            {
-            <img src="~/images/doctor.svg" alt="">}
-            </div>
-
-            <div class="infos">
-            @if (doc.IsStartWithDr) { <h3>dr. @doc.Name</h3> }   
-                 else { <h3>@doc.Name</h3> }
-            
-            <div class="reviews">
-                @for (byte i = 0; i < @doc.OverallRating; i++)
-                {
-                    <i class="fas fa-star"></i>}
-                @for (byte i = @doc.OverallRating ?? 0; i < 5; i++)
-                {
-                    <i class="far fa-star"></i>}
+                    @if (doc.ProfilePicture != null)
+                    {
+                        <img alt="" src="data:image/jpg;base64,@Convert.ToBase64String(doc.ProfilePicture)" /> }
+                    else
+                    {
+                        <img src="~/images/doctor.svg" alt="">}
                 </div>
-            <div class="more-infos">
-                <h5>Értékelések</h5>
-                <h5>Szakterületek</h5>
-                <h5>Elérhetőség</h5>
+
+                <div class="infos">
+                    @if (doc.IsStartWithDr)
+                    {<h3>dr. @doc.Name</h3> }
+                else
+                { <h3>@doc.Name</h3>}
+
+                    <div class="reviews">
+                        @for (byte i = 0; i < @doc.OverallRating; i++)
+                        {
+                            <i class="fas fa-star"></i>}
+                        @for (byte i = @doc.OverallRating ?? 0; i < 5; i++)
+                        {
+                            <i class="far fa-star"></i>}
+                    </div>
+                    <div class="more-infos">
+                        <h5>Értékelések</h5>
+                        <h5>Szakterületek</h5>
+                        <h5>Elérhetőség</h5>
+                    </div>
+                    <div class="info-content">
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur dolores voluptatum unde cum
+                            dolorum, vero blanditiis molestiae minima reprehenderit eius. Sapiente suscipit minima tempore
+                            assumenda quibusdam alias eveniet dolorem rerum?
+                        </p>
+                    </div>
+                    <div class="buttons">
+                        <a class="fas fa-info-circle" asp-action="Details" asp-controller="Doctors"
+                           asp-route-id="@doc.Id"> Adatlap</a>
+                        <a class="fas fa-marker" asp-action="Create" asp-controller="Reviews"
+                           asp-route-id="@doc.Id"> Értékelés</a>
+                    </div>
+                </div>
             </div>
-            <div class="info-content">
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur dolores voluptatum unde cum
-                    dolorum, vero blanditiis molestiae minima reprehenderit eius. Sapiente suscipit minima tempore
-                    assumenda quibusdam alias eveniet dolorem rerum?
-                </p>
-            </div>
-            <div class="buttons">
-                <a class="fas fa-info-circle" asp-action="Details" asp-controller="Doctors"
-                   asp-route-id="@doc.Id"> Adatlap</a>
-                <a class="fas fa-marker" asp-action="Create" asp-controller="Reviews"
-                   asp-route-id="@doc.Id"> Értékelés</a>
-            </div>
-        </div>
-    </div>
-</div>}
+        </div>}
 
     <div class="navigationButtons navBottom">
         <partial Name="_NavigationPartial" model="@Model" />
