@@ -1,4 +1,4 @@
-﻿@model PaginatedList<MarkMyDoctor.Models.Entities.Doctor>
+﻿@model PaginatedList<Doctor>
 
 @{ ViewData["Title"] = "Találatok"; }
 
@@ -37,7 +37,9 @@
             </div>
 
             <div class="infos">
-            <h3>@doc.Name</h3>
+            @if (doc.IsStartWithDr) { <h3>dr. @doc.Name</h3> }   
+                 else { <h3>@doc.Name</h3> }
+            
             <div class="reviews">
                 @for (byte i = 0; i < @doc.OverallRating; i++)
                 {

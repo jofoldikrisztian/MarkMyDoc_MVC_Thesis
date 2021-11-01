@@ -37,12 +37,6 @@ namespace MarkMyDoctor.Controllers
         }
 
 
-        [HttpPost]
-        public JsonResult AutoComplete(string toSearch)
-        {
-            return Json(_unitOfWork.DoctorRepository.GetAutoCompleteSearchResults(toSearch));
-        }
-
         public IActionResult Contact()
         {
 

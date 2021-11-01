@@ -20,10 +20,13 @@
         </div>
     </div>
     <div class="lower-container">
-        <h3>@Model.Name</h3>
+        @if (Model.IsStartWithDr)
+        {<h3>dr. @Model.Name</h3> }
+    else
+    { <h3>@Model.Name</h3>}
         <div class="reviews">
             @for (var i = 0; i < @Model.OverallRating; i++)
-            { 
+            {
                 <i class="fas fa-star"></i>
             }
             @for (var i = @Model.OverallRating; i < 5; i++)

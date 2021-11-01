@@ -8,7 +8,7 @@ namespace MarkMyDoctor.Interfaces
 {
     public interface IDoctorRepository : IRepository<Doctor>
     {
-        List<string> GetAutoCompleteSearchResults(string toSearch);
+        Task<List<string>?> GetAutoCompleteSearchResultsAsync(string toSearch);
         Task<DoctorViewModel> CollectDataForDoctorFormAsync();
         Task<DoctorViewModel> CollectDataForDoctorFormAsync(int id);
         Task<Doctor> CreateDoctorAsync(DoctorViewModel doctorViewModel);

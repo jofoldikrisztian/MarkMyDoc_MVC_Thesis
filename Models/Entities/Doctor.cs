@@ -9,6 +9,7 @@ namespace MarkMyDoctor.Models.Entities
     public class Doctor : IEntityTypeConfiguration<Doctor>, IEntity
     {
         public int Id { get; set; }
+        public bool IsStartWithDr { get; set; }
         [Display(Name = "Név:")]
         public string Name { get; set; }
         [Display(Name = "Telefonszám:")]

@@ -187,12 +187,12 @@ namespace MarkMyDoctor.Controllers
                 var doctor = await unitOfWork.DoctorRepository.GetByIdAsync(id.Value);
 
                 var deleteDoctorViewModel = new DeleteDoctorViewModel()
-                                                                 {
-                                                                     Id = doctor.Id,
-                                                                     Email = doctor.Email,
-                                                                     Name = doctor.Name,
-                                                                     PhoneNumber = doctor.PhoneNumber
-                                                                 };
+                {
+                    Id = doctor.Id,
+                    Email = doctor.Email,
+                    Name =  doctor.IsStartWithDr == true ? $"dr. {doctor.Name}" : doctor.Name, 
+                    PhoneNumber = doctor.PhoneNumber
+                };
 
                 return View(deleteDoctorViewModel);
             }

@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MarkMyDoctor.Data
@@ -27,17 +29,39 @@ namespace MarkMyDoctor.Data
         /// </summary>
         /// <param name="toSearch"></param>
         /// <returns>A keresési értéket tartalmazó stringeket</returns>
-        public List<string> GetAutoCompleteSearchResults(string toSearch)
+        public async Task<List<string>?> GetAutoCompleteSearchResultsAsync(string toSearch)
         {
-            var result = dbContext.Cities.Where(c => c.Name.Contains(toSearch)).Select(c => c.Name).ToList();
 
-            result.AddRange(dbContext.Doctors.Where(d => d.Name.Contains(toSearch)).Select(d => d.Name).ToList());
+            if (toSearch.Contains("dr.", StringComparison.OrdinalIgnoreCase))
+            {
+                toSearch = Regex.Replace(toSearch, @"\A\bDr\b.?", "", RegexOptions.IgnoreCase).Trim();
+            }
 
-            result.AddRange(dbContext.Specialities.Where(s => s.Name.Contains(toSearch)).Select(s => s.Name).ToList());
+            if (toSearch.Length > 2)
+            {
+                var result = await dbContext.Cities.Where(c => c.Name.Contains(toSearch)).Select(c => c.Name).ToListAsync();
 
-            result.Sort();
+                var doctorNames = await dbContext.Doctors.Where(d => d.Name.Contains(toSearch)).Select(d => new { d.Name, d.IsStartWithDr }).ToListAsync();
 
-            return result;
+                foreach (var docName in doctorNames)
+                {
+                    if (docName.IsStartWithDr)
+                    {
+                        result.Add("dr. " + docName.Name);
+                    }
+                    else { result.Add(docName.Name); }
+                }
+
+                result.AddRange(await dbContext.Specialities.Where(s => s.Name.Contains(toSearch)).Select(s => s.Name).ToListAsync());
+
+                result.Sort();
+
+                return result;
+            }
+
+            return null;
+
+           
         }
         /// <summary>
         /// Létrehoz egy DoctorViewModel-t egy új orvos létréhezásához, összegyűjti a szükséges adatokat az adatbáziosból feltölti a multiselect listát, a specialitásokkal. 
@@ -72,7 +96,7 @@ namespace MarkMyDoctor.Data
             {
                 var doctor = await GetByIdAsync(id, d => d.Include(d => d.DoctorSpecialities));
 
-                return new DoctorViewModel()
+                var dvm =  new DoctorViewModel()
                 {
                     Specialities = (from spec in await dbContext.Specialities
                                                                 .OrderBy(s => s.Name)
@@ -85,6 +109,13 @@ namespace MarkMyDoctor.Data
                     Doctor = doctor,
                     SelectedSpecialityIds = doctor.DoctorSpecialities.Select(d => d.Speciality.Id.ToString()).ToList()
                 };
+
+                if (dvm.Doctor.IsStartWithDr)
+                {
+                    dvm.Doctor.Name = "dr. " + doctor.Name;
+                }
+
+                return dvm;
             }
             catch (Exception ex)
             {
@@ -125,7 +156,14 @@ namespace MarkMyDoctor.Data
                     }
                 }
 
-                doctor.Name = doctorViewModel.Doctor.Name;
+                doctor.IsStartWithDr = doctorViewModel.Doctor.Name.StartsWith("dr.", StringComparison.OrdinalIgnoreCase);
+
+                if (doctor.IsStartWithDr)
+                {
+                    doctor.Name = Regex.Replace((Regex.Replace(doctorViewModel.Doctor.Name, @"\A\bDr\b.?", "", RegexOptions.IgnoreCase).ToString()), @"\bDr\b.?", "dr. ", RegexOptions.IgnoreCase).Trim();
+                }
+
+              
                 doctor.CanPayWithCard = doctorViewModel.Doctor.CanPayWithCard;
                 doctor.Email = doctorViewModel.Doctor.Email;
                 doctor.PhoneNumber = doctorViewModel.Doctor.PhoneNumber;
@@ -192,6 +230,13 @@ namespace MarkMyDoctor.Data
 
                 doctor = doctorViewModel.Doctor;
 
+                doctor.IsStartWithDr = doctor.Name.StartsWith("dr.", StringComparison.OrdinalIgnoreCase);
+
+                if (doctor.IsStartWithDr)
+                {
+                    doctor.Name = Regex.Replace((Regex.Replace(doctor.Name, @"\A\bDr\b.?", "", RegexOptions.IgnoreCase).ToString()), @"\bDr\b.?", "dr.", RegexOptions.IgnoreCase).Trim();
+                }
+
                 await AddAsync(doctor);
 
                 var docSpecList = new List<DoctorSpeciality>();
@@ -222,6 +267,7 @@ namespace MarkMyDoctor.Data
         {
             try
             {
+
                 var query = dbContext.Doctors.Where(d => d.DoctorSpecialities.Any(s => s.Speciality.Name.Contains(toSearch)) ||
                                                          d.Name.Contains(toSearch) ||
                                                          d.DoctorFacilities.Any(f => f.Facility.City.Name.Contains(toSearch)))

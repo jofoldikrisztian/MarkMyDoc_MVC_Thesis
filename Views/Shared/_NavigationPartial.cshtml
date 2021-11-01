@@ -1,12 +1,12 @@
-﻿@model PaginatedList<MarkMyDoctor.Models.Entities.Doctor>
+﻿@model PaginatedList<Doctor>
 
-@{
-    var prevDisabled = !Model.PreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.NextPage ? "disabled" : "";
-}
+@{ var prevDisabled = !Model.PreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.NextPage ? "disabled" : ""; }
 
-<a id="navButton" class="fas fa-angle-double-left @prevDisabled" asp-action=@ViewBag.Action
-   asp-route-pageNumber="@(Model.PageIndex - 1)" asp-route-toSearch="@ViewBag.toSearch"></a>
+
+<a id="navButton" class="fas fa-fast-backward @prevDisabled" asp-action=@ViewBag.Action asp-route-pageNumber="1" asp-route-toSearch="@ViewBag.toSearch"></a>
+<a id="navButton" class="fas fa-angle-double-left @prevDisabled" asp-action=@ViewBag.Action asp-route-pageNumber="@(Model.PageIndex - 1)" asp-route-toSearch="@ViewBag.toSearch"></a>
+
 <span>@Model.PageIndex / @Model.TotalPages</span>
-<a id="navButton" class="fas fa-angle-double-right @nextDisabled" asp-action=@ViewBag.Action
-   asp-route-pageNumber="@(Model.PageIndex + 1)" asp-route-toSearch="@ViewBag.toSearch"></a>
+<a id="navButton" class="fas fa-angle-double-right @nextDisabled" asp-action=@ViewBag.Action asp-route-pageNumber="@(Model.PageIndex + 1)" asp-route-toSearch="@ViewBag.toSearch"></a>
+<a id="navButton" class="fas fa-fast-forward @nextDisabled" asp-action=@ViewBag.Action asp-route-pageNumber="@(Model.TotalPages)" asp-route-toSearch="@ViewBag.toSearch"></a>

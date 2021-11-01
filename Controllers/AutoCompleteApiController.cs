@@ -25,7 +25,7 @@ namespace MarkMyDoctor.Controllers
             try
             {
                 string term = HttpContext.Request.Query["term"].ToString();
-                var search = unitOfWork.DoctorRepository.GetAutoCompleteSearchResults(term);
+                var search = await unitOfWork.DoctorRepository.GetAutoCompleteSearchResultsAsync(term);
 
                 return Ok(search);
             }

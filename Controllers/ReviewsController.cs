@@ -190,7 +190,7 @@ namespace MarkMyDoctor.Controllers
                 UserName = review.User.UserName,
                 Title = review.Title,
                 Body = review.ReviewBody,
-                Doctor = review.Doctor.Name                
+                Doctor = review.Doctor.IsStartWithDr == true ? $"dr. {review.Doctor.Name}" : review.Doctor.Name,
             };
 
             return View(unApprovedReview);

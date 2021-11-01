@@ -1,4 +1,4 @@
-﻿@model PaginatedList<MarkMyDoctor.Models.Entities.Doctor>
+﻿@model PaginatedList<Doctor>
 
 @{ ViewData["Title"] = "Találatok"; }
 
@@ -10,6 +10,11 @@
                 <input type="text" id="input-text" placeholder="Kezdj el gépelni..." name="toSearch" class="btn btn-outline-primary" aria-label="" aria-describedby="basic-addon1" />
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="submit">Keresés</button>
+                </div>
+                <div>
+                    <input type="radio" name="gender" value="Male" />
+                    <input type="radio" name="gender" value="Female" />
+                    <input type="radio" name="gender" value="Unspecified" />
                 </div>
             </div>
         </form>
@@ -39,16 +44,17 @@
         </div>
 
         <div class="infos">
-            <h3>@doc.Name</h3>
+            @if (doc.IsStartWithDr)
+            {<h3>dr. @doc.Name</h3> }
+        else
+        { <h3>@doc.Name</h3>}
             <div class="reviews">
                 @for (byte i = 0; i < @doc.OverallRating; i++)
                 {
-                    <i class="fas fa-star"></i>
-                }
+        <i class="fas fa-star"></i>                }
                 @for (byte i = @doc.OverallRating ?? 0; i < 5; i++)
                 {
-                    <i class="far fa-star"></i>
-                }
+        <i class="far fa-star"></i>                }
             </div>
             <div class="more-infos">
                 <h5>Szakterületek</h5>

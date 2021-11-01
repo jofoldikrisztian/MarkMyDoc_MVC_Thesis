@@ -96,7 +96,7 @@ namespace MarkMyDoctor.Data
                     Id = review.Id,
                     UserName = review.User.UserName,
                     Title = review.Title,
-                    Doctor = review.Doctor.Name
+                    Doctor = review.Doctor.IsStartWithDr == true ? $"dr. {review.Doctor.Name}" : review.Doctor.Name,
                 };
                 unAprrovedReviews.Add(thisViewModel);
             }

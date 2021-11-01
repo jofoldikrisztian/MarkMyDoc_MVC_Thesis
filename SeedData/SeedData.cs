@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using System.Text.RegularExpressions;
 
 namespace MarkMyDoctor.SeedData
 {
@@ -84,7 +84,7 @@ namespace MarkMyDoctor.SeedData
                 {
                     var docFac = new DoctorFacility()
                     {
-                        DoctorId = dbContext.Doctors.First(d => d.Name.Equals(line[3]) && d.PhoneNumber.Equals(line[2])).Id,
+                        DoctorId = dbContext.Doctors.First(d => d.Name.Equals(Regex.Replace((Regex.Replace(line[3], @"\A\bDr\b.?", "", RegexOptions.IgnoreCase).ToString()), @"\bDr\b.?", "dr.", RegexOptions.IgnoreCase).Trim()) && d.PhoneNumber.Equals(line[2])).Id,
                         FacilityId = dbContext.Facilities.First(f => f.Address.Equals(line[1])).Id
                     };
                     docFacList.Add(docFac);
@@ -153,7 +153,9 @@ namespace MarkMyDoctor.SeedData
 
                 var currentDoctor = new Doctor()
                 {
-                    Name = doctorLine[3],
+                    //Name = doctorLine[3].Replace("Dr", "dr"),
+                    IsStartWithDr = doctorLine[3].StartsWith("dr.", StringComparison.OrdinalIgnoreCase),
+                    Name = Regex.Replace((Regex.Replace(doctorLine[3], @"\A\bDr\b.?", "", RegexOptions.IgnoreCase).ToString()), @"\bDr\b.?", "dr.", RegexOptions.IgnoreCase).Trim(),
                     PhoneNumber = doctorLine[2],
                     CanPayWithCard = false,
                     Email = "<Ismeretlen>",
