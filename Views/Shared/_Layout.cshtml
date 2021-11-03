@@ -27,7 +27,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Főoldal</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" id="btnDoctors" asp-area="" asp-controller="Doctors" asp-action="Index">Orvosok</a>
+                            <a class="nav-link text-dark" id="btnDoctors" asp-area="" asp-controller="Doctors" asp-action="Index">Keresés</a>
                         </li>
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
                         {
@@ -39,6 +39,12 @@
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Reviews" asp-action="UnApprovedReviews">Értékelések</a>
+                            </li>
+                        }
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Doctors" asp-action="Manage">Orvosok</a>
                             </li>
                         }
                         <li class="nav-item">

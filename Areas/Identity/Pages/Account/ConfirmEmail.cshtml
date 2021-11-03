@@ -1,7 +1,13 @@
 ﻿@page
 @model ConfirmEmailModel
 @{
-    ViewData["Title"] = "Confirm email";
+    ViewData["Title"] = "Email cím megerősítve";
 }
 
-<h1>@ViewData["Title"]</h1>
+
+<div class="card">
+    <div class="card-body">
+        <h4>@Model.StatusMessage</h4>
+    </div>
+</div>
+

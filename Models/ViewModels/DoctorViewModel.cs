@@ -10,6 +10,7 @@ namespace MarkMyDoctor.Models.ViewModels
     {
         public ICollection<SelectListItem>? Specialities { get; init; }
         public Doctor Doctor { get; init; }
+        [Required(ErrorMessage = "Legalább egy specialitás megadás kötelező!")]
         [Display(Name = "Specialitások:")]
         public List<string> SelectedSpecialityIds { get; init; }
         [Display(Name = "Profilkép:")]

@@ -37,8 +37,8 @@ namespace MarkMyDoctor.Data
                     Id = user.Id,
                     Email = user.Email,
                     UserName = user.UserName,
-                    PhoneNumber = user.PhoneNumber,
-                    Roles = await GetUserRoles(user)
+                    Roles = await GetUserRoles(user),
+                    IsLockedOut = await _userManager.IsLockedOutAsync(user) ? "Igen" : "Nem"
                 };
                 userRolesViewModel.Add(thisViewModel);
             }
@@ -98,6 +98,16 @@ namespace MarkMyDoctor.Data
                 userToUpdate.PasswordHash = hashed;
             }
 
+
+        }
+
+        public void LockoutUser(User user)
+        {
+                _userManager.SetLockoutEnabledAsync(user, true);
+
+                DateTime lockoutDate = DateTime.Now.AddYears(100);
+
+                _userManager.SetLockoutEndDateAsync(user, lockoutDate);
 
         }
     }

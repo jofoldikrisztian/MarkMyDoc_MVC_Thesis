@@ -237,5 +237,45 @@ namespace MarkMyDoctor.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> LockoutUser(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("NoResult", "Home");
+            }
+
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(id.Value);
+
+            if (user == null)
+            {
+                return RedirectToAction("NoResult", "Home");
+            }
+
+            var userViewModel = new UserViewModel()
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                PhoneNumber = user.PhoneNumber,
+                Email = user.Email
+            };
+
+            return View(userViewModel);
+        }
+
+        [HttpPost, ActionName("LockoutUser")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LockoutConfirmed(int id)
+        {
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(id);
+
+            _unitOfWork.UserRepository.LockoutUser(user);
+
+            _unitOfWork.Commit();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
     }
 }

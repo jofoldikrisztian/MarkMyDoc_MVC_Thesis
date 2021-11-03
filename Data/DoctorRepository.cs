@@ -263,7 +263,7 @@ namespace MarkMyDoctor.Data
 
         }
 
-        public async Task<PaginatedList<Doctor>> GetSearchResultAsync(string toSearch, int pageNumber, bool byName, bool byCity, bool bySpeciality)
+        public async Task<PaginatedList<Doctor>> GetSearchResultAsync(string toSearch, int pageNumber, char character , bool byName, bool byCity, bool bySpeciality)
         {
             try
             {
@@ -276,46 +276,46 @@ namespace MarkMyDoctor.Data
                     query = dbContext.Doctors.Where(d => d.DoctorSpecialities.Any(s => s.Speciality.Name.Contains(toSearch)) ||
                                                         d.Name.Contains(toSearch) ||
                                                         d.DoctorFacilities.Any(f => f.Facility.City.Name.Contains(toSearch)))
-                                                        .OrderBy(d => d.Name);
+                                                        .OrderBy(d => d.Name).Include(d => d.DoctorSpecialities).ThenInclude(s => s.Speciality);
                 }
                 else if(byName && byCity && !bySpeciality)
                 {
                     query = dbContext.Doctors.Where(d => d.Name.Contains(toSearch) ||
                                                         d.DoctorFacilities.Any(f => f.Facility.City.Name.Contains(toSearch)))
-                                                        .OrderBy(d => d.Name);
+                                                        .OrderBy(d => d.Name).Include(d => d.DoctorSpecialities).ThenInclude(s => s.Speciality); 
                 }
                 else if (byName && !byCity && bySpeciality)
                 {
                     query = dbContext.Doctors.Where(d => d.DoctorSpecialities.Any(s => s.Speciality.Name.Contains(toSearch)) ||
                                            d.Name.Contains(toSearch))
-                                           .OrderBy(d => d.Name);
+                                           .OrderBy(d => d.Name).Include(d => d.DoctorSpecialities).ThenInclude(s => s.Speciality);
                 }
                 else if (byName && !byCity && !bySpeciality)
                 {
                     query = dbContext.Doctors.Where(d => d.Name.Contains(toSearch))
-                                                               .OrderBy(d => d.Name);
+                                                               .OrderBy(d => d.Name).Include(d => d.DoctorSpecialities).ThenInclude(s => s.Speciality);
                 }
                 else if (!byName && byCity && bySpeciality)
                 {
                     query = dbContext.Doctors.Where(d => d.DoctorSpecialities.Any(s => s.Speciality.Name.Contains(toSearch)) ||
                                                         d.DoctorFacilities.Any(f => f.Facility.City.Name.Contains(toSearch)))
-                                                        .OrderBy(d => d.Name);
+                                                        .OrderBy(d => d.Name).Include(d => d.DoctorSpecialities).ThenInclude(s => s.Speciality);
                 }
                 else if (!byName && byCity && !bySpeciality)
                 {
-                    query = dbContext.Doctors.Where(d => d.DoctorFacilities.Any(f => f.Facility.City.Name.Contains(toSearch))).OrderBy(d => d.Name);
+                    query = dbContext.Doctors.Where(d => d.DoctorFacilities.Any(f => f.Facility.City.Name.Contains(toSearch))).OrderBy(d => d.Name).Include(d => d.DoctorSpecialities).ThenInclude(s => s.Speciality);
                 }
                 else if (!byName && !byCity && bySpeciality)
                 {
                     query = dbContext.Doctors.Where(d => d.DoctorSpecialities.Any(s => s.Speciality.Name.Contains(toSearch))) 
-                                                        .OrderBy(d => d.Name);
+                                                        .OrderBy(d => d.Name).Include(d => d.DoctorSpecialities).ThenInclude(s => s.Speciality);
                 }
                 else
                 {
-                    query = dbContext.Doctors;
+                    query = dbContext.Doctors.OrderBy(d => d.Name).Include(d => d.DoctorSpecialities).ThenInclude(s => s.Speciality);
                 }
 
-                var model = await PaginatedList<Doctor>.CreateAsync(query, pageNumber, 5, byName, byCity, bySpeciality);
+                var model = await PaginatedList<Doctor>.CreateAsync(query, pageNumber, 5, character, byName, byCity, bySpeciality);
 
 
 
@@ -332,13 +332,13 @@ namespace MarkMyDoctor.Data
             }
         }
 
-        public async Task<PaginatedList<Doctor>> GetDoctorsAsync(int pageNumber)
+        public async Task<PaginatedList<Doctor>> GetDoctorsAsync(int pageNumber, char character)
         {
             try
             {
-                var query = dbContext.Doctors.OrderBy(d => d.Name).AsQueryable();
+                var query = dbContext.Doctors.OrderBy(d => d.Name).AsQueryable().Include(d => d.DoctorSpecialities).ThenInclude(s => s.Speciality);
 
-                var model = await PaginatedList<Doctor>.CreateAsync(query, pageNumber, 5);
+                var model = await PaginatedList<Doctor>.CreateAsync(query, pageNumber, 5, character);
 
                 if (model.Count() == 0)
                 {
@@ -367,6 +367,9 @@ namespace MarkMyDoctor.Data
             }
         }
 
-
+        public async Task<IEnumerable<ManageDoctorViewModel>> GetDoctorsToManageAsync()
+        {
+            return await dbContext.Doctors.Select(d => new ManageDoctorViewModel() { Id = d.Id, Name = d.Name }).ToListAsync();
+        }
     }
 }

@@ -5,6 +5,19 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@{  var numberOfFullStar = 0;
+    var numberOfHalfStar = 0;
+    var overallRating = 0.0;
+
+
+    if (Model.OverallRating != null)
+    {
+        numberOfFullStar = Model.OverallRating % 2 == 0 ? Convert.ToInt32(Model.OverallRating) : Convert.ToInt32((Math.Round((double)Model.OverallRating * 2) - 1) / 2);
+        numberOfHalfStar = Model.OverallRating % 2 == 1 ? 0 : 1;
+        overallRating = Math.Round((double)Model.OverallRating, 2);
+    }
+ }
+
 
 <div class="details-card-container">
     <div class="upper-container">
@@ -21,19 +34,28 @@
     </div>
     <div class="lower-container">
         @if (Model.IsStartWithDr)
-        {<h3>dr. @Model.Name</h3> }
-    else
-    { <h3>@Model.Name</h3>}
+        {
+            <h3>dr. @Model.Name</h3>
+        }
+        else
+        {
+            <h3>@Model.Name</h3>
+        }
         <div class="reviews">
-            @for (var i = 0; i < @Model.OverallRating; i++)
+            @for (var i = 0; i < @numberOfFullStar; i++)
             {
                 <i class="fas fa-star"></i>
             }
-            @for (var i = @Model.OverallRating; i < 5; i++)
+            @if (@numberOfHalfStar > 0)
+            {
+                <i class="fas fa-star-half-alt"></i>
+            }
+            @for (var i = @numberOfFullStar + numberOfHalfStar; i < 5; i++)
             {
                 <i class="far fa-star"></i>
             }
-            <span> (@Model?.Reviews?.Count())</span>
+            <span>@Math.Round((double)Model?.OverallRating, 2)</span>
+            <div>Értékelések száma: @Model?.Reviews?.Count()</div>
         </div>
         <div>
             @if (SignInManager.IsSignedIn(User) && User.IsInRole("Administrator"))
@@ -69,6 +91,16 @@
                 }
             </div>
         </div>
+        <div class="doctor-details" style="justify-content: center;">
+            <div class="doc-address">
+                <h4 id="address">Elérhetőségek:</h4>
+                <ul>
+                    <li>Telefonszám: @Model.PhoneNumber</li>
+                    <li>E-mail cím: @Model.Email</li>
+                    <li>Weboldal: @Model.WebAddress</li>
+                </ul>
+            </div>
+        </div>
         <div class="doctor-details-reviews">
             <h4>Értékelések:</h4>
             <div class="doctor-review">
@@ -77,7 +109,7 @@
                 {
                     <partial Name="_ReviewListPartial" model="@Model" />
                 }
-                else if (Model.Reviews.All(r => r.IsApproved == false))
+                else if (Model.Reviews.Count > 0 && Model.Reviews.All(r => r.IsApproved == false))
                 {
                     <div class="empty-box">
                         <span>Még nincs jóváhagyott értékelés!</span>

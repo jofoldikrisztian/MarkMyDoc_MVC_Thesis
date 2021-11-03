@@ -10,8 +10,10 @@ namespace MarkMyDoctor.Models.Entities
     {
         public int Id { get; set; }
         public bool IsStartWithDr { get; set; }
+        [Required(ErrorMessage = "A név megadása kötelező!")]
         [Display(Name = "Név:")]
         public string Name { get; set; }
+        [Required(ErrorMessage = "A telefonszám megadása kötelező!")]
         [Display(Name = "Telefonszám:")]
         public string PhoneNumber { get; set; }
         [Display(Name = "Bakkártyás fizetés lehetséges?")]
@@ -22,7 +24,7 @@ namespace MarkMyDoctor.Models.Entities
         public string? WebAddress { get; set; }
         [Display(Name = "Profilkép:")]
         public byte[]? ProfilePicture { get; set; }
-        public byte? OverallRating { get; set; }
+        public double? OverallRating { get; set; }
 
         public ICollection<Review>? Reviews { get; set; }
         public ICollection<DoctorFacility>? DoctorFacilities { get; set; }

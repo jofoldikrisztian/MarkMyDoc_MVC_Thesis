@@ -30,19 +30,28 @@ namespace MarkMyDoctor.Infrastructure
         public bool PreviousPage => (PageIndex > 1);
         public bool NextPage => (PageIndex < TotalPages);
 
-        public static async Task<PaginatedList<Doctor>> CreateAsync(IQueryable<Doctor> source, int pageIndex, int pageSize, bool byName = true, bool byCity = true, bool bySpeciality = true)
+        public static async Task<PaginatedList<Doctor>> CreateAsync(IQueryable<Doctor> source, int pageIndex, int pageSize, char character, bool byName = true, bool byCity = true, bool bySpeciality = true)
         {
             var count = await source.CountAsync();
 
-           
+            var letters = await source.GetLettersAsync();
 
-            var letters = await source.GetLetters();
+            if (character != 0)
+            {
+                pageIndex = (int)Math.Ceiling(await source.GetDoctorIndex(character) / (double)5);
+            }
+    
 
-            var items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            var items = await source.Skip((pageIndex - 1) * pageSize)
+                                    .Take(pageSize)
+                                    .ToListAsync();
+
+            
+
             return new PaginatedList<Doctor>(items, count, pageIndex, pageSize, byName, byCity, bySpeciality, letters);
         }
 
-   
+
 
     }
 }

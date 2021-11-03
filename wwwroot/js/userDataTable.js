@@ -19,8 +19,8 @@ $(document).ready(function () {
             { "data": "id", "name": "id", "autoWidth": true },
             { "data": "userName", "name": "userName", "autoWidth": true },
             { "data": "email", "name": "email", "autoWidth": true },
-            { "data": "phoneNumber", "name": "phoneNumber", "autoWidth": true },
             { "data": "roles", "name": "roles", "autoWidth": true },
+            { "data": "isLockedOut", "name": "isLockedOut", "autoWidth": true },
             {
                 "render": function (data, type, full, meta) { return '<a class="btn btn-info" href="/Users/Manage/' + full.id + '">Szerepkörök kezelése</a>'; }
             },
@@ -28,8 +28,11 @@ $(document).ready(function () {
                 "render": function (data, type, full, meta) { return '<a class="btn btn-info" href="/Users/Edit/' + full.id + '">Szerkesztés</a>'; }
             },
             {
-                "render": function (data, type, full, meta) { return '<a class="btn btn-danger" href="/Users/Delete/' + full.id + '">Törlés</a>'; }
+                "render": function (data, type, full, meta) { return '<a class="btn btn-danger" href="/Users/LockoutUser/' + full.id + '">Tiltás</a>'; }
             },
+            {
+                "render": function (data, type, full, meta) { return '<a class="btn btn-danger" href="/Users/Delete/' + full.id + '">Törlés</a>'; }
+            }
         ]
 
     });

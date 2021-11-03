@@ -123,7 +123,7 @@ namespace MarkMyDoctor.SeedData
 
                 var facility = new Facility()
                 {
-                    Name = line[0] + " " + line[1] + "-i háziorvosi rendelő",
+                    Name = line[0] + " " + line[1] + " háziorvosi rendelő",
                     City = db.Cities.FirstOrDefault(c => c.Name.Equals(line[0])) ?? db.Cities.First(c => c.Name.Equals("Ismeretlen")),
                     Address = line[1]
                 };
@@ -159,7 +159,7 @@ namespace MarkMyDoctor.SeedData
                     PhoneNumber = doctorLine[2],
                     CanPayWithCard = false,
                     Email = "<Ismeretlen>",
-                    WebAddress = "<Ismeretlen>"
+                    WebAddress = "www.markmydoc.com"
                 };
 
                 if (!doctors.Any(d => d.Name == currentDoctor.Name && d.PhoneNumber == doctorLine[2]))

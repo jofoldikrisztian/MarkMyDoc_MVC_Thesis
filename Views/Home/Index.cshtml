@@ -10,18 +10,29 @@
 <form class="search-form" asp-controller="Search" asp-action="SearchResult">
     <div class="main-text">
         <div id="search-box">
-            <input name="toSearch" id="input-text" type="text"
+            <input class="input-text" name="toSearch" id="input-text" type="text"
                    placeholder="Keresés név, város, szakterület alapján..."
                    onblur="this.placeholder='Keresés név, város, szakterület alapján...'"
                    onfocus="this.placeholder = ''">
             <button type="submit" id="btnSubmit" class="search-icon">
                 <i class="fas fa-search"></i>
             </button>
-            <div>
-                <input type="radio" name="gender" value="Male" />
-                <input type="radio" name="gender" value="Female" />
-                <input type="radio" name="gender" value="Unspecified" />
+           
+            <div class="home-checkboxes">
+                <div>
+                    <label for="bySpeciality"> Szakterület</label>
+                    <input checked type="checkbox" name="bySpeciality" value="true" title="Szakterület" />
+                </div>
+                <div>
+                    <label for="byName">Név</label>
+                    <input checked type="checkbox" name="byName" value="true" title="Név" />
+                </div>
+                <div>
+                    <label for="byCity">Város</label>
+                    <input checked type="checkbox" name="byCity" value="true" title="Város" />
+                </div>
             </div>
+
 
             <label for="input-text">Magyarország orvos, és egészségügyi intézmény nyílvántartása.<br>Keress, értékelj!</label>
             <div class="search-data"></div>

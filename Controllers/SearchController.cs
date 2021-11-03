@@ -19,7 +19,7 @@ namespace MarkMyDoctor.Controllers
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<IActionResult> SearchResult(bool byName, bool byCity, bool bySpeciality, string toSearch, int pageNumber = 1)
+        public async Task<IActionResult> SearchResult(bool byName, bool byCity, bool bySpeciality, string toSearch, char character, int pageNumber = 1)
         {
 
             try
@@ -28,13 +28,13 @@ namespace MarkMyDoctor.Controllers
                 ViewBag.Action = "SearchResult";
 
        
-                    if (toSearch.Contains("dr.", StringComparison.OrdinalIgnoreCase))
+                    if (toSearch != null && toSearch.Contains("dr.", StringComparison.OrdinalIgnoreCase))
                     {
                         toSearch = Regex.Replace(toSearch, @"\A\bDr\b.?", "", RegexOptions.IgnoreCase).Trim();
                     }
                 
 
-                var doctors = await unitOfWork.DoctorRepository.GetSearchResultAsync(toSearch, pageNumber, byName, byCity, bySpeciality);
+                var doctors = await unitOfWork.DoctorRepository.GetSearchResultAsync(toSearch, pageNumber, character, byName, byCity, bySpeciality);
 
                 return View(doctors);
             }
@@ -46,7 +46,5 @@ namespace MarkMyDoctor.Controllers
             }
 
         }
-
-
     }
 }

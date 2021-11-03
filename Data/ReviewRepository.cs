@@ -30,9 +30,9 @@ namespace MarkMyDoctor.Data
         {
             var review = doctorReviewViewModel.Review;
 
-            var felhasznalo = httpContextAccessor.HttpContext?.User;
+            var loggedUser = httpContextAccessor.HttpContext?.User;
 
-            var user = await userManager.GetUserAsync(felhasznalo);
+            var user = await userManager.GetUserAsync(loggedUser);
 
             review.DoctorId = doctorReviewViewModel.Doctor.Id;
             review.UserId = user.Id;
@@ -42,25 +42,21 @@ namespace MarkMyDoctor.Data
 
             await dbContext.Reviews.AddAsync(review);
 
-            var reviewScore = review.CommunicationRating +
-                              review.EmpathyRating +
-                              review.TrustAtmosphereRating +
-                              review.HumanityRating +
-                              review.ProfessionalismRating;
+            var reviewScore = (review.ProfessionalismRating * 1.4) +
+                              (review.CommunicationRating * 1.3) +
+                              (review.EmpathyRating * 1.2) +
+                              (review.TrustAtmosphereRating * 1.1) +
+                              review.HumanityRating;                              
 
             await CalculateDoctorOverall(review.DoctorId, reviewScore);
 
-
-
-            
         }
 
 
 
-        private async Task CalculateDoctorOverall(int id, int actualReviewScore)
+        private async Task CalculateDoctorOverall(int id, double actualReviewScore)
         {
             var doc = await dbContext.Doctors.FindAsync(id);
-
 
             if (doc != null)
             {
@@ -72,11 +68,17 @@ namespace MarkMyDoctor.Data
                     var empathy = dbContext.Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.EmpathyRating);
                     var trust = dbContext.Reviews.Where(review => review.Doctor.Id.Equals(id)).Average(review => review.TrustAtmosphereRating);
 
-                    doc.OverallRating = Convert.ToByte(Math.Round(((professionalism + humanity + trust + empathy + communication + (Math.Round((actualReviewScore) / 5.0))) / 6.0)));
+                    doc.OverallRating = (((professionalism * 1.4) +
+                                          (communication * 1.3) +
+                                          (empathy * 1.2) +
+                                          (trust * 1.1)+ 
+                                          humanity +
+                                          (actualReviewScore / 6.0)) / 7.0);
+
                 }
                 else
                 {
-                    doc.OverallRating = Convert.ToByte(Math.Round((actualReviewScore) / 5.0));
+                    doc.OverallRating = actualReviewScore / 6.0;
                 }
 
                 dbContext.Doctors.Update(doc);

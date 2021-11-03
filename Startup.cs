@@ -1,4 +1,5 @@
 using MarkMyDoctor.Data;
+using MarkMyDoctor.Extensions;
 using MarkMyDoctor.Interfaces;
 using MarkMyDoctor.Models.Entities;
 using MarkMyDoctor.SeedData;
@@ -8,7 +9,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,7 +42,13 @@ namespace MarkMyDoctor
                                         .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information));
 
 
-            services.AddIdentity<User, IdentityRole<int>>(o => o.User.RequireUniqueEmail = true)
+            services.AddIdentity<User, IdentityRole<int>>(o =>
+            {
+                o.User.RequireUniqueEmail = true;
+                o.Lockout.AllowedForNewUsers = true;
+                o.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
+                o.Lockout.MaxFailedAccessAttempts = 3;
+            })
                 .AddEntityFrameworkStores<DoctorDbContext>()
                 .AddDefaultTokenProviders()
                 .AddErrorDescriber<AppErrorDescriber>();
@@ -54,12 +60,13 @@ namespace MarkMyDoctor
             });
 
 
-            services.ConfigureApplicationCookie(optoins =>
+            services.ConfigureApplicationCookie(options =>
             {
-                optoins.Cookie.HttpOnly = true;
-                optoins.Cookie.IsEssential = true;
-                optoins.LoginPath = "/Identity/Account/Login";
-                optoins.AccessDeniedPath = "/Identity/Account/AccesDenied";
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+                options.LoginPath = "/Identity/Account/Login";
+                options.AccessDeniedPath = "/Identity/Account/AccesDenied";
+          
 
             });
 
@@ -81,7 +88,7 @@ namespace MarkMyDoctor
 
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+      
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -93,18 +100,17 @@ namespace MarkMyDoctor
             {
                 app.UseExceptionHandler("/Home/Error");
                 app.UseForwardedHeaders();
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+               
                 app.UseHsts();
             }
-            //app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
-
-
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseUserChecker();
 
             app.UseEndpoints(endpoints =>
             {

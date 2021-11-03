@@ -13,7 +13,8 @@ namespace MarkMyDoctor.Interfaces
         Task<DoctorViewModel> CollectDataForDoctorFormAsync(int id);
         Task<Doctor> CreateDoctorAsync(DoctorViewModel doctorViewModel);
         Task UpdateDoctorAsync(int id, DoctorViewModel doctorViewModel);
-        Task<PaginatedList<Doctor>> GetSearchResultAsync(string toSearch, int pageNumber, bool byName, bool byCity, bool bySpeciality);
-        Task<PaginatedList<Doctor>> GetDoctorsAsync(int pageNumber);
+        Task<PaginatedList<Doctor>> GetSearchResultAsync(string toSearch, int pageNumber, char character, bool byName, bool byCity, bool bySpeciality);
+        Task<PaginatedList<Doctor>> GetDoctorsAsync(int pageNumber, char character);
+        Task<IEnumerable<ManageDoctorViewModel>> GetDoctorsToManageAsync();
     }
 }

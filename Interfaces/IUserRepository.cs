@@ -18,5 +18,6 @@ namespace MarkMyDoctor.Interfaces
         Task<IdentityResult> RemoveFromRolesAsync(User user, IEnumerable<string> roles);
         Task<IdentityResult> AddToRolesAsync(User user, IEnumerable<string> roles);
         Task UpdateUserAsync(UserViewModel user);
+        void LockoutUser(User user);
     }
 }
